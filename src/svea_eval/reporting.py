@@ -5,8 +5,10 @@ from __future__ import annotations
 import math
 import statistics
 from collections import defaultdict
-from typing import Any, Iterable
+from collections.abc import Iterable
+from typing import Any
 
+from .diagnostics import has_prompt_echo, has_repeated_span
 from .models import Item
 
 
@@ -51,6 +53,40 @@ def summarize(samples: list[dict[str, Any]], items: Iterable[Item]) -> dict[str,
         "median_ms": statistics.median(latencies) if latencies else None,
         "p95_ms": _percentile(latencies, 0.95) if latencies else None,
     }
+    response_entries = [
+        (str(sample["item_id"]), str(sample["response"]))
+        for sample in samples
+        if isinstance(sample.get("response"), str) and str(sample["response"]).strip()
+    ]
+    prompt_echoes = [
+        item_id
+        for item_id, response in response_entries
+        if has_prompt_echo(response, item=item_by_id.get(item_id))
+    ]
+    repetitions = [
+        item_id for item_id, response in response_entries if has_repeated_span(response)
+    ]
+    output_tokens = [
+        int(sample["output_tokens"])
+        for sample in samples
+        if isinstance(sample.get("output_tokens"), (int, float))
+    ]
+    summary["output_diagnostics"] = {
+        "responses_checked": len(response_entries),
+        "prompt_echo_count": len(prompt_echoes),
+        "prompt_echo_rate": (
+            len(prompt_echoes) / len(response_entries) if response_entries else None
+        ),
+        "prompt_echo_item_ids": list(dict.fromkeys(prompt_echoes)),
+        "repeated_span_count": len(repetitions),
+        "repeated_span_rate": (
+            len(repetitions) / len(response_entries) if response_entries else None
+        ),
+        "repeated_span_item_ids": list(dict.fromkeys(repetitions)),
+        "median_output_tokens": statistics.median(output_tokens) if output_tokens else None,
+        "p95_output_tokens": _percentile(output_tokens, 0.95) if output_tokens else None,
+        "total_output_tokens": sum(output_tokens) if output_tokens else None,
+    }
     return summary
 
 
@@ -87,6 +123,17 @@ def render_text_report(run: dict[str, Any]) -> str:
     )
     if summary["counts"]["unjudged"]:
         lines.append(f"\nUnjudged rubric items: {summary['counts']['unjudged']}")
+    diagnostics = summary.get("output_diagnostics", {})
+    if diagnostics:
+        lines.extend(
+            [
+                "",
+                "Output diagnostics",
+                f"  Prompt echoes: {diagnostics.get('prompt_echo_count', 0)}",
+                f"  Repeated spans: {diagnostics.get('repeated_span_count', 0)}",
+                f"  Median output tokens: {diagnostics.get('median_output_tokens', '—')}",
+            ]
+        )
     return "\n".join(lines)
 
 

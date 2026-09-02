@@ -14,14 +14,15 @@ SVEA Eval is built to answer a more useful question than “what is the model's
 Swedish score?”: **what can the model reliably do in Swedish, in which domains,
 under which kinds of pressure?**
 
-The bundled `svea-core` v0.1 public pilot contains 40 original, source-aware
-items spread evenly across eight domains and seven task types. Eight contrast
-pairs repeat a capability with a meaningful perturbation — a stale fact, a
-strict output format, a distractor or missing evidence — so the report can show
-where performance breaks instead of hiding that drop inside an average.
+The bundled `svea-core` v0.2 public pilot contains 55 original, source-aware
+items across eight domains and seven task types. Twelve contrast pairs repeat a
+capability with a meaningful perturbation — a stale fact, strict output format,
+distractor, missing evidence, longer dependency or unsafe near-neighbor — so
+the report can show where performance breaks instead of hiding that drop inside
+an average.
 
 > [!IMPORTANT]
-> v0.1 is an author-reviewed **public pilot** for validating the method and
+> v0.2 is an author-reviewed **public pilot** for validating the method and
 > runner. It is not yet a population-valid national leaderboard. Public prompts
 > may be contaminated, small slices have wide uncertainty, and judged outputs
 > still need calibration against native-speaker ratings.
@@ -38,6 +39,9 @@ where performance breaks instead of hiding that drop inside an average.
 - **Transparent scoring.** MCQ, exact, numeric, containment, constraints and
   JSON checks are dependency-free. Open answers remain unscored unless a named
   judge is configured.
+- **Inspectable language analysis.** LIX and dependency-distance items use
+  precomputed counts, head vectors and calculations that are exposed in scorer
+  details rather than delegated to a judge.
 - **Evidence you can audit.** A run retains raw answers, model revision,
   backend, system prompt, decoding settings, latency, judge identity and suite
   version. Missing evidence stays missing.
@@ -49,14 +53,14 @@ where performance breaks instead of hiding that drop inside an average.
 
 | Domain | Examples of capabilities |
 |---|---|
-| Svenska språket | grammar, orthography, register, constrained writing |
+| Svenska språket | grammar, orthography, register, translation, LIX |
 | Samhälle & förvaltning | civic knowledge, plain language, notices |
 | Arbetsliv & vardag | action extraction, summaries, practical instructions |
 | Hälsolitteracitet | reading instructions, uncertainty, safe communication |
-| Matematik & naturvetenskap | arithmetic, decimal comma, units, explanations |
+| Matematik & naturvetenskap | arithmetic, units, dependency parsing and ADD |
 | Kultur & Sverige-kunskap | literature, geography, local concepts |
-| Källtrohet & säkerhet | abstention, missing evidence, prompt injection |
-| Digitala uppgifter & verktyg | JSON, tool selection, task planning |
+| Källtrohet & säkerhet | abstention, citations, prompt injection, safety pairs |
+| Digitala uppgifter & verktyg | JSON, tool calls, recovery, compact long context |
 
 Task types are deliberately mixed: multiple choice, short answer, numeric
 response, structured extraction, constrained generation, grounded QA and open
@@ -154,7 +158,7 @@ recommended for any result you intend to compare or publish.
 
 ## Score open answers with a judge
 
-Eight pilot items test explanation, summarization, register, safety and
+Eleven pilot items test explanation, summarization, translation, register, safety and
 planning. Without a judge they are recorded as `unjudged`; they are not treated
 as zero.
 
@@ -173,6 +177,11 @@ svea run \
 Judge scores use item-specific Swedish rubrics on a 0–4 scale and retain the
 raw judgment and judge identity. A serious leaderboard should publish human
 agreement measurements for its chosen judge and avoid self-judging.
+
+Items can combine the rubric with declared deterministic response constraints.
+For example, the new safety item checks prompt echo, word count and numbered
+answer count after judging. A violation preserves the judge's raw score and
+rationale but caps the item score and prevents a pass.
 
 The runner also preserves invalid raw judge output. If a later parser fix can
 read that same output, resuming the run re-scores it locally without calling
@@ -213,6 +222,22 @@ svea run \
 
 Filtered and limited runs are useful diagnostics. Mark them explicitly with
 `--diagnostic`; only complete, non-diagnostic runs belong on the project page.
+An item-ID prefix can isolate a versioned extension without regenerating older
+answers, for example `--item-prefix svea-v02`.
+
+After the extension has been judged, the strict merge command verifies the
+model and judge identities, target protocol, old/new item partition, and score
+completeness before producing a publishable full-suite artifact:
+
+```bash
+svea merge-extension \
+  results/runs/model-v01.json \
+  runs/model-v02-extension.json \
+  --output results/runs/model-v02.json
+```
+
+The merged artifact records all 40 preserved item IDs, all 15 newly generated
+item IDs, both run IDs, and the extension environment in `extension_history`.
 
 ## Results and comparability
 
@@ -224,7 +249,8 @@ summary contains:
 - macro-domain score and weakest-domain score;
 - base and challenge scores, robustness gap and pair retention;
 - malformed, unjudged and generation-error counts;
-- median and p95 request latency.
+- prompt-echo and repeated-span diagnostics;
+- median and p95 request latency plus output-token totals and percentiles.
 
 Two runs should only be compared when their suite ID, version, split, system
 prompt, sampling policy and scoring/judge protocol match. API aliases that move
@@ -311,7 +337,7 @@ Until an archival release exists, cite the repository and version:
   author  = {Birger Moëll},
   title   = {SVEA Eval: Swedish Versatile Evaluation & Analysis},
   year    = {2026},
-  version = {0.1.4},
+  version = {0.2.0},
   url     = {https://github.com/BirgerMoell/svea-eval}
 }
 ```

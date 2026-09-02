@@ -9,7 +9,7 @@ from typing import Any, Iterable
 
 from .models import Item
 from .reporting import summarize
-from .scoring import score_item
+from .scoring import score_item, score_judgment
 
 
 def rescore_artifact(
@@ -56,13 +56,17 @@ def rescore_run(
         if item is None:
             raise ValueError(f"run contains item absent from target suite: {item_id}")
         response = sample.get("response")
-        should_rescore = (
-            item.scoring["type"] != "rubric"
-            and not sample.get("error")
-            and isinstance(response, str)
-        )
+        judgment_response = (sample.get("judgment") or {}).get("response")
+        should_rescore = not sample.get("error") and isinstance(response, str)
         if should_rescore:
-            score = score_item(item=item, response=response)
+            if item.scoring["type"] == "rubric" and isinstance(judgment_response, str):
+                score = score_judgment(
+                    item=item,
+                    judgment=judgment_response,
+                    response=response,
+                )
+            else:
+                score = score_item(item=item, response=response)
             before = {key: sample.get(key) for key in ("score", "passed", "score_details")}
             sample.update(
                 {

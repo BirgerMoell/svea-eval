@@ -54,6 +54,23 @@ class RunnerTests(unittest.TestCase):
             self.assertEqual(run["samples"][0]["judgment"]["model"], "svea/oracle-diagnostic")
             self.assertEqual(run["judge"]["revision"], "oracle-rev")
 
+    def test_item_prefix_selects_the_version_extension(self):
+        with tempfile.TemporaryDirectory() as directory:
+            metadata, items = load_suite()
+            run = run_evaluation(
+                suite_metadata=metadata,
+                items=items,
+                backend=OracleBackend(),
+                judge_backend=OracleBackend(),
+                output=Path(directory) / "extension.json",
+                config=GenerationConfig(),
+                item_prefixes=("svea-v02-",),
+            )
+            self.assertEqual(run["status"], "completed")
+            self.assertTrue(run["diagnostic"])
+            self.assertEqual(run["summary"]["counts"]["scheduled"], 15)
+            self.assertEqual(run["protocol"]["item_prefix_filter"], ["svea-v02-"])
+
     def test_resume_rescores_preserved_judgment(self):
         with tempfile.TemporaryDirectory() as directory:
             metadata, items = load_suite()

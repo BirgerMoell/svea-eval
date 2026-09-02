@@ -91,6 +91,9 @@ function renderResults() {
   view.innerHTML = state.results.map((run, index) => {
     const profile = run.summary.capability_profile || {};
     const malformed = Number(run.summary.counts?.malformed || 0);
+    const diagnostics = run.summary.output_diagnostics || {};
+    const promptEchoes = Number(diagnostics.prompt_echo_count || 0);
+    const repeatedSpans = Number(diagnostics.repeated_span_count || 0);
     const domains = (run.summary.domains || []).map(domain => `
       <div class="domain-bar">
         <span>${escapeHtml(label(domain.id))}</span>
@@ -106,6 +109,7 @@ function renderResults() {
         <div><strong>${percent(profile.minimum_domain_score)}</strong><span>weakest domain</span></div>
       </div>
       ${malformed ? `<div class="format-alert"><strong>${malformed} malformed</strong><span>responses violated a declared output format</span></div>` : ""}
+      ${promptEchoes || repeatedSpans ? `<div class="format-alert"><strong>${promptEchoes + repeatedSpans} output anomalies</strong><span>${promptEchoes} prompt echoes · ${repeatedSpans} repeated spans</span></div>` : ""}
       <div class="result-domains">${domains}</div>
       <button class="inspect-button" type="button" data-run-index="${index}">Inspect ${run.items?.length || 0} answers <span aria-hidden="true">→</span></button>
     </article>`;
@@ -160,6 +164,9 @@ function setupDeepDive() {
 function renderDeepDive() {
   const run = state.results[state.detail.runIndex];
   if (!run) return;
+  const outputDiagnostics = run.summary?.output_diagnostics || {};
+  const promptEchoIds = new Set(outputDiagnostics.prompt_echo_item_ids || []);
+  const repeatedSpanIds = new Set(outputDiagnostics.repeated_span_item_ids || []);
   const judge = run.judge;
   const backendSettings = run.protocol?.backend_settings || {};
   const think = backendSettings.think;
@@ -178,14 +185,16 @@ function renderDeepDive() {
   const caveats = Array.isArray(run.limitations) ? run.limitations : [];
   const rescoring = run.rescoring_history?.at(-1);
   const judging = run.judging_history?.at(-1);
+  const extension = run.extension_history?.at(-1);
   const rescoringHtml = rescoring ? `<div class="rescore-note"><span>SCORING REVISION</span><p><strong>v${escapeHtml(rescoring.source_suite_version)} → v${escapeHtml(rescoring.target_suite_version)}</strong> ${escapeHtml(rescoring.reason)}</p><small>Saved model responses and judge outputs were reused; no inference was repeated.</small></div>` : "";
   const judgingHtml = judging ? `<div class="rescore-note"><span>OFFLINE JUDGE PASS</span><p><strong>${escapeHtml(judging.judge?.id || judge?.id || "Named judge")}</strong> scored ${(judging.judged_item_ids || []).length} preserved open answers.</p><small>Target responses were reused unchanged; target generation was not repeated.</small></div>` : "";
+  const extensionHtml = extension ? `<div class="rescore-note"><span>SUITE EXTENSION</span><p><strong>${(extension.preserved_item_ids || []).length} preserved + ${(extension.generated_item_ids || []).length} new</strong> responses form this v${escapeHtml(extension.current_suite_version)} result.</p><small>Model, revision, backend, prompt and decoding settings passed the protocol-equivalence check.</small></div>` : "";
   const caveatHtml = caveats.length ? `<details><summary>Run limitations and comparability (${caveats.length})</summary><ul>${caveats.map(caveat => `<li>${escapeHtml(caveat)}</li>`).join("")}</ul></details>` : "";
-  document.querySelector("#deep-caveats").innerHTML = rescoringHtml + judgingHtml + caveatHtml;
+  document.querySelector("#deep-caveats").innerHTML = extensionHtml + rescoringHtml + judgingHtml + caveatHtml;
 
   const entries = (run.items || []).filter(entry => {
     if (state.detail.domain !== "all" && entry.item.domain !== state.detail.domain) return false;
-    if (state.detail.filter === "attention") return entry.sample.error || entry.sample.score == null || entry.sample.score < 1 || !entry.sample.passed;
+    if (state.detail.filter === "attention") return entry.sample.error || entry.sample.score == null || entry.sample.score < 1 || !entry.sample.passed || promptEchoIds.has(entry.item.id) || repeatedSpanIds.has(entry.item.id);
     if (state.detail.filter === "judged") return Boolean(entry.sample.judgment);
     if (state.detail.filter === "deterministic") return !entry.sample.judgment;
     return true;
@@ -221,6 +230,9 @@ function renderDeepDive() {
 
 function renderAnswer(run, entry) {
   const { item, sample } = entry;
+  const outputDiagnostics = run.summary?.output_diagnostics || {};
+  const promptEcho = (outputDiagnostics.prompt_echo_item_ids || []).includes(item.id);
+  const repeatedSpan = (outputDiagnostics.repeated_span_item_ids || []).includes(item.id);
   const malformed = sample.score_details?.malformed === true;
   const partialFormatCredit = malformed && Number(sample.score) > 0;
   const dimensions = sample.judgment && sample.parsed && typeof sample.parsed === "object"
@@ -229,6 +241,10 @@ function renderAnswer(run, entry) {
   const dimensionHtml = dimensions.length ? `<div class="dimension-grid">${dimensions.map(([name, value]) => `
     <div><span>${escapeHtml(label(name))}</span><i><span style="width:${Math.max(0, Math.min(100, Number(value) * 25))}%"></span></i><b>${escapeHtml(value)}/4</b></div>`).join("")}</div>` : "";
   const context = item.context ? `<div class="question-context"><span>UNDERLAG</span><p>${escapeHtml(item.context)}</p></div>` : "";
+  const responseConstraintViolations = sample.score_details?.response_constraint_violations || [];
+  const responseConstraintHtml = responseConstraintViolations.length
+    ? `<p class="malformed-warning"><strong>Deterministic rubric constraint failed.</strong> ${escapeHtml(responseConstraintViolations.map(label).join(", "))}. The judge's ${percent(sample.score_details?.judge_score_before_constraints)} score was capped at ${percent(sample.score_details?.response_constraint_score_cap)} and the item did not pass.</p>`
+    : "";
   const options = item.options?.length ? `<ul class="answer-options">${item.options.map(option => `<li>${escapeHtml(option)}</li>`).join("")}</ul>` : "";
   const rationale = sample.score_details?.reason;
   const rubric = item.rubric;
@@ -247,6 +263,7 @@ function renderAnswer(run, entry) {
     <section class="judge-rationale">
       <div class="answer-subhead"><span>LLM JUDGE RATIONALE</span><strong>${escapeHtml(sample.judgment.model)}</strong></div>
       ${dimensionHtml}
+      ${responseConstraintHtml}
       <blockquote>${escapeHtml(rationale || "The judge returned scores without a written rationale.")}</blockquote>
       <p class="reasoning-note">Published score rationale supplied by the judge; not hidden chain-of-thought.</p>
       ${rubricHtml}
@@ -257,13 +274,16 @@ function renderAnswer(run, entry) {
       ${deterministicExplanation}
       <details><summary>Scorer details</summary><pre>${escapeHtml(JSON.stringify(sample.score_details || {}, null, 2))}</pre></details>
     </section>`;
+  const outputWarning = promptEcho || repeatedSpan
+    ? `<p class="malformed-warning"><strong>Output anomaly.</strong> ${promptEcho ? "The response appears to repeat benchmark prompt text." : ""} ${repeatedSpan ? "A 12-token span repeats non-contiguously." : ""} The raw response is preserved for review.</p>`
+    : "";
   document.querySelector("#detail-answer").innerHTML = `
     <header class="answer-header">
       <div><span>${escapeHtml(domainName(item.domain))}</span><h4>${escapeHtml(label(item.capability))}</h4><code>${escapeHtml(item.id)}</code></div>
       <div class="answer-score"><strong>${percent(sample.score)}</strong><span>${partialFormatCredit ? "malformed · partial credit" : malformed ? "malformed format" : sample.passed ? "passed" : sample.passed === false ? "did not pass" : "unscored"}</span></div>
     </header>
     <section class="question-block">${context}<span>UPPGIFT</span><p>${escapeHtml(item.prompt)}</p>${options}</section>
-    <section class="model-answer"><div class="answer-subhead"><span>MODEL ANSWER</span><strong>${escapeHtml(shortModel(run.model.id))}</strong></div><pre>${escapeHtml(sample.response ?? "No response")}</pre></section>
+    <section class="model-answer"><div class="answer-subhead"><span>MODEL ANSWER</span><strong>${escapeHtml(shortModel(run.model.id))}</strong></div>${outputWarning}<pre>${escapeHtml(sample.response ?? "No response")}</pre></section>
     ${judgePanel}
     <div class="answer-meta"><span>${escapeHtml(label(item.task_type))}</span><span>${Math.round(Number(sample.latency_ms || 0))} ms</span><span>${sample.output_tokens ?? "—"} output tokens</span><a href="${escapeAttribute(item.source.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.source.title)} ↗</a></div>`;
 }

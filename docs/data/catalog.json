@@ -1,7 +1,7 @@
 {
   "project": {
     "name": "SVEA Eval",
-    "version": "0.1.3",
+    "version": "0.2.0",
     "tagline": "Measure what a model can do in Swedish — and where that ability breaks.",
     "repository": "https://github.com/BirgerMoell/svea-eval"
   },
@@ -9,25 +9,31 @@
     "id": "svea-core",
     "name": "SVEA Core public pilot",
     "status": "public-pilot",
-    "items": 40,
-    "pairs": 8,
+    "items": 55,
+    "pairs": 12,
     "domains": [
       {
         "id": "swedish_language",
         "name": "Svenska språket",
         "description": "Grammatik, idiomatik, register och precis språkproduktion.",
-        "item_count": 5,
+        "item_count": 10,
         "capabilities": [
+          "calculation_verification",
           "grammar",
           "instruction_following",
           "orthography",
-          "register"
+          "readability_analysis",
+          "readability_calculation",
+          "register",
+          "translation_fidelity"
         ],
         "task_types": [
           "constrained_generation",
           "multiple_choice",
+          "numeric",
           "open_generation",
-          "short_answer"
+          "short_answer",
+          "structured_extraction"
         ]
       },
       {
@@ -89,9 +95,11 @@
         "id": "stem_reasoning",
         "name": "Matematik & naturvetenskap",
         "description": "Numerik, enheter, logik och förklaringar på svenska.",
-        "item_count": 5,
+        "item_count": 9,
         "capabilities": [
           "data_sufficiency",
+          "dependency_distance",
+          "dependency_parsing",
           "numeric_reasoning",
           "scientific_explanation",
           "unit_reasoning"
@@ -99,7 +107,8 @@
         "task_types": [
           "multiple_choice",
           "numeric",
-          "open_generation"
+          "open_generation",
+          "structured_extraction"
         ]
       },
       {
@@ -124,11 +133,14 @@
         "id": "grounding_safety",
         "name": "Källtrohet & säkerhet",
         "description": "Motstånd mot påhitt, promptinjektion och otillräckligt underlag.",
-        "item_count": 5,
+        "item_count": 8,
         "capabilities": [
           "calibrated_abstention",
+          "citation_grounding",
           "grounded_answering",
+          "harmful_request_refusal",
           "prompt_injection_resistance",
+          "safe_helpfulness",
           "safe_uncertainty",
           "structured_extraction"
         ],
@@ -143,11 +155,14 @@
         "id": "digital_agency",
         "name": "Digitala uppgifter & verktyg",
         "description": "Strukturerade svar, verktygsval och exakta formatkrav.",
-        "item_count": 5,
+        "item_count": 8,
         "capabilities": [
           "instruction_following",
+          "long_context_revision_tracking",
           "structured_output",
           "task_planning",
+          "tool_calling",
+          "tool_recovery",
           "tool_selection"
         ],
         "task_types": [
@@ -192,14 +207,16 @@
       "Report a domain profile, minimum-domain score, coverage and malformed rate; never only one blended rank.",
       "Score deterministic tasks locally and keep rubric tasks visibly unscored unless a named judge is configured.",
       "Use paired contrast cases to expose drops caused by distractors, strict formats and insufficient evidence.",
+      "Publish reviewed LIX counts and dependency calculations in deterministic scorer details.",
       "Preserve model revision, backend, prompt, decoding settings, raw answers, latency and judge provenance.",
       "Compare runs only when suite version, split and protocol are compatible."
     ],
     "limitations": [
-      "Version 0.1 is an author-reviewed public pilot, not a population-valid national benchmark.",
+      "Version 0.2 is an author-reviewed public pilot, not a population-valid national benchmark.",
       "The small sample sizes produce wide uncertainty intervals and are intended for harness validation and early model profiling.",
       "Open-generation scores depend on the selected judge and should be calibrated against native-speaker human ratings.",
-      "The pilot is text-only and does not yet measure speech, vision or interactive multi-step agents."
+      "The pilot is text-only and does not yet measure speech, vision or interactive multi-step agents.",
+      "The compact long-context item is a revision-tracking smoke test, not evidence of 128k-context capability."
     ]
   },
   "integrations": [

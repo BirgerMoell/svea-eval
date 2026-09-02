@@ -8,6 +8,7 @@ import re
 import unicodedata
 from typing import Any
 
+from .diagnostics import has_prompt_echo
 from .models import Item, Score
 
 
@@ -75,7 +76,7 @@ def build_judge_prompt(item: Item, response: str) -> str:
     )
 
 
-def score_judgment(item: Item, judgment: str) -> Score:
+def score_judgment(item: Item, judgment: str, response: str | None = None) -> Score:
     payload = _parse_json(judgment)
     scores = payload.get("scores")
     if not isinstance(scores, dict):
@@ -97,12 +98,55 @@ def score_judgment(item: Item, judgment: str) -> Score:
         parsed[dimension] = value
     normalized = sum(parsed.values()) / (4 * len(parsed))
     pass_threshold = float(item.scoring.get("pass_threshold", 0.75))
-    return Score(
+    score = Score(
         value=normalized,
         passed=normalized >= pass_threshold,
         scorer="rubric",
         parsed=parsed,
         details={"reason": str(payload.get("reason", "")), "raw_scale": "0-4"},
+    )
+    return _apply_rubric_response_constraints(item=item, response=response, score=score)
+
+
+def _apply_rubric_response_constraints(
+    *, item: Item, response: str | None, score: Score
+) -> Score:
+    constraints = item.scoring.get("response_constraints", {})
+    if not constraints or response is None:
+        return score
+    checks: dict[str, bool] = {}
+    if constraints.get("forbid_prompt_echo"):
+        checks["no_prompt_echo"] = not has_prompt_echo(response, item=item)
+    if "max_words" in constraints:
+        checks["max_words"] = _word_count(response) <= int(constraints["max_words"])
+    if "numbered_items" in constraints:
+        numbered = re.findall(r"(?:^|\s)\d+[.)]\s+", response)
+        checks["numbered_items"] = len(numbered) == int(constraints["numbered_items"])
+    violations = [name for name, passed in checks.items() if not passed]
+    details = {
+        **score.details,
+        "judge_score_before_constraints": score.value,
+        "response_constraint_checks": checks,
+        "response_constraint_violations": violations,
+    }
+    if not violations:
+        return Score(
+            value=score.value,
+            passed=score.passed,
+            scorer=score.scorer,
+            parsed=score.parsed,
+            details=details,
+            error=score.error,
+        )
+    cap = float(constraints.get("score_cap", 0.75))
+    details["response_constraint_score_cap"] = cap
+    return Score(
+        value=min(float(score.value or 0.0), cap),
+        passed=False,
+        scorer=score.scorer,
+        parsed=score.parsed,
+        details=details,
+        error=score.error,
     )
 
 
@@ -146,13 +190,13 @@ def _score_choice(item: Item, response: str) -> Score:
         passed=passed,
         scorer="choice",
         parsed=parsed,
-        details={
+        details=_with_item_evidence(item, {
             "expected": gold,
             "required_format": required_format,
             "format_valid": format_valid,
             "partial_credit": partial_credit,
             "malformed": parsed is None or not format_valid,
-        },
+        }),
     )
 
 
@@ -165,7 +209,7 @@ def _score_exact(item: Item, response: str) -> Score:
         passed=passed,
         scorer="exact",
         parsed=parsed,
-        details={"accepted": expected},
+        details=_with_item_evidence(item, {"accepted": expected}),
     )
 
 
@@ -198,7 +242,9 @@ def _score_numeric(item: Item, response: str) -> Score:
             value=0.0,
             passed=False,
             scorer="numeric",
-            details={"malformed": True, "expected": item.gold["value"]},
+            details=_with_item_evidence(
+                item, {"malformed": True, "expected": item.gold["value"]}
+            ),
         )
     raw = match.group(0).replace(" ", "")
     if "," in raw:
@@ -214,7 +260,10 @@ def _score_numeric(item: Item, response: str) -> Score:
         passed=passed,
         scorer="numeric",
         parsed=parsed,
-        details={"expected": expected, "tolerance": tolerance, "unit": item.gold.get("unit")},
+        details=_with_item_evidence(
+            item,
+            {"expected": expected, "tolerance": tolerance, "unit": item.gold.get("unit")},
+        ),
     )
 
 
@@ -233,7 +282,9 @@ def _score_json(item: Item, response: str) -> Score:
         None,
     )
     passed = matched_index is not None
-    details = {"expected": expected, "allow_extra_keys": subset}
+    details = _with_item_evidence(
+        item, {"expected": expected, "allow_extra_keys": subset}
+    )
     if accepted_values:
         details["accepted_values"] = accepted_values
         details["matched_candidate"] = matched_index
@@ -318,3 +369,14 @@ def _json_contains(actual: Any, expected: Any) -> bool:
 
 def _word_count(value: str) -> int:
     return len(re.findall(r"\b[\wÅÄÖåäö]+\b", value, re.UNICODE))
+
+
+def _with_item_evidence(item: Item, details: dict[str, Any]) -> dict[str, Any]:
+    """Expose reviewed derivations in deterministic score details when supplied."""
+    calculation = item.metadata.get("gold_calculation")
+    if calculation is not None:
+        details["gold_calculation"] = calculation
+    reference_scheme = item.metadata.get("reference_scheme")
+    if reference_scheme is not None:
+        details["reference_scheme"] = reference_scheme
+    return details

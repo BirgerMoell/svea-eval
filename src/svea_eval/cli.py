@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from importlib.resources import files
 from pathlib import Path
 from typing import Any
 
@@ -12,6 +13,7 @@ from . import __version__
 from .backends import DEFAULT_SYSTEM_PROMPT, GenerationConfig, create_backend
 from .data import load_suite, resolve_suite, validate_suite
 from .judging import judge_artifact
+from .merge import merge_extension_runs
 from .reporting import render_text_report
 from .rescore import rescore_artifact
 from .runner import run_evaluation
@@ -58,6 +60,12 @@ def build_parser() -> argparse.ArgumentParser:
     run_parser.add_argument("--limit", type=int)
     run_parser.add_argument("--domain", action="append", default=[])
     run_parser.add_argument("--task-type", action="append", default=[])
+    run_parser.add_argument(
+        "--item-prefix",
+        action="append",
+        default=[],
+        help="run only item IDs beginning with this prefix; repeatable",
+    )
     run_parser.add_argument("--output", type=Path, required=True)
     run_parser.add_argument("--run-id")
     run_parser.add_argument("--diagnostic", action="store_true")
@@ -110,6 +118,16 @@ def build_parser() -> argparse.ArgumentParser:
     judge_parser.add_argument("--seed", type=_optional_int, default=17, metavar="INT|none")
     judge_parser.add_argument("--system-prompt", default=DEFAULT_SYSTEM_PROMPT)
 
+    merge_parser = subparsers.add_parser(
+        "merge-extension",
+        help="merge an archived base-suite run with a fully judged extension run",
+    )
+    merge_parser.add_argument("base_run", type=Path)
+    merge_parser.add_argument("extension_run", type=Path)
+    merge_parser.add_argument("--base-suite", type=Path)
+    merge_parser.add_argument("--suite", type=Path)
+    merge_parser.add_argument("--output", type=Path, required=True)
+
     site_parser = subparsers.add_parser("build-site", help="Refresh GitHub Pages data")
     site_parser.add_argument("--docs", type=Path, default=Path("docs"))
     site_parser.add_argument("--results", type=Path, default=Path("results/runs"))
@@ -132,9 +150,11 @@ def main(argv: list[str] | None = None) -> int:
             return _rescore(args)
         if args.command == "judge":
             return _judge(args)
+        if args.command == "merge-extension":
+            return _merge_extension(args)
         if args.command == "build-site":
             return _build_site(args)
-    except (OSError, RuntimeError, ValueError, json.JSONDecodeError) as exc:
+    except (OSError, RuntimeError, TypeError, ValueError, json.JSONDecodeError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
     return 2
@@ -232,6 +252,7 @@ def _run(args: argparse.Namespace) -> int:
         limit=args.limit,
         domains=set(args.domain),
         task_types=set(args.task_type),
+        item_prefixes=tuple(args.item_prefix),
         run_id=args.run_id,
         diagnostic=args.diagnostic,
     )
@@ -306,6 +327,29 @@ def _build_site(args: argparse.Namespace) -> int:
         f"Built {args.docs.resolve() / 'data'} for {result['catalog']['suite']['items']} items "
         f"and {result['runs']} publishable runs"
     )
+    return 0
+
+
+def _merge_extension(args: argparse.Namespace) -> int:
+    base_suite = args.base_suite or Path(
+        str(files("svea_eval").joinpath("resources/suites/svea-core-v0.1"))
+    )
+    base_metadata, base_items = load_suite(base_suite)
+    current_metadata, current_items = load_suite(args.suite)
+    merged = merge_extension_runs(
+        base_run=json.loads(args.base_run.read_text(encoding="utf-8")),
+        extension_run=json.loads(args.extension_run.read_text(encoding="utf-8")),
+        base_metadata=base_metadata,
+        base_items=base_items,
+        current_metadata=current_metadata,
+        current_items=current_items,
+    )
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(
+        json.dumps(merged, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+    print(render_text_report(merged))
+    print(f"\nSaved {args.output.resolve()}")
     return 0
 
 

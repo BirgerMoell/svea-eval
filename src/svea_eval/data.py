@@ -16,7 +16,7 @@ SUPPORTED_VARIANTS = {"base", "challenge", "clean", "distractor", "supported", "
 
 
 def bundled_suite_dir() -> Path:
-    return Path(str(files("svea_eval").joinpath("resources/suites/svea-core-v0.1")))
+    return Path(str(files("svea_eval").joinpath("resources/suites/svea-core-v0.2")))
 
 
 def resolve_suite(path: str | Path | None = None) -> Path:

@@ -117,7 +117,11 @@ def judge_run(
                 }
                 sample["judgment"] = judgment
                 try:
-                    score = score_judgment(item=item, judgment=generation.text)
+                    score = score_judgment(
+                        item=item,
+                        judgment=generation.text,
+                        response=sample["response"],
+                    )
                 except ValueError as exc:
                     score = Score(
                         value=None,

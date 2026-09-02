@@ -27,10 +27,16 @@ rank.
 
 ## Public pilot
 
-`svea-core` v0.1 contains 40 development items: five in each of eight domains.
-The pilot is intentionally small enough to inspect. Eight pairs compare a base
-case with a challenge involving a distractor, stricter output, reverse
-reasoning or absent evidence.
+`svea-core` v0.2 contains 55 development items across eight domains. The pilot
+is intentionally small enough to inspect. Twelve pairs compare a base case with
+a challenge involving a distractor, stricter output, reverse reasoning, absent
+evidence, longer dependency or unsafe near-neighbor.
+
+Version 0.2 adds four LIX questions, four dependency parsing or Average
+Dependency Distance questions and seven targeted capability probes covering
+translation, cited grounding, function calls, tool recovery, safety and compact
+long-context revision tracking. The original v0.1 snapshot remains bundled so
+published v0.1 artifacts can be reproduced.
 
 It is public, and model developers may train on it. Its valid uses are:
 
@@ -60,10 +66,23 @@ Constraint items may receive a partial 0–1 score so the failure is
 interpretable. `passed` requires every declared constraint. Other deterministic
 scorers are normally binary.
 
+LIX and dependency questions have reviewed gold calculations stored with each
+item. Tokenization, treatment of the root and rounding are declared in the
+prompt. Deterministic score details expose the counts, head vectors, distances
+and intermediate calculations used to obtain the expected result. The small
+public slice is a diagnostic of Swedish structural analysis and arithmetic, not
+a standalone proxy for general model quality.
+
 Rubric judging uses named dimensions with integer scores from 0 to 4. The
 normalized item score is the mean divided by four. Each item declares its pass
 threshold. The raw judge response is retained. Judge choice is part of the
 protocol and must not be mixed across runs without calibration.
+
+Rubric items may also declare deterministic response constraints. In v0.2 the
+new rubric items forbid prompt echo, and the safe-helpfulness item additionally
+checks the word limit and number of numbered answers. A failed hard constraint
+is shown alongside the judge rationale, prevents a pass and caps the item score
+at the declared value; it never erases the judge's original score or output.
 
 ## Aggregation
 
@@ -75,6 +94,10 @@ The report includes:
 - **coverage:** scored items and measured versus declared domains;
 - **pass rate:** share of scored items whose full pass condition is met;
 - **malformed rate:** outputs that cannot be parsed for the required format;
+- **prompt-echo rate:** responses that reproduce the benchmark system scaffold;
+- **repeated-span rate:** responses containing a repeated non-overlapping
+  twelve-token span;
+- **output-token profile:** median, p95 and total reported output tokens;
 - **95% interval:** a normal-approximation interval around each slice mean;
 - **robustness gap:** mean base score minus mean challenge score for complete
   contrast pairs;

@@ -30,6 +30,7 @@ def run_evaluation(
     limit: int | None = None,
     domains: set[str] | None = None,
     task_types: set[str] | None = None,
+    item_prefixes: tuple[str, ...] = (),
     run_id: str | None = None,
     diagnostic: bool = False,
 ) -> dict[str, Any]:
@@ -38,6 +39,7 @@ def run_evaluation(
         for item in items
         if (not domains or item.domain in domains)
         and (not task_types or item.task_type in task_types)
+        and (not item_prefixes or item.id.startswith(item_prefixes))
     ]
     if limit is not None:
         selected = selected[:limit]
@@ -48,7 +50,9 @@ def run_evaluation(
     output.parent.mkdir(parents=True, exist_ok=True)
     sidecar = output.with_suffix(".samples.jsonl")
     manifest_path = output.with_suffix(".manifest.json")
-    effective_diagnostic = bool(diagnostic or limit is not None or domains or task_types)
+    effective_diagnostic = bool(
+        diagnostic or limit is not None or domains or task_types or item_prefixes
+    )
     manifest = {
         "schema_version": 1,
         "suite_id": suite_metadata["id"],
@@ -140,6 +144,7 @@ def run_evaluation(
             "limit": limit,
             "domain_filter": sorted(domains) if domains else [],
             "task_type_filter": sorted(task_types) if task_types else [],
+            "item_prefix_filter": list(item_prefixes),
             "backend_settings": backend.protocol_settings(),
             "judge_backend_settings": (
                 judge_backend.protocol_settings() if judge_backend else {}
@@ -185,7 +190,9 @@ def _run_item(
                 "latency_ms": judge_generation.latency_ms,
             }
             try:
-                score = score_judgment(item=item, judgment=judge_generation.text)
+                score = score_judgment(
+                    item=item, judgment=judge_generation.text, response=generation.text
+                )
             except ValueError as exc:
                 score = Score(
                     value=None,
@@ -254,7 +261,9 @@ def _rescore_preserved_judgment(
     if sample.get("scorer") != "rubric" or not isinstance(response, str):
         return None
     try:
-        score = score_judgment(item=item, judgment=response)
+        score = score_judgment(
+            item=item, judgment=response, response=str(sample.get("response", ""))
+        )
     except ValueError:
         return None
     return {
