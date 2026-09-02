@@ -54,6 +54,12 @@ def build_parser() -> argparse.ArgumentParser:
         default=False,
         help="allow Ollama thinking tokens (disabled by default for answer-budget fidelity)",
     )
+    run_parser.add_argument(
+        "--ollama-reasoning-tokens",
+        type=_nonnegative_int,
+        metavar="INT",
+        help="additional generation-token allowance for target reasoning",
+    )
     run_parser.add_argument("--temperature", type=float, default=0.0)
     run_parser.add_argument("--seed", type=_optional_int, default=17, metavar="INT|none")
     run_parser.add_argument("--system-prompt", default=DEFAULT_SYSTEM_PROMPT)
@@ -77,6 +83,18 @@ def build_parser() -> argparse.ArgumentParser:
     run_parser.add_argument("--judge-base-url")
     run_parser.add_argument("--judge-api-key-env", default="OPENAI_API_KEY")
     run_parser.add_argument("--judge-revision")
+    run_parser.add_argument(
+        "--judge-ollama-think",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help="enable thinking for an Ollama judge independently of the target",
+    )
+    run_parser.add_argument(
+        "--judge-ollama-reasoning-tokens",
+        type=_nonnegative_int,
+        metavar="INT",
+        help="additional generation-token allowance for judge reasoning",
+    )
 
     report_parser = subparsers.add_parser("report", help="Print a saved run summary")
     report_parser.add_argument("run", type=Path)
@@ -113,6 +131,12 @@ def build_parser() -> argparse.ArgumentParser:
         "--ollama-think",
         action=argparse.BooleanOptionalAction,
         default=False,
+    )
+    judge_parser.add_argument(
+        "--ollama-reasoning-tokens",
+        type=_nonnegative_int,
+        metavar="INT",
+        help="additional generation-token allowance for judge reasoning",
     )
     judge_parser.add_argument("--temperature", type=float, default=0.0)
     judge_parser.add_argument("--seed", type=_optional_int, default=17, metavar="INT|none")
@@ -220,6 +244,7 @@ def _run(args: argparse.Namespace) -> int:
         device=args.device,
         timeout_seconds=args.timeout,
         ollama_think=args.ollama_think,
+        ollama_reasoning_tokens=args.ollama_reasoning_tokens,
     )
     judge_backend = None
     if args.judge_backend:
@@ -233,7 +258,8 @@ def _run(args: argparse.Namespace) -> int:
             revision=args.judge_revision,
             device=args.device,
             timeout_seconds=args.timeout,
-            ollama_think=args.ollama_think,
+            ollama_think=args.judge_ollama_think,
+            ollama_reasoning_tokens=args.judge_ollama_reasoning_tokens,
         )
     config = GenerationConfig(
         temperature=args.temperature,
@@ -303,6 +329,7 @@ def _judge(args: argparse.Namespace) -> int:
         device=args.device,
         timeout_seconds=args.timeout,
         ollama_think=args.ollama_think,
+        ollama_reasoning_tokens=args.ollama_reasoning_tokens,
     )
     run = judge_artifact(
         path=args.run,
@@ -357,3 +384,10 @@ def _optional_int(value: str) -> int | None:
     if value.casefold() in {"none", "null", "off"}:
         return None
     return int(value)
+
+
+def _nonnegative_int(value: str) -> int:
+    parsed = int(value)
+    if parsed < 0:
+        raise argparse.ArgumentTypeError("must be non-negative")
+    return parsed

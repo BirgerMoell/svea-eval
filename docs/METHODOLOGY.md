@@ -100,6 +100,23 @@ normalized item score is the mean divided by four. Each item declares its pass
 threshold. The raw judge response is retained. Judge choice is part of the
 protocol and must not be mixed across runs without calibration.
 
+## Reasoning protocol
+
+Reasoning-enabled generation is evaluated as a separate target protocol. For
+Ollama runs, the artifact records whether `think` was enabled and any additional
+reasoning-token allowance. The item's declared `max_tokens` remains the intended
+final-answer budget; the additional allowance expands the native generation cap
+for reasoning-capable models.
+
+The public artifact retains only the final answer and non-content metadata such
+as reasoning character count, latency and total generated tokens. Private hidden
+chain-of-thought is not published. The project page labels each run as reasoning
+on, reasoning off or provider default, and shows an on/off score delta only when
+the model revision, suite, decoding settings and judge protocol otherwise match.
+
+Target and judge reasoning settings are independent. Enabling target reasoning
+does not alter the judge protocol.
+
 Rubric items may also declare deterministic response constraints. In v0.2 the
 new rubric items forbid prompt echo, and the safe-helpfulness item additionally
 checks the word limit and number of numbered answers. A failed hard constraint
@@ -137,6 +154,7 @@ Treat two scores as comparable only if these fields match:
 - item selection and limits;
 - system prompt and message formatting;
 - temperature, seed and token limits;
+- target reasoning mode and additional reasoning-token allowance;
 - deterministic scorer implementation version;
 - judge model/version and rubric protocol for judged items.
 

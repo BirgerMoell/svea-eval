@@ -175,6 +175,7 @@ def _public_run(run: dict[str, Any], *, item_by_id: dict[str, Any]) -> dict[str,
                         "input_tokens",
                         "output_tokens",
                         "finish_reason",
+                        "generation_metadata",
                         "judgment",
                         "error",
                     )

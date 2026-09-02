@@ -53,6 +53,10 @@ class RunnerTests(unittest.TestCase):
             self.assertEqual(run["samples"][0]["score"], 1.0)
             self.assertEqual(run["samples"][0]["judgment"]["model"], "svea/oracle-diagnostic")
             self.assertEqual(run["judge"]["revision"], "oracle-rev")
+            self.assertEqual(run["samples"][0]["generation_metadata"], {})
+            self.assertEqual(run["samples"][0]["judgment"]["generation_metadata"], {})
+            self.assertEqual(run["protocol"]["judge_temperature"], 0.0)
+            self.assertEqual(run["protocol"]["judge_seed"], 17)
 
     def test_item_prefix_selects_the_version_extension(self):
         with tempfile.TemporaryDirectory() as directory:

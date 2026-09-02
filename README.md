@@ -131,9 +131,29 @@ svea run \
   --output runs/gemma3-12b.json
 ```
 
-Pass `--ollama-think` only when thinking is intentionally part of the protocol
-and the suite's answer budgets have been reviewed for that mode. The setting is
-recorded in the run manifest and result artifact.
+Pass `--ollama-think` only when reasoning is intentionally part of the target
+protocol. Give it an explicit additional allowance so reasoning does not consume
+the item's final-answer budget:
+
+```bash
+svea run \
+  --backend ollama \
+  --model qwen3.6:35b-a3b \
+  --revision OLLAMA_MODEL_DIGEST \
+  --ollama-think \
+  --ollama-reasoning-tokens 4096 \
+  --output runs/qwen3.6-reasoning.json
+```
+
+Reasoning-on and reasoning-off runs are separate protocols and appear as such on
+the project page. The result records the mode, allowance and per-request
+reasoning character count, but never publishes private chain-of-thought. Ollama's
+reported generation-token count includes both reasoning and the final answer.
+
+Target and judge reasoning are independent. A reasoning target does not silently
+turn on reasoning for an Ollama judge. Use `--judge-ollama-think` and
+`--judge-ollama-reasoning-tokens` only when that judge protocol is intentional;
+the offline `svea judge` command accepts the equivalent `--ollama-*` flags.
 
 The runner appends each finished sample to a sidecar JSONL file. Repeating the
 same command resumes instead of paying for completed samples again.
@@ -253,7 +273,9 @@ summary contains:
 - median and p95 request latency plus output-token totals and percentiles.
 
 Two runs should only be compared when their suite ID, version, split, system
-prompt, sampling policy and scoring/judge protocol match. API aliases that move
+prompt, sampling policy, target reasoning mode and allowance, and scoring/judge
+protocol match. The project page can show a reasoning-on/off delta only when the
+checkpoint and all non-reasoning protocol fields match. API aliases that move
 over time are not immutable model identifiers; record a provider version or
 date in `--revision` whenever possible.
 

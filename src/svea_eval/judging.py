@@ -114,6 +114,7 @@ def judge_run(
                     "input_tokens": generation.input_tokens,
                     "output_tokens": generation.output_tokens,
                     "finish_reason": generation.finish_reason,
+                    "generation_metadata": generation.raw or {},
                 }
                 sample["judgment"] = judgment
                 try:

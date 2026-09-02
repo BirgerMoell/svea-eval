@@ -36,7 +36,11 @@ class _FakeOllamaResponse(_FakeResponse):
             {
                 "model": "gemma-test",
                 "created_at": "2026-09-02T00:00:00Z",
-                "message": {"role": "assistant", "content": "A"},
+                "message": {
+                    "role": "assistant",
+                    "content": "A",
+                    "thinking": "Private reasoning is intentionally not retained.",
+                },
                 "done": True,
                 "done_reason": "stop",
                 "prompt_eval_count": 21,
@@ -109,3 +113,40 @@ class BackendTests(unittest.TestCase):
         self.assertEqual(generation.input_tokens, 21)
         self.assertEqual(generation.output_tokens, 2)
         self.assertEqual(backend.protocol_settings(), {"think": False})
+        self.assertFalse(generation.raw["reasoning_enabled"])
+        self.assertNotIn("thinking", generation.raw)
+
+    def test_ollama_reasoning_is_a_separate_protocol_with_extra_budget(self):
+        captured = {}
+
+        def fake_urlopen(request, timeout):
+            captured["request"] = request
+            return _FakeOllamaResponse()
+
+        _, items = load_suite()
+        backend = OllamaBackend(
+            model_id="reasoning-model",
+            think=True,
+            reasoning_token_budget=4096,
+        )
+        with patch("urllib.request.urlopen", side_effect=fake_urlopen):
+            generation = backend.generate(item=items[0], config=GenerationConfig(seed=42))
+
+        payload = json.loads(captured["request"].data)
+        self.assertTrue(payload["think"])
+        self.assertEqual(payload["options"]["num_predict"], items[0].max_tokens + 4096)
+        self.assertEqual(
+            backend.protocol_settings(),
+            {"think": True, "reasoning_token_budget": 4096},
+        )
+        self.assertGreater(generation.raw["reasoning_char_count"], 0)
+        self.assertEqual(generation.raw["answer_token_budget"], items[0].max_tokens)
+        self.assertEqual(
+            generation.raw["total_generation_token_budget"],
+            items[0].max_tokens + 4096,
+        )
+        self.assertNotIn("thinking", generation.raw)
+
+    def test_ollama_reasoning_budget_requires_thinking(self):
+        with self.assertRaisesRegex(ValueError, "requires thinking"):
+            OllamaBackend(model_id="reasoning-model", reasoning_token_budget=128)

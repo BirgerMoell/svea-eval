@@ -87,8 +87,25 @@ function renderResults() {
     Number(right.summary?.overall?.score || 0) - Number(left.summary?.overall?.score || 0));
   applyDeepLink();
   const view = document.querySelector("#results-view");
-  view.className = "result-cards";
-  view.innerHTML = state.results.map((run, index) => {
+  view.className = "results-stack";
+  const comparisons = reasoningComparisons();
+  const comparisonHtml = comparisons.length ? `<section class="reasoning-comparisons">
+    <div class="comparison-heading"><span>REASONING PROTOCOL COMPARISON</span><p>Same checkpoint, suite, decoding settings and judge; target reasoning mode is the controlled difference.</p></div>
+    ${comparisons.map(({ direct, reasoning }) => {
+      const delta = Number(reasoning.summary?.overall?.score || 0) - Number(direct.summary?.overall?.score || 0);
+      const lixRows = ["svea-v02-lang-005-lix-base", "svea-v02-lang-005-lix-challenge"].map((itemId, itemIndex) => {
+        const directScore = itemScore(direct, itemId);
+        const reasoningScore = itemScore(reasoning, itemId);
+        return `<div><span>LIX ${itemIndex ? "challenge" : "base"}</span><strong>${percent(directScore)} → ${percent(reasoningScore)}</strong></div>`;
+      }).join("");
+      return `<article class="reasoning-comparison">
+        <header><div><span>${escapeHtml(shortModel(reasoning.model.id))}</span><small>${escapeHtml(shortRevision(reasoning.model.revision))}</small></div><strong class="comparison-delta ${delta < 0 ? "negative" : ""}">${delta >= 0 ? "+" : ""}${(delta * 100).toFixed(1)} points</strong></header>
+        <div class="comparison-scores"><div><span>Reasoning off</span><strong>${percent(direct.summary?.overall?.score)}</strong></div><i aria-hidden="true">→</i><div><span>Reasoning on</span><strong>${percent(reasoning.summary?.overall?.score)}</strong><small>${escapeHtml(reasoningAllowance(reasoning))}</small></div></div>
+        <div class="comparison-lix">${lixRows}</div>
+      </article>`;
+    }).join("")}
+  </section>` : "";
+  const cardsHtml = state.results.map((run, index) => {
     const profile = run.summary.capability_profile || {};
     const malformed = Number(run.summary.counts?.malformed || 0);
     const diagnostics = run.summary.output_diagnostics || {};
@@ -103,6 +120,7 @@ function renderResults() {
     `).join("");
     return `<article class="result-card">
       <header><h3>${escapeHtml(shortModel(run.model.id))}</h3><span>${escapeHtml(shortRevision(run.model.revision))}</span></header>
+      <div class="protocol-line"><span>TARGET PROTOCOL</span><strong>${escapeHtml(reasoningLabel(run))}</strong><small>${escapeHtml(reasoningAllowance(run))}</small></div>
       <div class="judge-line"><span>JUDGE</span><strong>${escapeHtml(run.judge ? shortModel(run.judge.id) : "No LLM judge")}</strong><small>${escapeHtml(run.judge?.revision ? shortRevision(run.judge.revision) : "deterministic only")}</small></div>
       <div class="result-main">
         <div><strong>${percent(profile.macro_domain_score)}</strong><span>macro domain</span></div>
@@ -114,6 +132,7 @@ function renderResults() {
       <button class="inspect-button" type="button" data-run-index="${index}">Inspect ${run.items?.length || 0} answers <span aria-hidden="true">→</span></button>
     </article>`;
   }).join("");
+  view.innerHTML = comparisonHtml + `<div class="result-cards">${cardsHtml}</div>`;
   setupDeepDive();
 }
 
@@ -124,7 +143,7 @@ function setupDeepDive() {
   const filterSelect = document.querySelector("#detail-filter");
   deepDive.hidden = false;
   modelSelect.innerHTML = state.results.map((run, index) =>
-    `<option value="${index}">${escapeHtml(shortModel(run.model.id))}</option>`).join("");
+    `<option value="${index}">${escapeHtml(runLabel(run))}</option>`).join("");
   domainSelect.innerHTML = `<option value="all">All domains</option>${state.catalog.suite.domains.map(domain =>
     `<option value="${escapeAttribute(domain.id)}">${escapeHtml(domain.name)}</option>`).join("")}`;
   modelSelect.value = String(state.detail.runIndex);
@@ -171,9 +190,9 @@ function renderDeepDive() {
   const backendSettings = run.protocol?.backend_settings || {};
   const think = backendSettings.think;
   const protocolMode = think === false
-    ? "Thinking off"
+    ? "Reasoning off"
     : think === true
-      ? "Thinking on"
+      ? "Reasoning on"
       : backendSettings.resolved_device
         ? `Transformers · ${String(backendSettings.resolved_device).toUpperCase()}`
         : "Provider default";
@@ -181,7 +200,7 @@ function renderDeepDive() {
     <div><span>TARGET MODEL</span><strong>${escapeHtml(run.model.id)}</strong><code title="${escapeAttribute(run.model.revision || "")}">${escapeHtml(shortRevision(run.model.revision))}</code></div>
     <div><span>LLM JUDGE</span><strong>${escapeHtml(judge?.id || "Not configured")}</strong><code title="${escapeAttribute(judge?.revision || "")}">${escapeHtml(judge?.revision ? shortRevision(judge.revision) : "—")}</code></div>
     <div><span>SUITE</span><strong>${escapeHtml(run.suite.id)} v${escapeHtml(run.suite.version)}</strong><code>${run.items?.length || 0} items</code></div>
-    <div><span>PROTOCOL</span><strong>${escapeHtml(protocolMode)}</strong><code>temp ${escapeHtml(run.protocol?.temperature ?? "—")}</code></div>`;
+    <div><span>TARGET PROTOCOL</span><strong>${escapeHtml(protocolMode)}</strong><code>${escapeHtml(reasoningAllowance(run))} · temp ${escapeHtml(run.protocol?.temperature ?? "—")}</code></div>`;
   const caveats = Array.isArray(run.limitations) ? run.limitations : [];
   const rescoring = run.rescoring_history?.at(-1);
   const judging = run.judging_history?.at(-1);
@@ -235,6 +254,8 @@ function renderAnswer(run, entry) {
   const repeatedSpan = (outputDiagnostics.repeated_span_item_ids || []).includes(item.id);
   const malformed = sample.score_details?.malformed === true;
   const partialFormatCredit = malformed && Number(sample.score) > 0;
+  const reasoningEnabled = run.protocol?.backend_settings?.think === true;
+  const reasoningChars = Number(sample.generation_metadata?.reasoning_char_count || 0);
   const dimensions = sample.judgment && sample.parsed && typeof sample.parsed === "object"
     ? Object.entries(sample.parsed).filter(([, value]) => Number.isFinite(Number(value)))
     : [];
@@ -281,15 +302,83 @@ function renderAnswer(run, entry) {
   const outputWarning = promptEcho || repeatedSpan
     ? `<p class="malformed-warning"><strong>Output anomaly.</strong> ${promptEcho ? "The response appears to repeat benchmark prompt text." : ""} ${repeatedSpan ? "A 12-token span repeats non-contiguously." : ""} The raw response is preserved for review.</p>`
     : "";
+  const reasoningDisclosure = reasoningEnabled
+    ? `<p class="reasoning-disclosure"><strong>Reasoning-enabled protocol.</strong> The model's final answer is shown below. Private chain-of-thought is not published${reasoningChars ? `; this request reported ${reasoningChars.toLocaleString("en-US")} reasoning characters` : ""}.</p>`
+    : "";
+  const tokenLabel = reasoningEnabled ? "generated tokens incl. reasoning" : "output tokens";
   document.querySelector("#detail-answer").innerHTML = `
     <header class="answer-header">
       <div><span>${escapeHtml(domainName(item.domain))}</span><h4>${escapeHtml(label(item.capability))}</h4><code>${escapeHtml(item.id)}</code></div>
       <div class="answer-score"><strong>${percent(sample.score)}</strong><span>${partialFormatCredit ? "malformed · partial credit" : malformed ? "malformed format" : sample.passed ? "passed" : sample.passed === false ? "did not pass" : "unscored"}</span></div>
     </header>
     <section class="question-block">${context}<span>UPPGIFT</span><p>${escapeHtml(item.prompt)}</p>${options}</section>
-    <section class="model-answer"><div class="answer-subhead"><span>MODEL ANSWER</span><strong>${escapeHtml(shortModel(run.model.id))}</strong></div>${outputWarning}<pre>${escapeHtml(sample.response ?? "No response")}</pre></section>
+    <section class="model-answer"><div class="answer-subhead"><span>MODEL ANSWER</span><strong>${escapeHtml(runLabel(run))}</strong></div>${reasoningDisclosure}${outputWarning}<pre>${escapeHtml(sample.response ?? "No response")}</pre></section>
     ${judgePanel}
-    <div class="answer-meta"><span>${escapeHtml(label(item.task_type))}</span><span>${Math.round(Number(sample.latency_ms || 0))} ms</span><span>${sample.output_tokens ?? "—"} output tokens</span><a href="${escapeAttribute(item.source.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.source.title)} ↗</a></div>`;
+    <div class="answer-meta"><span>${escapeHtml(label(item.task_type))}</span><span>${Math.round(Number(sample.latency_ms || 0))} ms</span><span>${sample.output_tokens ?? "—"} ${escapeHtml(tokenLabel)}</span><a href="${escapeAttribute(item.source.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.source.title)} ↗</a></div>`;
+}
+
+function reasoningLabel(run) {
+  const think = run.protocol?.backend_settings?.think;
+  if (think === true) return "Reasoning on";
+  if (think === false) return "Reasoning off";
+  return "Provider default";
+}
+
+function reasoningAllowance(run) {
+  const settings = run.protocol?.backend_settings || {};
+  if (settings.think !== true) return settings.think === false ? "answer budget only" : "not declared";
+  const allowance = Number(settings.reasoning_token_budget);
+  return Number.isFinite(allowance) ? `+${allowance.toLocaleString("en-US")} reasoning tokens` : "shared answer budget";
+}
+
+function runLabel(run) {
+  return `${shortModel(run.model.id)} · ${reasoningLabel(run).toLowerCase()}`;
+}
+
+function itemScore(run, itemId) {
+  return run.items?.find(entry => entry.item.id === itemId)?.sample?.score ?? null;
+}
+
+function reasoningComparisons() {
+  const groups = new Map();
+  state.results.forEach(run => {
+    const think = run.protocol?.backend_settings?.think;
+    if (think !== true && think !== false) return;
+    const protocol = JSON.parse(JSON.stringify(run.protocol || {}));
+    if (protocol.backend_settings) {
+      delete protocol.backend_settings.think;
+      delete protocol.backend_settings.reasoning_token_budget;
+    }
+    const key = stableStringify({
+      model: run.model,
+      suite: run.suite,
+      judge: run.judge,
+      temperature: protocol.temperature,
+      seed: protocol.seed,
+      system_prompt: protocol.system_prompt,
+      limit: protocol.limit,
+      domain_filter: protocol.domain_filter || [],
+      task_type_filter: protocol.task_type_filter || [],
+      item_prefix_filter: protocol.item_prefix_filter || [],
+      backend_settings: protocol.backend_settings || {},
+      judge_backend_settings: protocol.judge_backend_settings || {},
+      judge_temperature: protocol.judge_temperature,
+      judge_seed: protocol.judge_seed,
+      judge_system_prompt: protocol.judge_system_prompt,
+    });
+    const group = groups.get(key) || {};
+    group[think ? "reasoning" : "direct"] = run;
+    groups.set(key, group);
+  });
+  return [...groups.values()].filter(group => group.direct && group.reasoning);
+}
+
+function stableStringify(value) {
+  if (Array.isArray(value)) return `[${value.map(stableStringify).join(",")}]`;
+  if (value && typeof value === "object") {
+    return `{${Object.keys(value).sort().map(key => `${JSON.stringify(key)}:${stableStringify(value[key])}`).join(",")}}`;
+  }
+  return JSON.stringify(value);
 }
 
 function setupTabs() {

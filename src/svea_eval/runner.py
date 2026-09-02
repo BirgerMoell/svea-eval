@@ -53,6 +53,7 @@ def run_evaluation(
     effective_diagnostic = bool(
         diagnostic or limit is not None or domains or task_types or item_prefixes
     )
+    effective_judge_config = judge_config or config
     manifest = {
         "schema_version": 1,
         "suite_id": suite_metadata["id"],
@@ -70,6 +71,14 @@ def run_evaluation(
         "seed": config.seed,
         "system_prompt": config.system_prompt,
     }
+    if judge_backend:
+        manifest.update(
+            {
+                "judge_temperature": effective_judge_config.temperature,
+                "judge_seed": effective_judge_config.seed,
+                "judge_system_prompt": effective_judge_config.system_prompt,
+            }
+        )
     _validate_or_write_manifest(path=manifest_path, sidecar=sidecar, manifest=manifest)
     completed = _load_sidecar(sidecar)
     started_at = datetime.now(timezone.utc).isoformat()
@@ -95,7 +104,7 @@ def run_evaluation(
             backend=backend,
             config=config,
             judge_backend=judge_backend,
-            judge_config=judge_config or config,
+            judge_config=effective_judge_config,
         )
         completed[item.id] = sample
         with sidecar.open("a", encoding="utf-8") as handle:
@@ -149,6 +158,13 @@ def run_evaluation(
             "judge_backend_settings": (
                 judge_backend.protocol_settings() if judge_backend else {}
             ),
+            "judge_temperature": (
+                effective_judge_config.temperature if judge_backend else None
+            ),
+            "judge_seed": effective_judge_config.seed if judge_backend else None,
+            "judge_system_prompt": (
+                effective_judge_config.system_prompt if judge_backend else None
+            ),
         },
         "environment": {
             "python": platform.python_version(),
@@ -188,6 +204,7 @@ def _run_item(
                 "model": judge_backend.model_id,
                 "response": judge_generation.text,
                 "latency_ms": judge_generation.latency_ms,
+                "generation_metadata": judge_generation.raw or {},
             }
             try:
                 score = score_judgment(
@@ -213,6 +230,7 @@ def _run_item(
             "input_tokens": generation.input_tokens,
             "output_tokens": generation.output_tokens,
             "finish_reason": generation.finish_reason,
+            "generation_metadata": generation.raw or {},
             "judgment": judgment,
             "error": None,
         }
@@ -230,6 +248,7 @@ def _run_item(
             "input_tokens": None,
             "output_tokens": None,
             "finish_reason": None,
+            "generation_metadata": {},
             "judgment": None,
             "error": f"{type(exc).__name__}: {exc}",
         }

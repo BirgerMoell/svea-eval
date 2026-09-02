@@ -43,6 +43,10 @@ class SiteTests(unittest.TestCase):
                         "input_tokens": 10,
                         "output_tokens": 1,
                         "finish_reason": "stop",
+                        "generation_metadata": {
+                            "reasoning_enabled": False,
+                            "reasoning_char_count": 0,
+                        },
                         "judgment": None,
                         "error": None,
                     }
@@ -75,6 +79,11 @@ class SiteTests(unittest.TestCase):
             )
             self.assertEqual(payload["runs"][0]["items"][0]["sample"]["response"], "A")
             self.assertIsNone(payload["runs"][0]["items"][0]["item"]["rubric"])
+            self.assertFalse(
+                payload["runs"][0]["items"][0]["sample"]["generation_metadata"][
+                    "reasoning_enabled"
+                ]
+            )
             self.assertEqual(
                 payload["runs"][0]["rescoring_history"][0]["target_suite_version"],
                 "0.2.2",

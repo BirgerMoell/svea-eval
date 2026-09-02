@@ -17,7 +17,7 @@
     <meta name="twitter:description" content="An open, Swedish-first capability benchmark for API and local language models.">
     <meta name="twitter:image" content="https://birgermoell.github.io/svea-eval/og.png">
     <link rel="canonical" href="https://birgermoell.github.io/svea-eval/">
-    <link rel="stylesheet" href="styles.css?v=20260902-9">
+    <link rel="stylesheet" href="styles.css?v=20260903-1">
     <title>SVEA Eval — Swedish capability, mapped</title>
   </head>
   <body>
@@ -174,7 +174,7 @@ svea run \
           <p class="kicker">04 / EVIDENCE</p>
           <div>
             <h2>Results, with their caveats attached.</h2>
-            <p>The page accepts only complete, non-diagnostic runs. Open any model to inspect every question, answer, scoring decision and named judge rationale.</p>
+            <p>The page accepts only complete, non-diagnostic runs. Reasoning-on and reasoning-off runs are separate protocols; matched checkpoints are compared directly. Open any run to inspect every question, final answer, scoring decision and named judge rationale.</p>
           </div>
         </div>
         <div id="results-view" class="results-empty" aria-live="polite">
@@ -185,7 +185,7 @@ svea run \
         <div id="deep-dive" class="deep-dive" aria-live="polite" hidden>
           <div class="deep-heading">
             <div><p class="small-label">ANSWER EXPLORER</p><h3>From aggregate score to actual evidence.</h3></div>
-            <p>Judge rationales are the explanations returned with rubric scores—not private hidden chain-of-thought.</p>
+            <p>Target reasoning mode is identified explicitly. Private chain-of-thought is not published; judge rationales are the concise explanations returned with rubric scores.</p>
           </div>
           <div class="deep-controls">
             <label>Model<select id="detail-model" aria-label="Select model"></select></label>
@@ -231,7 +231,7 @@ svea run \
       <p>Open code under Apache-2.0 · Original pilot data under CC0-1.0</p>
       <div><a href="https://github.com/BirgerMoell/svea-eval">GitHub</a><a href="https://github.com/BirgerMoell/svea-eval/blob/main/docs/METHODOLOGY.md">Methodology</a><a href="https://github.com/BirgerMoell/svea-eval/blob/main/docs/SOURCES.md">Sources</a></div>
     </footer>
-    <script src="data/site-data.js?v=20260902-9"></script>
-    <script src="app.js?v=20260902-9" defer></script>
+    <script src="data/site-data.js?v=20260903-1"></script>
+    <script src="app.js?v=20260903-1" defer></script>
   </body>
 </html>

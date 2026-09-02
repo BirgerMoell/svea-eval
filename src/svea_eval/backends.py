@@ -122,14 +122,23 @@ class OllamaBackend(Backend):
         base_url: str = "http://127.0.0.1:11434",
         timeout_seconds: float = 120.0,
         think: bool = False,
+        reasoning_token_budget: int | None = None,
     ) -> None:
+        if reasoning_token_budget is not None and reasoning_token_budget < 0:
+            raise ValueError("Ollama reasoning token budget must be non-negative")
+        if reasoning_token_budget is not None and not think:
+            raise ValueError("Ollama reasoning token budget requires thinking to be enabled")
         self.model_id = model_id
         self.base_url = base_url.rstrip("/")
         self.timeout_seconds = timeout_seconds
         self.think = think
+        self.reasoning_token_budget = reasoning_token_budget
 
     def protocol_settings(self) -> dict[str, Any]:
-        return {"think": self.think}
+        settings: dict[str, Any] = {"think": self.think}
+        if self.reasoning_token_budget is not None:
+            settings["reasoning_token_budget"] = self.reasoning_token_budget
+        return settings
 
     def generate(self, item: Item, config: GenerationConfig) -> Generation:
         url = self.base_url
@@ -137,9 +146,10 @@ class OllamaBackend(Backend):
             url = url[:-3]
         if not url.endswith("/api/chat"):
             url += "/api/chat"
+        total_generation_budget = item.max_tokens + (self.reasoning_token_budget or 0)
         options: dict[str, Any] = {
             "temperature": config.temperature,
-            "num_predict": item.max_tokens,
+            "num_predict": total_generation_budget,
         }
         if config.seed is not None:
             options["seed"] = config.seed
@@ -170,6 +180,7 @@ class OllamaBackend(Backend):
             raise RuntimeError(f"could not reach Ollama: {exc.reason}") from exc
         latency_ms = (time.perf_counter() - started) * 1000
         message = raw.get("message", {})
+        thinking = message.get("thinking")
         return Generation(
             text=str(message.get("content", "")),
             latency_ms=latency_ms,
@@ -180,6 +191,11 @@ class OllamaBackend(Backend):
                 "created_at": raw.get("created_at"),
                 "total_duration_ns": raw.get("total_duration"),
                 "load_duration_ns": raw.get("load_duration"),
+                "reasoning_enabled": self.think,
+                "reasoning_char_count": len(thinking) if isinstance(thinking, str) else 0,
+                "answer_char_count": len(str(message.get("content", ""))),
+                "answer_token_budget": item.max_tokens,
+                "total_generation_token_budget": total_generation_budget,
             },
         )
 
@@ -299,6 +315,7 @@ def create_backend(
     device: str = "auto",
     timeout_seconds: float = 120.0,
     ollama_think: bool = False,
+    ollama_reasoning_tokens: int | None = None,
 ) -> Backend:
     if kind == "openai-compatible":
         if not base_url:
@@ -317,6 +334,7 @@ def create_backend(
             base_url=base_url or "http://127.0.0.1:11434",
             timeout_seconds=timeout_seconds,
             think=ollama_think,
+            reasoning_token_budget=ollama_reasoning_tokens,
         )
     if kind == "oracle":
         return OracleBackend()
