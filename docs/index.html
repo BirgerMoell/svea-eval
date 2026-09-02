@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="SVEA Eval measures practical Swedish language-model capabilities across domains, task types and robustness contrasts — through APIs or local inference.">
+    <meta name="theme-color" content="#0a2e63">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="SVEA Eval">
+    <meta property="og:title" content="SVEA Eval — Swedish capability, mapped">
+    <meta property="og:description" content="An open, Swedish-first capability benchmark for API and local language models.">
+    <meta property="og:url" content="https://birgermoell.github.io/svea-eval/">
+    <meta property="og:image" content="https://birgermoell.github.io/svea-eval/og.png">
+    <meta property="og:image:alt" content="SVEA Eval capability atlas showing Swedish model evaluation across domains and tasks">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="SVEA Eval — Swedish capability, mapped">
+    <meta name="twitter:description" content="An open, Swedish-first capability benchmark for API and local language models.">
+    <meta name="twitter:image" content="https://birgermoell.github.io/svea-eval/og.png">
+    <link rel="canonical" href="https://birgermoell.github.io/svea-eval/">
+    <link rel="stylesheet" href="styles.css">
+    <title>SVEA Eval — Swedish capability, mapped</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="SVEA Eval home">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span>SVEA <b>EVAL</b></span>
+      </a>
+      <nav aria-label="Primary navigation">
+        <a href="#map">Capability map</a>
+        <a href="#method">Method</a>
+        <a href="#run">Run it</a>
+        <a href="#results">Results</a>
+      </nav>
+      <a class="nav-cta" href="https://github.com/BirgerMoell/svea-eval">GitHub <span aria-hidden="true">↗</span></a>
+    </header>
+
+    <main id="main">
+      <section class="hero" id="top">
+        <div class="hero-copy">
+          <p class="eyebrow"><span></span> OPEN SWEDISH MODEL EVALUATION</p>
+          <h1>Swedish is more than a <em>language test.</em></h1>
+          <p class="hero-lead">SVEA Eval maps what a model can actually do in Swedish — across language, public life, work, health, science, culture, grounding and digital tasks.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="#run">Run the pilot</a>
+            <a class="button quiet" href="https://github.com/BirgerMoell/svea-eval">Explore the repository</a>
+          </div>
+          <p class="pilot-note"><strong>v0.1 public pilot.</strong> Built for inspection and early profiling; not yet a national leaderboard.</p>
+        </div>
+        <div class="atlas" aria-label="SVEA capability atlas illustration">
+          <div class="atlas-topline">
+            <span>CAPABILITY ATLAS</span>
+            <span>SV · v0.1</span>
+          </div>
+          <div class="atlas-grid" aria-hidden="true">
+            <span class="cell a1"></span><span class="cell a2"></span><span class="cell a3"></span><span class="cell a4"></span>
+            <span class="cell a5"></span><span class="cell a6"></span><span class="cell a7"></span><span class="cell a8"></span>
+            <span class="cell a9"></span><span class="cell a10"></span><span class="cell a11"></span><span class="cell a12"></span>
+            <span class="cell a13"></span><span class="cell a14"></span><span class="cell a15"></span><span class="cell a16"></span>
+          </div>
+          <div class="atlas-axis"><span>DOMAIN</span><span>PRESSURE →</span></div>
+          <div class="atlas-caption">
+            <strong>One model.<br>Many shapes.</strong>
+            <p>Base tasks reveal ability. Contrast tasks reveal whether it holds.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="metric-strip" aria-label="Pilot suite statistics">
+        <div><strong data-stat="items">40</strong><span>public pilot items</span></div>
+        <div><strong data-stat="domains">8</strong><span>Swedish domains</span></div>
+        <div><strong data-stat="task-types">7</strong><span>task types</span></div>
+        <div><strong data-stat="pairs">8</strong><span>contrast pairs</span></div>
+      </section>
+
+      <section class="section map-section" id="map">
+        <div class="section-heading">
+          <p class="kicker">01 / COVERAGE</p>
+          <div>
+            <h2>A score should leave a shape.</h2>
+            <p>A model can write fluent Swedish and still miss dates, invent a missing fact or break a JSON contract. SVEA keeps those capabilities separate.</p>
+          </div>
+        </div>
+        <div class="domain-grid" id="domain-grid" aria-live="polite">
+          <article class="domain-card loading"><span>01</span><h3>Loading capability map…</h3></article>
+        </div>
+        <div class="task-band">
+          <p>Seven task forms</p>
+          <div id="task-types"><span>Multiple choice</span><span>Short answer</span><span>Numeric</span><span>Structured extraction</span><span>Constrained generation</span><span>Grounded QA</span><span>Open generation</span></div>
+        </div>
+      </section>
+
+      <section class="section method-section" id="method">
+        <div class="section-heading inverse">
+          <p class="kicker">02 / METHOD</p>
+          <div>
+            <h2>Measure the answer.<br>Keep the evidence.</h2>
+            <p>SVEA uses transparent scoring wherever possible and makes every comparison carry its protocol.</p>
+          </div>
+        </div>
+        <div class="method-layout">
+          <ol class="method-list" id="method-list">
+            <li><span>01</span><div><strong>Profile, don’t flatten</strong><p>Domain, task, coverage, weakest slice and uncertainty stay visible.</p></div></li>
+            <li><span>02</span><div><strong>Stress the capability</strong><p>Paired variants isolate distractors, strict formats and absent evidence.</p></div></li>
+            <li><span>03</span><div><strong>Prefer deterministic checks</strong><p>Exact, numeric, JSON and constraints run locally without a judge.</p></div></li>
+            <li><span>04</span><div><strong>Name the judge</strong><p>Open answers remain missing until a pinned judge is configured.</p></div></li>
+            <li><span>05</span><div><strong>Preserve provenance</strong><p>Revision, prompt, decoding, raw answer and latency travel together.</p></div></li>
+          </ol>
+          <aside class="contrast-card">
+            <p class="small-label">CONTRAST PAIR</p>
+            <div class="pair-row">
+              <span class="pair-icon base">A</span>
+              <div><strong>Base</strong><p>Answer a fact from a short record.</p></div>
+              <b class="score-dot good">1.0</b>
+            </div>
+            <div class="pair-link"><span></span><i>same capability</i><span></span></div>
+            <div class="pair-row">
+              <span class="pair-icon pressure">B</span>
+              <div><strong>Missing evidence</strong><p>Decline to invent what is absent.</p></div>
+              <b class="score-dot bad">0.0</b>
+            </div>
+            <div class="gap-line"><span>ROBUSTNESS GAP</span><strong>−100 pp</strong></div>
+            <p class="card-note">An aggregate can hide this failure. A contrast set makes it the result.</p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section run-section" id="run">
+        <div class="section-heading">
+          <p class="kicker">03 / RUN</p>
+          <div>
+            <h2>One suite. Your endpoint.</h2>
+            <p>The dependency-free core talks to hosted and local OpenAI-compatible endpoints. Transformers is an optional local backend.</p>
+          </div>
+        </div>
+        <div class="runner">
+          <div class="runner-tabs" role="tablist" aria-label="Run examples">
+            <button role="tab" aria-selected="true" data-tab="api">Hosted API</button>
+            <button role="tab" aria-selected="false" data-tab="endpoint">Local endpoint</button>
+            <button role="tab" aria-selected="false" data-tab="hf">Transformers</button>
+          </div>
+          <div class="code-window">
+            <div class="window-bar"><span></span><span></span><span></span><button id="copy-command" type="button">Copy</button></div>
+            <pre id="command-api" class="command active"><code><span class="dim">export</span> OPENAI_API_KEY=<span class="yellow">"…"</span>
+svea run \
+  --backend openai-compatible \
+  --base-url https://api.openai.com/v1 \
+  --model YOUR_MODEL_ID \
+  --revision PINNED_VERSION \
+  --output runs/model-api.json</code></pre>
+            <pre id="command-endpoint" class="command"><code>svea run \
+  --backend openai-compatible \
+  --base-url http://127.0.0.1:8000/v1 \
+  --model served-model \
+  --revision CHECKPOINT_SHA \
+  --output runs/model-local.json</code></pre>
+            <pre id="command-hf" class="command"><code><span class="dim">python3 -m pip install -e</span> <span class="yellow">'.[local]'</span>
+svea run \
+  --backend huggingface \
+  --model /path/to/checkpoint \
+  --revision CHECKPOINT_SHA \
+  --output runs/model-hf.json</code></pre>
+          </div>
+          <div class="runner-foot">
+            <span><b>↻</b> Resumable after every item</span>
+            <span><b>⌁</b> API keys never enter artifacts</span>
+            <span><b>◇</b> Raw answers retained</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section results-section" id="results">
+        <div class="section-heading">
+          <p class="kicker">04 / EVIDENCE</p>
+          <div>
+            <h2>Results, with their caveats attached.</h2>
+            <p>The page accepts only complete, non-diagnostic runs. Public-pilot evidence is never presented as a hidden-test claim.</p>
+          </div>
+        </div>
+        <div id="results-view" class="results-empty" aria-live="polite">
+          <span class="empty-glyph" aria-hidden="true">∅</span>
+          <div><h3>No reviewed full-suite runs yet.</h3><p>The harness is ready. The first contribution should be a reproducible baseline with a pinned model and judge.</p></div>
+          <a class="button quiet" href="https://github.com/BirgerMoell/svea-eval/blob/main/CONTRIBUTING.md">Submit a run</a>
+        </div>
+      </section>
+
+      <section class="section ecosystem-section" id="ecosystem">
+        <div class="section-heading">
+          <p class="kicker">05 / ECOSYSTEM</p>
+          <div>
+            <h2>Built to connect, not replace.</h2>
+            <p>Deep domain tests and established NLU suites remain valuable. SVEA gives them a common Swedish capability and evidence layer.</p>
+          </div>
+        </div>
+        <div class="integration-list" id="integration-list">
+          <a href="https://github.com/spraakbanken/SuperLim-2"><span>01</span><strong>SuperLim 2.0</strong><p>Established Swedish NLU tasks</p><i>↗</i></a>
+          <a href="https://github.com/NLP-RISE/swesat"><span>02</span><strong>SweSAT-1.0</strong><p>Native Swedish exam questions</p><i>↗</i></a>
+          <a href="https://github.com/BirgerMoell/swedish-medical-benchmark"><span>03</span><strong>Swedish Medical LLM Benchmark</strong><p>Deep clinical-domain evaluation</p><i>↗</i></a>
+        </div>
+      </section>
+
+      <section class="call-to-action">
+        <p class="kicker">THE NEXT VERSION NEEDS REVIEWERS</p>
+        <h2>Help make Swedish model evaluation harder to fool — and easier to trust.</h2>
+        <div>
+          <a class="button light" href="https://github.com/BirgerMoell/svea-eval/blob/main/CONTRIBUTING.md">Contribute tasks or evidence</a>
+          <a href="https://github.com/BirgerMoell/svea-eval/blob/main/docs/METHODOLOGY.md" class="text-link">Read the methodology <span aria-hidden="true">→</span></a>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <a class="brand footer-brand" href="#top"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>SVEA <b>EVAL</b></span></a>
+      <p>Open code under Apache-2.0 · Original pilot data under CC0-1.0</p>
+      <div><a href="https://github.com/BirgerMoell/svea-eval">GitHub</a><a href="https://github.com/BirgerMoell/svea-eval/blob/main/docs/METHODOLOGY.md">Methodology</a><a href="https://github.com/BirgerMoell/svea-eval/blob/main/docs/SOURCES.md">Sources</a></div>
+    </footer>
+    <script src="app.js" defer></script>
+  </body>
+</html>

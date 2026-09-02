@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use SVEA Eval, please cite this software."
+title: "SVEA Eval: Swedish Versatile Evaluation & Analysis"
+type: software
+authors:
+  - family-names: "Moëll"
+    given-names: "Birger"
+version: 0.1.0
+date-released: 2026-09-02
+url: "https://github.com/BirgerMoell/svea-eval"
+repository-code: "https://github.com/BirgerMoell/svea-eval"
+license: Apache-2.0

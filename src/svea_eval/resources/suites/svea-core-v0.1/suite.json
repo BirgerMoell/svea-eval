@@ -1,0 +1,72 @@
+{
+  "id": "svea-core",
+  "version": "0.1.0",
+  "name": "SVEA Core public pilot",
+  "tagline": "Measure what a model can do in Swedish — and where that ability breaks.",
+  "status": "public-pilot",
+  "split": "dev",
+  "public_development_set": true,
+  "data_file": "dev.jsonl",
+  "data_license": "CC0-1.0",
+  "domains": [
+    "swedish_language",
+    "civics_public",
+    "work_life",
+    "health_literacy",
+    "stem_reasoning",
+    "culture_society",
+    "grounding_safety",
+    "digital_agency"
+  ],
+  "domain_labels": {
+    "swedish_language": "Svenska språket",
+    "civics_public": "Samhälle & förvaltning",
+    "work_life": "Arbetsliv & vardag",
+    "health_literacy": "Hälsolitteracitet",
+    "stem_reasoning": "Matematik & naturvetenskap",
+    "culture_society": "Kultur & Sverige-kunskap",
+    "grounding_safety": "Källtrohet & säkerhet",
+    "digital_agency": "Digitala uppgifter & verktyg"
+  },
+  "domain_descriptions": {
+    "swedish_language": "Grammatik, idiomatik, register och precis språkproduktion.",
+    "civics_public": "Tolkning av svenska samhälls- och myndighetsnära texter.",
+    "work_life": "Praktisk kommunikation, planering och informationsutvinning.",
+    "health_literacy": "Begriplig, försiktig hantering av allmän hälsoinformation.",
+    "stem_reasoning": "Numerik, enheter, logik och förklaringar på svenska.",
+    "culture_society": "Stabila svenska kultur-, geografi- och samhällsreferenser.",
+    "grounding_safety": "Motstånd mot påhitt, promptinjektion och otillräckligt underlag.",
+    "digital_agency": "Strukturerade svar, verktygsval och exakta formatkrav."
+  },
+  "task_types": [
+    "multiple_choice",
+    "short_answer",
+    "numeric",
+    "structured_extraction",
+    "constrained_generation",
+    "grounded_qa",
+    "open_generation"
+  ],
+  "task_type_labels": {
+    "multiple_choice": "Flervalsfråga",
+    "short_answer": "Kort svar",
+    "numeric": "Numeriskt svar",
+    "structured_extraction": "Strukturerad extraktion",
+    "constrained_generation": "Styrd generering",
+    "grounded_qa": "Källgrundad frågesvar",
+    "open_generation": "Öppen generering"
+  },
+  "methodology": [
+    "Report a domain profile, minimum-domain score, coverage and malformed rate; never only one blended rank.",
+    "Score deterministic tasks locally and keep rubric tasks visibly unscored unless a named judge is configured.",
+    "Use paired contrast cases to expose drops caused by distractors, strict formats and insufficient evidence.",
+    "Preserve model revision, backend, prompt, decoding settings, raw answers, latency and judge provenance.",
+    "Compare runs only when suite version, split and protocol are compatible."
+  ],
+  "limitations": [
+    "Version 0.1 is an author-reviewed public pilot, not a population-valid national benchmark.",
+    "The small sample sizes produce wide uncertainty intervals and are intended for harness validation and early model profiling.",
+    "Open-generation scores depend on the selected judge and should be calibrated against native-speaker human ratings.",
+    "The pilot is text-only and does not yet measure speech, vision or interactive multi-step agents."
+  ]
+}

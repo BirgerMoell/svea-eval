@@ -1,0 +1,46 @@
+{
+  "integrations": [
+    {
+      "id": "superlim-2",
+      "name": "SuperLim 2.0",
+      "role": "Established Swedish NLU tasks",
+      "status": "catalogued",
+      "url": "https://github.com/spraakbanken/SuperLim-2",
+      "data_url": "https://huggingface.co/datasets/sbx/superlim-2",
+      "license_note": "Licensing and terms are dataset-specific; SVEA does not repackage the collection."
+    },
+    {
+      "id": "swesat-1",
+      "name": "SweSAT-1.0",
+      "role": "Native Swedish verbal and quantitative exam questions",
+      "status": "catalogued",
+      "url": "https://github.com/NLP-RISE/swesat",
+      "license_note": "Reading passages may be copyrighted; use the upstream retrieval flow and source notes."
+    },
+    {
+      "id": "smlb",
+      "name": "Swedish Medical LLM Benchmark",
+      "role": "Deep Swedish medical-domain evaluation",
+      "status": "catalogued",
+      "url": "https://github.com/BirgerMoell/swedish-medical-benchmark",
+      "license_note": "Keep SMLB provenance and benchmark terms; SVEA links to rather than vendors the suite."
+    },
+    {
+      "id": "euroeval-sv",
+      "name": "EuroEval — Swedish",
+      "role": "Comparable European-language model evaluation",
+      "status": "catalogued",
+      "url": "https://euroeval.com/",
+      "source_url": "https://github.com/EuroEval/EuroEval",
+      "license_note": "Framework is MIT; individual dataset terms remain authoritative."
+    },
+    {
+      "id": "oellm-eval",
+      "name": "OpenEuroLLM oellm-eval",
+      "role": "Cluster scheduling and established harness task registry",
+      "status": "catalogued",
+      "url": "https://github.com/OpenEuroLLM/oellm-eval",
+      "license_note": "Use upstream task protocols for protocol-matched comparisons."
+    }
+  ]
+}

@@ -1,0 +1,126 @@
+"""Build the static GitHub Pages data bundle from validated run artifacts."""
+
+from __future__ import annotations
+
+import json
+from importlib.resources import files
+from pathlib import Path
+from typing import Any
+
+from .data import load_suite, validate_suite
+
+
+def build_site_data(
+    *,
+    docs_dir: Path,
+    results_dir: Path | None = None,
+    external_catalog: Path | None = None,
+) -> dict[str, Any]:
+    metadata, items = load_suite()
+    errors = validate_suite(metadata=metadata, items=items)
+    if errors:
+        raise ValueError("cannot build site from invalid suite:\n" + "\n".join(errors))
+
+    if external_catalog is None:
+        external_catalog = Path(str(files("svea_eval").joinpath("resources/external.json")))
+    integrations = json.loads(external_catalog.read_text(encoding="utf-8"))["integrations"]
+    runs = _load_public_runs(
+        results_dir,
+        suite_id=metadata["id"],
+        suite_version=metadata["version"],
+        expected_items=len(items),
+    )
+    domains = []
+    for domain in metadata["domains"]:
+        domain_items = [item for item in items if item.domain == domain]
+        domains.append(
+            {
+                "id": domain,
+                "name": metadata["domain_labels"][domain],
+                "description": metadata["domain_descriptions"][domain],
+                "item_count": len(domain_items),
+                "capabilities": sorted({item.capability for item in domain_items}),
+                "task_types": sorted({item.task_type for item in domain_items}),
+            }
+        )
+    catalog = {
+        "project": {
+            "name": "SVEA Eval",
+            "version": metadata["version"],
+            "tagline": metadata["tagline"],
+            "repository": "https://github.com/BirgerMoell/svea-eval",
+        },
+        "suite": {
+            "id": metadata["id"],
+            "name": metadata["name"],
+            "status": metadata["status"],
+            "items": len(items),
+            "pairs": len({item.pair_id for item in items if item.pair_id}),
+            "domains": domains,
+            "task_types": [
+                {"id": task, "name": metadata["task_type_labels"][task]}
+                for task in metadata["task_types"]
+            ],
+            "methodology": metadata["methodology"],
+            "limitations": metadata["limitations"],
+        },
+        "integrations": integrations,
+    }
+    data_dir = docs_dir / "data"
+    data_dir.mkdir(parents=True, exist_ok=True)
+    (data_dir / "catalog.json").write_text(
+        json.dumps(catalog, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+    (data_dir / "results.json").write_text(
+        json.dumps({"runs": runs}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+    return {"catalog": catalog, "runs": len(runs)}
+
+
+def _load_public_runs(
+    results_dir: Path | None,
+    *,
+    suite_id: str,
+    suite_version: str,
+    expected_items: int,
+) -> list[dict[str, Any]]:
+    if results_dir is None or not results_dir.exists():
+        return []
+    runs: list[dict[str, Any]] = []
+    for path in sorted(results_dir.glob("*.json")):
+        run = json.loads(path.read_text(encoding="utf-8"))
+        if not _is_publishable(
+            run,
+            suite_id=suite_id,
+            suite_version=suite_version,
+            expected_items=expected_items,
+        ):
+            continue
+        runs.append(_public_run(run))
+    return runs
+
+
+def _is_publishable(
+    run: dict[str, Any], *, suite_id: str, suite_version: str, expected_items: int
+) -> bool:
+    return bool(
+        not run.get("diagnostic")
+        and run.get("status") == "completed"
+        and run.get("model", {}).get("revision")
+        and run.get("suite", {}).get("id") == suite_id
+        and run.get("suite", {}).get("version") == suite_version
+        and run.get("summary", {}).get("counts", {}).get("scheduled") == expected_items
+        and run.get("summary", {}).get("counts", {}).get("scored") == expected_items
+    )
+
+
+def _public_run(run: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "run_id": run["run_id"],
+        "model": run["model"],
+        "judge": run.get("judge"),
+        "suite": run["suite"],
+        "finished_at": run["finished_at"],
+        "summary": run["summary"],
+        "limitations": run.get("limitations", []),
+    }

@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://birgermoell.github.io/svea-eval/schemas/item.schema.json",
+  "title": "SVEA Eval item",
+  "type": "object",
+  "required": [
+    "id",
+    "suite_id",
+    "suite_version",
+    "split",
+    "domain",
+    "capability",
+    "task_type",
+    "prompt",
+    "gold",
+    "scoring",
+    "source"
+  ],
+  "properties": {
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
+    "suite_id": {"type": "string"},
+    "suite_version": {"type": "string"},
+    "split": {"enum": ["dev", "validation", "test_public", "test_private"]},
+    "domain": {"type": "string"},
+    "capability": {"type": "string"},
+    "task_type": {"type": "string"},
+    "context": {"type": "string"},
+    "prompt": {"type": "string", "minLength": 1},
+    "options": {"type": "array", "items": {"type": "string"}},
+    "gold": {"type": "object"},
+    "scoring": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "enum": [
+            "choice",
+            "exact",
+            "contains_all",
+            "numeric",
+            "json_exact",
+            "constraints",
+            "rubric"
+          ]
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "required": ["kind", "title", "url", "license"],
+      "properties": {
+        "kind": {"type": "string"},
+        "title": {"type": "string"},
+        "url": {"type": "string"},
+        "license": {"type": "string"},
+        "accessed": {"type": "string"}
+      }
+    },
+    "pair_id": {"type": "string"},
+    "variant": {"type": "string"},
+    "tags": {"type": "array", "items": {"type": "string"}},
+    "max_tokens": {"type": "integer", "minimum": 1},
+    "review_status": {"type": "string"}
+  },
+  "additionalProperties": true
+}

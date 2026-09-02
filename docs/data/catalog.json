@@ -1,0 +1,249 @@
+{
+  "project": {
+    "name": "SVEA Eval",
+    "version": "0.1.0",
+    "tagline": "Measure what a model can do in Swedish — and where that ability breaks.",
+    "repository": "https://github.com/BirgerMoell/svea-eval"
+  },
+  "suite": {
+    "id": "svea-core",
+    "name": "SVEA Core public pilot",
+    "status": "public-pilot",
+    "items": 40,
+    "pairs": 8,
+    "domains": [
+      {
+        "id": "swedish_language",
+        "name": "Svenska språket",
+        "description": "Grammatik, idiomatik, register och precis språkproduktion.",
+        "item_count": 5,
+        "capabilities": [
+          "grammar",
+          "instruction_following",
+          "orthography",
+          "register"
+        ],
+        "task_types": [
+          "constrained_generation",
+          "multiple_choice",
+          "open_generation",
+          "short_answer"
+        ]
+      },
+      {
+        "id": "civics_public",
+        "name": "Samhälle & förvaltning",
+        "description": "Tolkning av svenska samhälls- och myndighetsnära texter.",
+        "item_count": 5,
+        "capabilities": [
+          "calibrated_abstention",
+          "civic_knowledge",
+          "explanation",
+          "grounded_answering",
+          "structured_extraction"
+        ],
+        "task_types": [
+          "grounded_qa",
+          "multiple_choice",
+          "open_generation",
+          "structured_extraction"
+        ]
+      },
+      {
+        "id": "work_life",
+        "name": "Arbetsliv & vardag",
+        "description": "Praktisk kommunikation, planering och informationsutvinning.",
+        "item_count": 5,
+        "capabilities": [
+          "information_extraction",
+          "instruction_following",
+          "structured_extraction",
+          "summarization"
+        ],
+        "task_types": [
+          "constrained_generation",
+          "grounded_qa",
+          "open_generation",
+          "structured_extraction"
+        ]
+      },
+      {
+        "id": "health_literacy",
+        "name": "Hälsolitteracitet",
+        "description": "Begriplig, försiktig hantering av allmän hälsoinformation.",
+        "item_count": 5,
+        "capabilities": [
+          "calibrated_abstention",
+          "numeric_reasoning",
+          "reading_comprehension",
+          "safe_communication"
+        ],
+        "task_types": [
+          "multiple_choice",
+          "numeric",
+          "open_generation",
+          "short_answer"
+        ]
+      },
+      {
+        "id": "stem_reasoning",
+        "name": "Matematik & naturvetenskap",
+        "description": "Numerik, enheter, logik och förklaringar på svenska.",
+        "item_count": 5,
+        "capabilities": [
+          "data_sufficiency",
+          "numeric_reasoning",
+          "scientific_explanation",
+          "unit_reasoning"
+        ],
+        "task_types": [
+          "multiple_choice",
+          "numeric",
+          "open_generation"
+        ]
+      },
+      {
+        "id": "culture_society",
+        "name": "Kultur & Sverige-kunskap",
+        "description": "Stabila svenska kultur-, geografi- och samhällsreferenser.",
+        "item_count": 5,
+        "capabilities": [
+          "cultural_explanation",
+          "cultural_knowledge",
+          "geographic_knowledge",
+          "information_synthesis"
+        ],
+        "task_types": [
+          "grounded_qa",
+          "multiple_choice",
+          "open_generation",
+          "short_answer"
+        ]
+      },
+      {
+        "id": "grounding_safety",
+        "name": "Källtrohet & säkerhet",
+        "description": "Motstånd mot påhitt, promptinjektion och otillräckligt underlag.",
+        "item_count": 5,
+        "capabilities": [
+          "calibrated_abstention",
+          "grounded_answering",
+          "prompt_injection_resistance",
+          "safe_uncertainty",
+          "structured_extraction"
+        ],
+        "task_types": [
+          "grounded_qa",
+          "open_generation",
+          "short_answer",
+          "structured_extraction"
+        ]
+      },
+      {
+        "id": "digital_agency",
+        "name": "Digitala uppgifter & verktyg",
+        "description": "Strukturerade svar, verktygsval och exakta formatkrav.",
+        "item_count": 5,
+        "capabilities": [
+          "instruction_following",
+          "structured_output",
+          "task_planning",
+          "tool_selection"
+        ],
+        "task_types": [
+          "constrained_generation",
+          "multiple_choice",
+          "open_generation",
+          "structured_extraction"
+        ]
+      }
+    ],
+    "task_types": [
+      {
+        "id": "multiple_choice",
+        "name": "Flervalsfråga"
+      },
+      {
+        "id": "short_answer",
+        "name": "Kort svar"
+      },
+      {
+        "id": "numeric",
+        "name": "Numeriskt svar"
+      },
+      {
+        "id": "structured_extraction",
+        "name": "Strukturerad extraktion"
+      },
+      {
+        "id": "constrained_generation",
+        "name": "Styrd generering"
+      },
+      {
+        "id": "grounded_qa",
+        "name": "Källgrundad frågesvar"
+      },
+      {
+        "id": "open_generation",
+        "name": "Öppen generering"
+      }
+    ],
+    "methodology": [
+      "Report a domain profile, minimum-domain score, coverage and malformed rate; never only one blended rank.",
+      "Score deterministic tasks locally and keep rubric tasks visibly unscored unless a named judge is configured.",
+      "Use paired contrast cases to expose drops caused by distractors, strict formats and insufficient evidence.",
+      "Preserve model revision, backend, prompt, decoding settings, raw answers, latency and judge provenance.",
+      "Compare runs only when suite version, split and protocol are compatible."
+    ],
+    "limitations": [
+      "Version 0.1 is an author-reviewed public pilot, not a population-valid national benchmark.",
+      "The small sample sizes produce wide uncertainty intervals and are intended for harness validation and early model profiling.",
+      "Open-generation scores depend on the selected judge and should be calibrated against native-speaker human ratings.",
+      "The pilot is text-only and does not yet measure speech, vision or interactive multi-step agents."
+    ]
+  },
+  "integrations": [
+    {
+      "id": "superlim-2",
+      "name": "SuperLim 2.0",
+      "role": "Established Swedish NLU tasks",
+      "status": "catalogued",
+      "url": "https://github.com/spraakbanken/SuperLim-2",
+      "data_url": "https://huggingface.co/datasets/sbx/superlim-2",
+      "license_note": "Licensing and terms are dataset-specific; SVEA does not repackage the collection."
+    },
+    {
+      "id": "swesat-1",
+      "name": "SweSAT-1.0",
+      "role": "Native Swedish verbal and quantitative exam questions",
+      "status": "catalogued",
+      "url": "https://github.com/NLP-RISE/swesat",
+      "license_note": "Reading passages may be copyrighted; use the upstream retrieval flow and source notes."
+    },
+    {
+      "id": "smlb",
+      "name": "Swedish Medical LLM Benchmark",
+      "role": "Deep Swedish medical-domain evaluation",
+      "status": "catalogued",
+      "url": "https://github.com/BirgerMoell/swedish-medical-benchmark",
+      "license_note": "Keep SMLB provenance and benchmark terms; SVEA links to rather than vendors the suite."
+    },
+    {
+      "id": "euroeval-sv",
+      "name": "EuroEval — Swedish",
+      "role": "Comparable European-language model evaluation",
+      "status": "catalogued",
+      "url": "https://euroeval.com/",
+      "source_url": "https://github.com/EuroEval/EuroEval",
+      "license_note": "Framework is MIT; individual dataset terms remain authoritative."
+    },
+    {
+      "id": "oellm-eval",
+      "name": "OpenEuroLLM oellm-eval",
+      "role": "Cluster scheduling and established harness task registry",
+      "status": "catalogued",
+      "url": "https://github.com/OpenEuroLLM/oellm-eval",
+      "license_note": "Use upstream task protocols for protocol-matched comparisons."
+    }
+  ]
+}

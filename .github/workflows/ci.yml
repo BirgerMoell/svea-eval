@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install package
+        run: python -m pip install -e .
+      - name: Validate suite
+        run: svea validate
+      - name: Run tests
+        run: python -m unittest discover -s tests -v
+      - name: Compile package
+        run: python -m compileall -q src
+      - name: Verify generated site data
+        run: |
+          svea build-site --docs docs --results results/runs
+          git diff --exit-code -- docs/data
