@@ -68,11 +68,22 @@ def build_site_data(
     }
     data_dir = docs_dir / "data"
     data_dir.mkdir(parents=True, exist_ok=True)
+    results_payload = {"runs": runs}
     (data_dir / "catalog.json").write_text(
         json.dumps(catalog, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
     (data_dir / "results.json").write_text(
-        json.dumps({"runs": runs}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        json.dumps(results_payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+    (data_dir / "site-data.js").write_text(
+        "window.SVEA_SITE_DATA = "
+        + json.dumps(
+            {"catalog": catalog, "results": results_payload},
+            ensure_ascii=False,
+            separators=(",", ":"),
+        )
+        + ";\n",
+        encoding="utf-8",
     )
     return {"catalog": catalog, "runs": len(runs)}
 

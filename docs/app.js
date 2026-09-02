@@ -1,9 +1,18 @@
-const state = { catalog: null, results: [] };
+const bundled = window.SVEA_SITE_DATA || {};
+const state = {
+  catalog: bundled.catalog || null,
+  results: bundled.results?.runs || [],
+};
 
 const percent = value => value == null ? "—" : `${(Number(value) * 100).toFixed(1)}%`;
 const shortModel = value => String(value || "").split("/").at(-1);
 
 async function loadData() {
+  if (state.catalog) {
+    renderCatalog();
+    renderResults();
+    return;
+  }
   try {
     const [catalogResponse, resultsResponse] = await Promise.all([
       fetch("data/catalog.json"),

@@ -37,3 +37,6 @@ class SiteTests(unittest.TestCase):
             payload = json.loads((root / "docs/data/results.json").read_text())
             self.assertEqual(built["runs"], 1)
             self.assertEqual([run["run_id"] for run in payload["runs"]], ["run-1"])
+            bundle = (root / "docs/data/site-data.js").read_text()
+            self.assertTrue(bundle.startswith("window.SVEA_SITE_DATA = "))
+            self.assertIn('"run_id":"run-1"', bundle)
