@@ -29,6 +29,28 @@ async function loadData() {
   }
 }
 
+function applyDeepLink() {
+  const params = new URLSearchParams(window.location.search);
+  const runId = params.get("run");
+  const itemId = params.get("item");
+  const runIndex = state.results.findIndex(run => run.run_id === runId);
+  if (runIndex >= 0) {
+    state.detail.runIndex = runIndex;
+    state.detail.itemId = itemId || null;
+    state.detail.domain = "all";
+    state.detail.filter = "all";
+  }
+}
+
+function syncDeepLink(runId, itemId) {
+  const url = new URL(window.location.href);
+  url.search = "";
+  url.searchParams.set("run", runId);
+  url.searchParams.set("item", itemId);
+  url.hash = "deep-dive";
+  window.history.replaceState(null, "", url);
+}
+
 function renderCatalog() {
   const suite = state.catalog.suite;
   document.querySelector('[data-stat="items"]').textContent = suite.items;
@@ -63,10 +85,12 @@ function renderResults() {
   if (!state.results.length) return;
   state.results.sort((left, right) =>
     Number(right.summary?.overall?.score || 0) - Number(left.summary?.overall?.score || 0));
+  applyDeepLink();
   const view = document.querySelector("#results-view");
   view.className = "result-cards";
   view.innerHTML = state.results.map((run, index) => {
     const profile = run.summary.capability_profile || {};
+    const malformed = Number(run.summary.counts?.malformed || 0);
     const domains = (run.summary.domains || []).map(domain => `
       <div class="domain-bar">
         <span>${escapeHtml(label(domain.id))}</span>
@@ -81,6 +105,7 @@ function renderResults() {
         <div><strong>${percent(profile.macro_domain_score)}</strong><span>macro domain</span></div>
         <div><strong>${percent(profile.minimum_domain_score)}</strong><span>weakest domain</span></div>
       </div>
+      ${malformed ? `<div class="format-alert"><strong>${malformed} malformed</strong><span>responses violated a declared output format</span></div>` : ""}
       <div class="result-domains">${domains}</div>
       <button class="inspect-button" type="button" data-run-index="${index}">Inspect ${run.items?.length || 0} answers <span aria-hidden="true">→</span></button>
     </article>`;
@@ -190,11 +215,14 @@ function renderDeepDive() {
     });
   });
   const selected = entries.find(entry => entry.item.id === state.detail.itemId) || entries[0];
+  syncDeepLink(run.run_id, selected.item.id);
   renderAnswer(run, selected);
 }
 
 function renderAnswer(run, entry) {
   const { item, sample } = entry;
+  const malformed = sample.score_details?.malformed === true;
+  const partialFormatCredit = malformed && Number(sample.score) > 0;
   const dimensions = sample.judgment && sample.parsed && typeof sample.parsed === "object"
     ? Object.entries(sample.parsed).filter(([, value]) => Number.isFinite(Number(value)))
     : [];
@@ -210,6 +238,11 @@ function renderAnswer(run, entry) {
     <p><strong>Required points</strong></p><ul>${(rubric.required_points || []).map(point => `<li>${escapeHtml(point)}</li>`).join("")}</ul>
     <p><strong>Scoring dimensions</strong></p><dl>${Object.entries(rubric.dimensions || {}).map(([name, description]) => `<dt>${escapeHtml(label(name))}</dt><dd>${escapeHtml(description)}</dd>`).join("")}</dl>
   </div></details>` : "";
+  const deterministicExplanation = malformed
+    ? partialFormatCredit
+      ? `<p class="malformed-warning"><strong>Malformed format.</strong> The response violated the exact answer contract, but an unambiguous correct leading choice was detected, so ${percent(sample.score)} partial credit was awarded. It did not pass.</p>`
+      : `<p class="malformed-warning"><strong>Malformed format.</strong> The response did not match the declared answer contract, so no credit was awarded${sample.parsed ? ` (detected choice: ${escapeHtml(sample.parsed)})` : ""}.</p>`
+    : `<p>No LLM judge was used for this item. The answer was checked by the declared scorer.</p>`;
   const judgePanel = sample.judgment ? `
     <section class="judge-rationale">
       <div class="answer-subhead"><span>LLM JUDGE RATIONALE</span><strong>${escapeHtml(sample.judgment.model)}</strong></div>
@@ -221,13 +254,13 @@ function renderAnswer(run, entry) {
     </section>` : `
     <section class="deterministic-score">
       <div class="answer-subhead"><span>SCORING DECISION</span><strong>Deterministic · ${escapeHtml(sample.scorer)}</strong></div>
-      <p>No LLM judge was used for this item. The answer was checked by the declared scorer.</p>
+      ${deterministicExplanation}
       <details><summary>Scorer details</summary><pre>${escapeHtml(JSON.stringify(sample.score_details || {}, null, 2))}</pre></details>
     </section>`;
   document.querySelector("#detail-answer").innerHTML = `
     <header class="answer-header">
       <div><span>${escapeHtml(domainName(item.domain))}</span><h4>${escapeHtml(label(item.capability))}</h4><code>${escapeHtml(item.id)}</code></div>
-      <div class="answer-score"><strong>${percent(sample.score)}</strong><span>${sample.passed ? "passed" : sample.passed === false ? "did not pass" : "unscored"}</span></div>
+      <div class="answer-score"><strong>${percent(sample.score)}</strong><span>${partialFormatCredit ? "malformed · partial credit" : malformed ? "malformed format" : sample.passed ? "passed" : sample.passed === false ? "did not pass" : "unscored"}</span></div>
     </header>
     <section class="question-block">${context}<span>UPPGIFT</span><p>${escapeHtml(item.prompt)}</p>${options}</section>
     <section class="model-answer"><div class="answer-subhead"><span>MODEL ANSWER</span><strong>${escapeHtml(shortModel(run.model.id))}</strong></div><pre>${escapeHtml(sample.response ?? "No response")}</pre></section>

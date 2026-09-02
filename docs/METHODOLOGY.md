@@ -48,7 +48,7 @@ All item scores are normalized to 0–1.
 
 | Scorer | Behavior |
 |---|---|
-| `choice` | extracts a constrained A–F answer and records malformed output |
+| `choice` | requires the declared response format; current pilot items give 1.0 for exactly one A–F letter, 0.5 for an unambiguous correct leading choice with extra text, and mark the latter malformed and not passed |
 | `exact` | Unicode-normalized, case-insensitive answer or declared alias |
 | `numeric` | parses Swedish decimal commas and applies an explicit tolerance |
 | `contains_all` | requires at least one alias from every fact group and rejects forbidden facts |

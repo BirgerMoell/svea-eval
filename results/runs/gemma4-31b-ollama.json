@@ -5,7 +5,7 @@
   "diagnostic": false,
   "suite": {
     "id": "svea-core",
-    "version": "0.1.1",
+    "version": "0.1.3",
     "split": "dev",
     "public_development_set": true
   },
@@ -522,6 +522,9 @@
       "score": 1.0,
       "score_details": {
         "expected": "A",
+        "required_format": "single_letter",
+        "format_valid": true,
+        "partial_credit": false,
         "malformed": false
       },
       "scorer": "choice",
@@ -541,6 +544,9 @@
       "score": 1.0,
       "score_details": {
         "expected": "A",
+        "required_format": "single_letter",
+        "format_valid": true,
+        "partial_credit": false,
         "malformed": false
       },
       "scorer": "choice",
@@ -670,6 +676,9 @@
       "score": 1.0,
       "score_details": {
         "expected": "A",
+        "required_format": "single_letter",
+        "format_valid": true,
+        "partial_credit": false,
         "malformed": false
       },
       "scorer": "choice",
@@ -871,6 +880,9 @@
       "score": 1.0,
       "score_details": {
         "expected": "B",
+        "required_format": "single_letter",
+        "format_valid": true,
+        "partial_credit": false,
         "malformed": false
       },
       "scorer": "choice",
@@ -890,6 +902,9 @@
       "score": 1.0,
       "score_details": {
         "expected": "B",
+        "required_format": "single_letter",
+        "format_valid": true,
+        "partial_credit": false,
         "malformed": false
       },
       "scorer": "choice",
@@ -1036,6 +1051,9 @@
       "score": 1.0,
       "score_details": {
         "expected": "C",
+        "required_format": "single_letter",
+        "format_valid": true,
+        "partial_credit": false,
         "malformed": false
       },
       "scorer": "choice",
@@ -1082,6 +1100,9 @@
       "score": 1.0,
       "score_details": {
         "expected": "A",
+        "required_format": "single_letter",
+        "format_valid": true,
+        "partial_credit": false,
         "malformed": false
       },
       "scorer": "choice",
@@ -1101,6 +1122,9 @@
       "score": 1.0,
       "score_details": {
         "expected": "B",
+        "required_format": "single_letter",
+        "format_valid": true,
+        "partial_credit": false,
         "malformed": false
       },
       "scorer": "choice",
@@ -1368,6 +1392,9 @@
       "score": 1.0,
       "score_details": {
         "expected": "B",
+        "required_format": "single_letter",
+        "format_valid": true,
+        "partial_credit": false,
         "malformed": false
       },
       "scorer": "choice",
@@ -1474,6 +1501,429 @@
                 }
               ],
               "matched_candidate": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "source_suite_version": "0.1.1",
+      "target_suite_version": "0.1.2",
+      "reason": "SVEA Core v0.1.2 enforces the explicit single-letter response contract on multiple-choice items. Saved model responses and judge outputs were reused; surrounding option text is now marked malformed and receives zero.",
+      "model_responses_reused": true,
+      "judge_outputs_reused": true,
+      "changes": [
+        {
+          "item_id": "svea-v01-lang-001-clean",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "A",
+              "malformed": false
+            }
+          },
+          "after": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "A",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "malformed": false
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-lang-001-distractor",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "A",
+              "malformed": false
+            }
+          },
+          "after": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "A",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "malformed": false
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-civic-002",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "A",
+              "malformed": false
+            }
+          },
+          "after": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "A",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "malformed": false
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-health-001-clean",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "B",
+              "malformed": false
+            }
+          },
+          "after": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "B",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "malformed": false
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-health-001-distractor",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "B",
+              "malformed": false
+            }
+          },
+          "after": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "B",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "malformed": false
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-stem-003",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "C",
+              "malformed": false
+            }
+          },
+          "after": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "C",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "malformed": false
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-culture-001-base",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "A",
+              "malformed": false
+            }
+          },
+          "after": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "A",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "malformed": false
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-culture-001-challenge",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "B",
+              "malformed": false
+            }
+          },
+          "after": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "B",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "malformed": false
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-digital-002",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "B",
+              "malformed": false
+            }
+          },
+          "after": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "B",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "malformed": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "source_suite_version": "0.1.2",
+      "target_suite_version": "0.1.3",
+      "reason": "SVEA Core v0.1.3 awards 0.5 semantic partial credit when a malformed multiple-choice response begins with an unambiguous correct choice. Full credit and passed status still require exactly one letter; saved model responses and judge outputs were reused.",
+      "model_responses_reused": true,
+      "judge_outputs_reused": true,
+      "changes": [
+        {
+          "item_id": "svea-v01-lang-001-clean",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "A",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "malformed": false
+            }
+          },
+          "after": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "A",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "partial_credit": false,
+              "malformed": false
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-lang-001-distractor",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "A",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "malformed": false
+            }
+          },
+          "after": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "A",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "partial_credit": false,
+              "malformed": false
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-civic-002",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "A",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "malformed": false
+            }
+          },
+          "after": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "A",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "partial_credit": false,
+              "malformed": false
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-health-001-clean",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "B",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "malformed": false
+            }
+          },
+          "after": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "B",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "partial_credit": false,
+              "malformed": false
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-health-001-distractor",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "B",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "malformed": false
+            }
+          },
+          "after": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "B",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "partial_credit": false,
+              "malformed": false
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-stem-003",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "C",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "malformed": false
+            }
+          },
+          "after": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "C",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "partial_credit": false,
+              "malformed": false
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-culture-001-base",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "A",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "malformed": false
+            }
+          },
+          "after": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "A",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "partial_credit": false,
+              "malformed": false
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-culture-001-challenge",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "B",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "malformed": false
+            }
+          },
+          "after": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "B",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "partial_credit": false,
+              "malformed": false
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-digital-002",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "B",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "malformed": false
+            }
+          },
+          "after": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "B",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "partial_credit": false,
+              "malformed": false
             }
           }
         }

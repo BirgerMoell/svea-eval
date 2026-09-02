@@ -22,7 +22,7 @@ class SiteTests(unittest.TestCase):
                     "revision": "judge-rev",
                     "backend": "openai-compatible",
                 },
-                "suite": {"id": "svea-core", "version": "0.1.1"},
+                "suite": {"id": "svea-core", "version": "0.1.3"},
                 "protocol": {"temperature": 0},
                 "finished_at": "2026-09-02T00:00:00+00:00",
                 "summary": {
@@ -51,7 +51,7 @@ class SiteTests(unittest.TestCase):
                 "rescoring_history": [
                     {
                         "source_suite_version": "0.1.0",
-                        "target_suite_version": "0.1.1",
+                        "target_suite_version": "0.1.3",
                         "reason": "Reviewed correction.",
                     }
                 ],
@@ -76,7 +76,7 @@ class SiteTests(unittest.TestCase):
             self.assertIsNone(payload["runs"][0]["items"][0]["item"]["rubric"])
             self.assertEqual(
                 payload["runs"][0]["rescoring_history"][0]["target_suite_version"],
-                "0.1.1",
+                "0.1.3",
             )
             bundle = (root / "docs/data/site-data.js").read_text()
             self.assertTrue(bundle.startswith("window.SVEA_SITE_DATA = "))

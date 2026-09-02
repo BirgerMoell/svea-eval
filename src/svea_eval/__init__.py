@@ -1,3 +1,3 @@
 """SVEA Eval: Swedish-first evaluation for language models."""
 
-__version__ = "0.1.2"
+__version__ = "0.1.4"

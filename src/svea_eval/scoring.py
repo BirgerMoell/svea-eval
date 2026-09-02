@@ -13,6 +13,10 @@ from .models import Item, Score
 
 _CODE_FENCE = re.compile(r"^\s*```(?:json|text)?\s*|\s*```\s*$", re.IGNORECASE)
 _CHOICE = re.compile(r"(?:^|\b)(?:svaret\s+(?:är|blir)\s+|svar\s*[:\-]?\s*)?([A-F])(?:\b|[.)])", re.IGNORECASE)
+_LEADING_CHOICE = re.compile(
+    r"^\s*(?:(?:svaret\s+(?:är|blir)|svar)\s*[:\-]?\s*)?([A-F])(?:\b|[.)])",
+    re.IGNORECASE,
+)
 _NUMBER = re.compile(r"[-+]?\d(?:[\d\s.]*\d)?(?:[,.]\d+)?|[-+]?\d")
 
 
@@ -114,7 +118,8 @@ def _normalize_dimension_key(value: str) -> str:
 
 def _score_choice(item: Item, response: str) -> Score:
     gold = normalize_text(str(item.gold["answer"])).upper()
-    match = _CHOICE.search(response.strip())
+    stripped = response.strip()
+    match = _CHOICE.search(stripped)
     parsed = match.group(1).upper() if match else None
     if parsed is None and item.options:
         normalized = normalize_text(response)
@@ -123,13 +128,31 @@ def _score_choice(item: Item, response: str) -> Score:
             if normalize_text(text) == normalized:
                 parsed = letter.strip().upper()
                 break
-    passed = parsed == gold
+    required_format = item.scoring.get("format")
+    format_valid = True
+    partial_credit = False
+    if required_format == "single_letter":
+        format_match = re.fullmatch(r"([A-F])", stripped, re.IGNORECASE)
+        format_valid = format_match is not None
+        if format_match:
+            parsed = format_match.group(1).upper()
+        elif (leading_match := _LEADING_CHOICE.match(stripped)) is not None:
+            parsed = leading_match.group(1).upper()
+            partial_credit = parsed == gold
+    passed = format_valid and parsed == gold
+    value = 1.0 if passed else 0.5 if partial_credit else 0.0
     return Score(
-        value=1.0 if passed else 0.0,
+        value=value,
         passed=passed,
         scorer="choice",
         parsed=parsed,
-        details={"expected": gold, "malformed": parsed is None},
+        details={
+            "expected": gold,
+            "required_format": required_format,
+            "format_valid": format_valid,
+            "partial_credit": partial_credit,
+            "malformed": parsed is None or not format_valid,
+        },
     )
 
 

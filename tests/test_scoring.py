@@ -11,10 +11,36 @@ class ScoringTests(unittest.TestCase):
         _, items = load_suite()
         cls.items = {item.id: item for item in items}
 
-    def test_choice_accepts_labeled_answer(self):
-        score = score_item(item=self.items["svea-v01-lang-001-clean"], response="Svaret är A.")
-        self.assertEqual(score.value, 1.0)
+    def test_choice_enforces_requested_single_letter_format(self):
+        valid = score_item(item=self.items["svea-v01-lang-001-clean"], response="A")
+        verbose = score_item(
+            item=self.items["svea-v01-lang-001-clean"],
+            response="Svaret är A. De som kom först fick kaffe.",
+        )
+        self.assertEqual(valid.value, 1.0)
+        self.assertEqual(valid.parsed, "A")
+        self.assertEqual(verbose.value, 0.5)
+        self.assertEqual(verbose.parsed, "A")
+        self.assertFalse(verbose.passed)
+        self.assertTrue(verbose.details["malformed"])
+        self.assertFalse(verbose.details["format_valid"])
+        self.assertTrue(verbose.details["partial_credit"])
+
+    def test_choice_distinguishes_wrong_letter_from_malformed_format(self):
+        score = score_item(item=self.items["svea-v01-lang-001-clean"], response="B")
+        self.assertEqual(score.value, 0.0)
+        self.assertEqual(score.parsed, "B")
+        self.assertFalse(score.details["malformed"])
+
+    def test_choice_gives_no_partial_credit_when_choice_is_not_leading(self):
+        score = score_item(
+            item=self.items["svea-v01-lang-001-clean"],
+            response="Efter en genomgång är svaret A.",
+        )
+        self.assertEqual(score.value, 0.0)
         self.assertEqual(score.parsed, "A")
+        self.assertTrue(score.details["malformed"])
+        self.assertFalse(score.details["partial_credit"])
 
     def test_choice_marks_unparseable_output(self):
         score = score_item(item=self.items["svea-v01-lang-001-clean"], response="Jag är osäker.")

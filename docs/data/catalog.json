@@ -1,7 +1,7 @@
 {
   "project": {
     "name": "SVEA Eval",
-    "version": "0.1.1",
+    "version": "0.1.3",
     "tagline": "Measure what a model can do in Swedish — and where that ability breaks.",
     "repository": "https://github.com/BirgerMoell/svea-eval"
   },

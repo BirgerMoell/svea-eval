@@ -178,6 +178,8 @@ The runner also preserves invalid raw judge output. If a later parser fix can
 read that same output, resuming the run re-scores it locally without calling
 either model again. The project page exposes the named judge, dimension scores,
 published rationale and raw structured judgment for every rubric-scored answer.
+The active model run and item are mirrored in the page URL, so a copied browser
+address reopens the same answer-level evidence.
 
 Large local targets and judges can also run in separate processes. First run
 the target without a judge, then score only the preserved rubric responses:
@@ -309,7 +311,7 @@ Until an archival release exists, cite the repository and version:
   author  = {Birger Moëll},
   title   = {SVEA Eval: Swedish Versatile Evaluation & Analysis},
   year    = {2026},
-  version = {0.1.1},
+  version = {0.1.4},
   url     = {https://github.com/BirgerMoell/svea-eval}
 }
 ```

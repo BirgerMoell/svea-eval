@@ -5,7 +5,7 @@
   "diagnostic": false,
   "suite": {
     "id": "svea-core",
-    "version": "0.1.1",
+    "version": "0.1.3",
     "split": "dev",
     "public_development_set": true
   },
@@ -50,27 +50,27 @@
       "scored": 40,
       "unjudged": 0,
       "generation_errors": 0,
-      "malformed": 0
+      "malformed": 6
     },
     "overall": {
-      "score": 0.7458333333333333,
+      "score": 0.6833333333333333,
       "n": 40,
       "ci95": [
-        0.6271335906319319,
-        0.8645330760347348
+        0.5664849278775898,
+        0.800181738789077
       ],
-      "pass_rate": 0.675
+      "pass_rate": 0.55
     },
     "domains": [
       {
         "id": "civics_public",
-        "score": 0.9666666666666666,
+        "score": 0.8666666666666666,
         "n": 5,
         "ci95": [
-          0.9013333333333332,
+          0.6761889047683868,
           1.0
         ],
-        "pass_rate": 1.0
+        "pass_rate": 0.8
       },
       {
         "id": "culture_society",
@@ -84,13 +84,13 @@
       },
       {
         "id": "digital_agency",
-        "score": 0.9166666666666666,
+        "score": 0.8166666666666667,
         "n": 5,
         "ci95": [
-          0.7533333333333333,
+          0.5951105538845746,
           1.0
         ],
-        "pass_rate": 0.8
+        "pass_rate": 0.6
       },
       {
         "id": "grounding_safety",
@@ -104,33 +104,33 @@
       },
       {
         "id": "health_literacy",
-        "score": 0.7333333333333333,
+        "score": 0.6333333333333333,
         "n": 5,
         "ci95": [
-          0.35237780953677367,
-          1.0
-        ],
-        "pass_rate": 0.6
-      },
-      {
-        "id": "stem_reasoning",
-        "score": 0.35,
-        "n": 5,
-        "ci95": [
-          0.0,
-          0.7771720964669859
+          0.26957272829510526,
+          0.9970939383715614
         ],
         "pass_rate": 0.4
       },
       {
-        "id": "swedish_language",
-        "score": 0.65,
+        "id": "stem_reasoning",
+        "score": 0.25,
         "n": 5,
         "ci95": [
-          0.24858527957014614,
-          1.0
+          0.0,
+          0.5599032106965012
         ],
-        "pass_rate": 0.6
+        "pass_rate": 0.2
+      },
+      {
+        "id": "swedish_language",
+        "score": 0.55,
+        "n": 5,
+        "ci95": [
+          0.186239394961772,
+          0.9137606050382281
+        ],
+        "pass_rate": 0.4
       },
       {
         "id": "work_life",
@@ -156,13 +156,13 @@
       },
       {
         "id": "civic_knowledge",
-        "score": 1.0,
+        "score": 0.5,
         "n": 1,
         "ci95": [
-          1.0,
-          1.0
+          0.5,
+          0.5
         ],
-        "pass_rate": 1.0
+        "pass_rate": 0.0
       },
       {
         "id": "cultural_explanation",
@@ -186,13 +186,13 @@
       },
       {
         "id": "data_sufficiency",
-        "score": 1.0,
+        "score": 0.5,
         "n": 1,
         "ci95": [
-          1.0,
-          1.0
+          0.5,
+          0.5
         ],
-        "pass_rate": 1.0
+        "pass_rate": 0.0
       },
       {
         "id": "explanation",
@@ -216,13 +216,13 @@
       },
       {
         "id": "grammar",
-        "score": 0.5,
+        "score": 0.25,
         "n": 2,
         "ci95": [
           0.0,
-          1.0
+          0.74
         ],
-        "pass_rate": 0.5
+        "pass_rate": 0.0
       },
       {
         "id": "grounded_answering",
@@ -296,13 +296,13 @@
       },
       {
         "id": "reading_comprehension",
-        "score": 1.0,
+        "score": 0.75,
         "n": 2,
         "ci95": [
-          1.0,
+          0.26,
           1.0
         ],
-        "pass_rate": 1.0
+        "pass_rate": 0.5
       },
       {
         "id": "register",
@@ -386,13 +386,13 @@
       },
       {
         "id": "tool_selection",
-        "score": 1.0,
+        "score": 0.5,
         "n": 1,
         "ci95": [
-          1.0,
-          1.0
+          0.5,
+          0.5
         ],
-        "pass_rate": 1.0
+        "pass_rate": 0.0
       },
       {
         "id": "unit_reasoning",
@@ -428,13 +428,13 @@
       },
       {
         "id": "multiple_choice",
-        "score": 0.7777777777777778,
+        "score": 0.5,
         "n": 9,
         "ci95": [
-          0.4896848572396335,
-          1.0
+          0.26901178481239446,
+          0.7309882151876055
         ],
-        "pass_rate": 0.7777777777777778
+        "pass_rate": 0.2222222222222222
       },
       {
         "id": "numeric",
@@ -480,13 +480,13 @@
     "contrast_sets": {
       "complete_pairs": 8,
       "base_score": 0.75,
-      "challenge_score": 0.6875,
-      "robustness_gap": 0.0625,
-      "pair_retention_rate": 0.75
+      "challenge_score": 0.5625,
+      "robustness_gap": 0.1875,
+      "pair_retention_rate": 0.625
     },
     "capability_profile": {
-      "macro_domain_score": 0.7458333333333333,
-      "minimum_domain_score": 0.35,
+      "macro_domain_score": 0.6833333333333333,
+      "minimum_domain_score": 0.25,
       "covered_domains": 8,
       "declared_domains": 8
     },
@@ -505,6 +505,9 @@
       "parsed": "B",
       "score_details": {
         "expected": "A",
+        "required_format": "single_letter",
+        "format_valid": true,
+        "partial_credit": false,
         "malformed": false
       },
       "scoring_error": null,
@@ -518,13 +521,16 @@
     {
       "item_id": "svea-v01-lang-001-distractor",
       "response": "Svaret är A. De som kom",
-      "score": 1.0,
-      "passed": true,
+      "score": 0.5,
+      "passed": false,
       "scorer": "choice",
       "parsed": "A",
       "score_details": {
         "expected": "A",
-        "malformed": false
+        "required_format": "single_letter",
+        "format_valid": false,
+        "partial_credit": true,
+        "malformed": true
       },
       "scoring_error": null,
       "latency_ms": 1190.0778749841265,
@@ -652,13 +658,16 @@
     {
       "item_id": "svea-v01-civic-002",
       "response": "Svaret är A. Valmyndigheten",
-      "score": 1.0,
-      "passed": true,
+      "score": 0.5,
+      "passed": false,
       "scorer": "choice",
       "parsed": "A",
       "score_details": {
         "expected": "A",
-        "malformed": false
+        "required_format": "single_letter",
+        "format_valid": false,
+        "partial_credit": true,
+        "malformed": true
       },
       "scoring_error": null,
       "latency_ms": 925.6903339992277,
@@ -869,6 +878,9 @@
       "parsed": "B",
       "score_details": {
         "expected": "B",
+        "required_format": "single_letter",
+        "format_valid": true,
+        "partial_credit": false,
         "malformed": false
       },
       "scoring_error": null,
@@ -882,13 +894,16 @@
     {
       "item_id": "svea-v01-health-001-distractor",
       "response": "B. Komma 15 minuter",
-      "score": 1.0,
-      "passed": true,
+      "score": 0.5,
+      "passed": false,
       "scorer": "choice",
       "parsed": "B",
       "score_details": {
         "expected": "B",
-        "malformed": false
+        "required_format": "single_letter",
+        "format_valid": false,
+        "partial_credit": true,
+        "malformed": true
       },
       "scoring_error": null,
       "latency_ms": 1316.2746250163764,
@@ -1033,13 +1048,16 @@
     {
       "item_id": "svea-v01-stem-003",
       "response": "C. Nej, sidlängderna",
-      "score": 1.0,
-      "passed": true,
+      "score": 0.5,
+      "passed": false,
       "scorer": "choice",
       "parsed": "C",
       "score_details": {
         "expected": "C",
-        "malformed": false
+        "required_format": "single_letter",
+        "format_valid": false,
+        "partial_credit": true,
+        "malformed": true
       },
       "scoring_error": null,
       "latency_ms": 1219.2858750349842,
@@ -1090,6 +1108,9 @@
       "parsed": "A",
       "score_details": {
         "expected": "A",
+        "required_format": "single_letter",
+        "format_valid": true,
+        "partial_credit": false,
         "malformed": false
       },
       "scoring_error": null,
@@ -1109,7 +1130,10 @@
       "parsed": "C",
       "score_details": {
         "expected": "B",
-        "malformed": false
+        "required_format": "single_letter",
+        "format_valid": false,
+        "partial_credit": false,
+        "malformed": true
       },
       "scoring_error": null,
       "latency_ms": 952.8610419947654,
@@ -1380,13 +1404,16 @@
     {
       "item_id": "svea-v01-digital-002",
       "response": "B. Kontrollera väderprogn",
-      "score": 1.0,
-      "passed": true,
+      "score": 0.5,
+      "passed": false,
       "scorer": "choice",
       "parsed": "B",
       "score_details": {
         "expected": "B",
-        "malformed": false
+        "required_format": "single_letter",
+        "format_valid": false,
+        "partial_credit": true,
+        "malformed": true
       },
       "scoring_error": null,
       "latency_ms": 1245.4081670148298,
@@ -1487,6 +1514,431 @@
         "svea-v01-digital-004"
       ],
       "failed_item_ids": []
+    }
+  ],
+  "rescoring_history": [
+    {
+      "source_suite_version": "0.1.1",
+      "target_suite_version": "0.1.2",
+      "reason": "SVEA Core v0.1.2 enforces the explicit single-letter response contract on multiple-choice items. Saved model responses and judge outputs were reused; surrounding option text is now marked malformed and receives zero.",
+      "model_responses_reused": true,
+      "judge_outputs_reused": true,
+      "changes": [
+        {
+          "item_id": "svea-v01-lang-001-clean",
+          "before": {
+            "score": 0.0,
+            "passed": false,
+            "score_details": {
+              "expected": "A",
+              "malformed": false
+            }
+          },
+          "after": {
+            "score": 0.0,
+            "passed": false,
+            "score_details": {
+              "expected": "A",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "malformed": false
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-lang-001-distractor",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "A",
+              "malformed": false
+            }
+          },
+          "after": {
+            "score": 0.0,
+            "passed": false,
+            "score_details": {
+              "expected": "A",
+              "required_format": "single_letter",
+              "format_valid": false,
+              "malformed": true
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-civic-002",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "A",
+              "malformed": false
+            }
+          },
+          "after": {
+            "score": 0.0,
+            "passed": false,
+            "score_details": {
+              "expected": "A",
+              "required_format": "single_letter",
+              "format_valid": false,
+              "malformed": true
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-health-001-clean",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "B",
+              "malformed": false
+            }
+          },
+          "after": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "B",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "malformed": false
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-health-001-distractor",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "B",
+              "malformed": false
+            }
+          },
+          "after": {
+            "score": 0.0,
+            "passed": false,
+            "score_details": {
+              "expected": "B",
+              "required_format": "single_letter",
+              "format_valid": false,
+              "malformed": true
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-stem-003",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "C",
+              "malformed": false
+            }
+          },
+          "after": {
+            "score": 0.0,
+            "passed": false,
+            "score_details": {
+              "expected": "C",
+              "required_format": "single_letter",
+              "format_valid": false,
+              "malformed": true
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-culture-001-base",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "A",
+              "malformed": false
+            }
+          },
+          "after": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "A",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "malformed": false
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-culture-001-challenge",
+          "before": {
+            "score": 0.0,
+            "passed": false,
+            "score_details": {
+              "expected": "B",
+              "malformed": false
+            }
+          },
+          "after": {
+            "score": 0.0,
+            "passed": false,
+            "score_details": {
+              "expected": "B",
+              "required_format": "single_letter",
+              "format_valid": false,
+              "malformed": true
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-digital-002",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "B",
+              "malformed": false
+            }
+          },
+          "after": {
+            "score": 0.0,
+            "passed": false,
+            "score_details": {
+              "expected": "B",
+              "required_format": "single_letter",
+              "format_valid": false,
+              "malformed": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "source_suite_version": "0.1.2",
+      "target_suite_version": "0.1.3",
+      "reason": "SVEA Core v0.1.3 awards 0.5 semantic partial credit when a malformed multiple-choice response begins with an unambiguous correct choice. Full credit and passed status still require exactly one letter; saved model responses and judge outputs were reused.",
+      "model_responses_reused": true,
+      "judge_outputs_reused": true,
+      "changes": [
+        {
+          "item_id": "svea-v01-lang-001-clean",
+          "before": {
+            "score": 0.0,
+            "passed": false,
+            "score_details": {
+              "expected": "A",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "malformed": false
+            }
+          },
+          "after": {
+            "score": 0.0,
+            "passed": false,
+            "score_details": {
+              "expected": "A",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "partial_credit": false,
+              "malformed": false
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-lang-001-distractor",
+          "before": {
+            "score": 0.0,
+            "passed": false,
+            "score_details": {
+              "expected": "A",
+              "required_format": "single_letter",
+              "format_valid": false,
+              "malformed": true
+            }
+          },
+          "after": {
+            "score": 0.5,
+            "passed": false,
+            "score_details": {
+              "expected": "A",
+              "required_format": "single_letter",
+              "format_valid": false,
+              "partial_credit": true,
+              "malformed": true
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-civic-002",
+          "before": {
+            "score": 0.0,
+            "passed": false,
+            "score_details": {
+              "expected": "A",
+              "required_format": "single_letter",
+              "format_valid": false,
+              "malformed": true
+            }
+          },
+          "after": {
+            "score": 0.5,
+            "passed": false,
+            "score_details": {
+              "expected": "A",
+              "required_format": "single_letter",
+              "format_valid": false,
+              "partial_credit": true,
+              "malformed": true
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-health-001-clean",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "B",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "malformed": false
+            }
+          },
+          "after": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "B",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "partial_credit": false,
+              "malformed": false
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-health-001-distractor",
+          "before": {
+            "score": 0.0,
+            "passed": false,
+            "score_details": {
+              "expected": "B",
+              "required_format": "single_letter",
+              "format_valid": false,
+              "malformed": true
+            }
+          },
+          "after": {
+            "score": 0.5,
+            "passed": false,
+            "score_details": {
+              "expected": "B",
+              "required_format": "single_letter",
+              "format_valid": false,
+              "partial_credit": true,
+              "malformed": true
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-stem-003",
+          "before": {
+            "score": 0.0,
+            "passed": false,
+            "score_details": {
+              "expected": "C",
+              "required_format": "single_letter",
+              "format_valid": false,
+              "malformed": true
+            }
+          },
+          "after": {
+            "score": 0.5,
+            "passed": false,
+            "score_details": {
+              "expected": "C",
+              "required_format": "single_letter",
+              "format_valid": false,
+              "partial_credit": true,
+              "malformed": true
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-culture-001-base",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "A",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "malformed": false
+            }
+          },
+          "after": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": "A",
+              "required_format": "single_letter",
+              "format_valid": true,
+              "partial_credit": false,
+              "malformed": false
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-culture-001-challenge",
+          "before": {
+            "score": 0.0,
+            "passed": false,
+            "score_details": {
+              "expected": "B",
+              "required_format": "single_letter",
+              "format_valid": false,
+              "malformed": true
+            }
+          },
+          "after": {
+            "score": 0.0,
+            "passed": false,
+            "score_details": {
+              "expected": "B",
+              "required_format": "single_letter",
+              "format_valid": false,
+              "partial_credit": false,
+              "malformed": true
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-digital-002",
+          "before": {
+            "score": 0.0,
+            "passed": false,
+            "score_details": {
+              "expected": "B",
+              "required_format": "single_letter",
+              "format_valid": false,
+              "malformed": true
+            }
+          },
+          "after": {
+            "score": 0.5,
+            "passed": false,
+            "score_details": {
+              "expected": "B",
+              "required_format": "single_letter",
+              "format_valid": false,
+              "partial_credit": true,
+              "malformed": true
+            }
+          }
+        }
+      ]
     }
   ]
 }

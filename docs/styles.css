@@ -175,6 +175,8 @@ h1 em { color: var(--blue); font-weight: 500; }
 .result-main div { padding: 15px; background: var(--paper); }
 .result-main strong { display: block; color: var(--blue); font-family: Georgia, serif; font-size: 33px; font-weight: 500; }
 .result-main span { color: var(--muted); font-size: 10px; font-weight: 800; text-transform: uppercase; }
+.format-alert { margin: -15px 0 22px; padding: 10px 12px; display: flex; gap: 8px; align-items: baseline; border-left: 4px solid var(--red); background: #fff0e9; color: var(--red); font-size: 9px; }
+.format-alert span { color: var(--muted); }
 .result-domains { display: grid; gap: 8px; }
 .domain-bar { display: grid; grid-template-columns: 130px 1fr 42px; align-items: center; gap: 10px; font-size: 11px; }
 .domain-bar i { height: 5px; background: #ddd9ce; }
@@ -240,6 +242,7 @@ h1 em { color: var(--blue); font-weight: 500; }
 .dimension-grid b { text-align: right; }
 .judge-rationale blockquote { margin: 17px 0 8px; padding: 18px 20px; border-left: 5px solid var(--mint); background: #e8f2ee; font-family: Georgia, serif; font-size: 18px; line-height: 1.45; }
 .reasoning-note, .deterministic-score > p { color: var(--muted); font-size: 10px; }
+.deterministic-score > .malformed-warning { margin-top: 16px; padding: 12px 14px; border-left: 4px solid var(--red); background: #fff0e9; color: var(--red); line-height: 1.5; }
 details { margin-top: 15px; }
 details summary { color: var(--blue); font-size: 10px; font-weight: 850; cursor: pointer; }
 .rubric-details > div { margin-top: 10px; padding: 14px 16px; background: var(--paper); color: var(--muted); font-size: 10px; line-height: 1.55; }
