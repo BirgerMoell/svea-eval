@@ -45,12 +45,14 @@ class RunnerTests(unittest.TestCase):
                 items=[rubric_item],
                 backend=OracleBackend(),
                 judge_backend=OracleBackend(),
+                judge_revision="oracle-rev",
                 output=Path(directory) / "judged.json",
                 config=GenerationConfig(),
             )
             self.assertEqual(run["status"], "completed")
             self.assertEqual(run["samples"][0]["score"], 1.0)
             self.assertEqual(run["samples"][0]["judgment"]["model"], "svea/oracle-diagnostic")
+            self.assertEqual(run["judge"]["revision"], "oracle-rev")
 
     def test_resume_rejects_changed_protocol(self):
         with tempfile.TemporaryDirectory() as directory:

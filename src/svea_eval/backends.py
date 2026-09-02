@@ -1,4 +1,4 @@
-"""Generation backends for hosted APIs and local Transformers models."""
+"""Generation backends for hosted APIs, Ollama and local Transformers models."""
 
 from __future__ import annotations
 
@@ -34,6 +34,10 @@ class Backend(ABC):
     @abstractmethod
     def generate(self, item: Item, config: GenerationConfig) -> Generation:
         """Generate one answer for an evaluation item."""
+
+    def protocol_settings(self) -> dict[str, Any]:
+        """Return non-secret backend settings that affect model output."""
+        return {}
 
 
 class OpenAICompatibleBackend(Backend):
@@ -99,6 +103,84 @@ class OpenAICompatibleBackend(Backend):
             output_tokens=_optional_int(usage.get("completion_tokens")),
             finish_reason=choice.get("finish_reason"),
             raw={"id": raw.get("id"), "created": raw.get("created")},
+        )
+
+
+class OllamaBackend(Backend):
+    """Dependency-free client for Ollama's native chat endpoint.
+
+    The native endpoint exposes ``think`` explicitly. That matters for models
+    whose hidden reasoning otherwise consumes a benchmark item's answer-token
+    budget before a final answer is emitted.
+    """
+
+    name = "ollama"
+
+    def __init__(
+        self,
+        model_id: str,
+        base_url: str = "http://127.0.0.1:11434",
+        timeout_seconds: float = 120.0,
+        think: bool = False,
+    ) -> None:
+        self.model_id = model_id
+        self.base_url = base_url.rstrip("/")
+        self.timeout_seconds = timeout_seconds
+        self.think = think
+
+    def protocol_settings(self) -> dict[str, Any]:
+        return {"think": self.think}
+
+    def generate(self, item: Item, config: GenerationConfig) -> Generation:
+        url = self.base_url
+        if url.endswith("/v1"):
+            url = url[:-3]
+        if not url.endswith("/api/chat"):
+            url += "/api/chat"
+        options: dict[str, Any] = {
+            "temperature": config.temperature,
+            "num_predict": item.max_tokens,
+        }
+        if config.seed is not None:
+            options["seed"] = config.seed
+        payload = {
+            "model": self.model_id,
+            "messages": [
+                {"role": "system", "content": config.system_prompt},
+                {"role": "user", "content": item.user_prompt()},
+            ],
+            "options": options,
+            "stream": False,
+            "think": self.think,
+        }
+        request = urllib.request.Request(
+            url=url,
+            data=json.dumps(payload).encode("utf-8"),
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        started = time.perf_counter()
+        try:
+            with urllib.request.urlopen(request, timeout=self.timeout_seconds) as response:
+                raw = json.loads(response.read().decode("utf-8"))
+        except urllib.error.HTTPError as exc:
+            body = exc.read().decode("utf-8", errors="replace")[:1000]
+            raise RuntimeError(f"Ollama returned HTTP {exc.code}: {body}") from exc
+        except urllib.error.URLError as exc:
+            raise RuntimeError(f"could not reach Ollama: {exc.reason}") from exc
+        latency_ms = (time.perf_counter() - started) * 1000
+        message = raw.get("message", {})
+        return Generation(
+            text=str(message.get("content", "")),
+            latency_ms=latency_ms,
+            input_tokens=_optional_int(raw.get("prompt_eval_count")),
+            output_tokens=_optional_int(raw.get("eval_count")),
+            finish_reason=raw.get("done_reason"),
+            raw={
+                "created_at": raw.get("created_at"),
+                "total_duration_ns": raw.get("total_duration"),
+                "load_duration_ns": raw.get("load_duration"),
+            },
         )
 
 
@@ -208,6 +290,7 @@ def create_backend(
     revision: str | None = None,
     device: str = "auto",
     timeout_seconds: float = 120.0,
+    ollama_think: bool = False,
 ) -> Backend:
     if kind == "openai-compatible":
         if not base_url:
@@ -220,6 +303,13 @@ def create_backend(
         )
     if kind == "huggingface":
         return HuggingFaceBackend(model_id=model_id, revision=revision, device=device)
+    if kind == "ollama":
+        return OllamaBackend(
+            model_id=model_id,
+            base_url=base_url or "http://127.0.0.1:11434",
+            timeout_seconds=timeout_seconds,
+            think=ollama_think,
+        )
     if kind == "oracle":
         return OracleBackend()
     raise ValueError(f"unknown backend: {kind}")

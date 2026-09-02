@@ -33,8 +33,8 @@ where performance breaks instead of hiding that drop inside an average.
 - **Contrast-set robustness.** Paired cases reveal sensitivity to distractors,
   strict schemas and absent evidence.
 - **One protocol for API and local models.** Use a hosted API, an
-  OpenAI-compatible local server such as vLLM or Ollama, or a Transformers
-  checkpoint directly.
+  OpenAI-compatible local server such as vLLM, Ollama's native chat endpoint,
+  or a Transformers checkpoint directly.
 - **Transparent scoring.** MCQ, exact, numeric, containment, constraints and
   JSON checks are dependency-free. Open answers remain unscored unless a named
   judge is configured.
@@ -103,7 +103,7 @@ svea run \
   --output runs/model-api.json
 ```
 
-For a local vLLM or Ollama OpenAI-compatible server, omit the key when the
+For a local vLLM or another OpenAI-compatible server, omit the key when the
 server does not require one:
 
 ```bash
@@ -114,6 +114,22 @@ svea run \
   --revision COMMIT_OR_CHECKPOINT_SHA \
   --output runs/model-local-endpoint.json
 ```
+
+For Ollama, use the native backend. It disables hidden thinking by default so
+reasoning tokens cannot consume the short answer budget before a final answer
+is emitted:
+
+```bash
+svea run \
+  --backend ollama \
+  --model gemma3:12b \
+  --revision OLLAMA_MODEL_DIGEST \
+  --output runs/gemma3-12b.json
+```
+
+Pass `--ollama-think` only when thinking is intentionally part of the protocol
+and the suite's answer budgets have been reviewed for that mode. The setting is
+recorded in the run manifest and result artifact.
 
 The runner appends each finished sample to a sidecar JSONL file. Repeating the
 same command resumes instead of paying for completed samples again.

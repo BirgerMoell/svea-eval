@@ -131,13 +131,13 @@
           <p class="kicker">03 / RUN</p>
           <div>
             <h2>One suite. Your endpoint.</h2>
-            <p>The dependency-free core talks to hosted and local OpenAI-compatible endpoints. Transformers is an optional local backend.</p>
+            <p>The dependency-free core talks to hosted APIs, Ollama's native chat endpoint and local OpenAI-compatible servers. Transformers is an optional direct backend.</p>
           </div>
         </div>
         <div class="runner">
           <div class="runner-tabs" role="tablist" aria-label="Run examples">
             <button role="tab" aria-selected="true" data-tab="api">Hosted API</button>
-            <button role="tab" aria-selected="false" data-tab="endpoint">Local endpoint</button>
+            <button role="tab" aria-selected="false" data-tab="endpoint">Ollama / local</button>
             <button role="tab" aria-selected="false" data-tab="hf">Transformers</button>
           </div>
           <div class="code-window">
@@ -150,11 +150,10 @@ svea run \
   --revision PINNED_VERSION \
   --output runs/model-api.json</code></pre>
             <pre id="command-endpoint" class="command"><code>svea run \
-  --backend openai-compatible \
-  --base-url http://127.0.0.1:8000/v1 \
-  --model served-model \
-  --revision CHECKPOINT_SHA \
-  --output runs/model-local.json</code></pre>
+  --backend ollama \
+  --model gemma3:12b \
+  --revision OLLAMA_MODEL_DIGEST \
+  --output runs/gemma3-12b.json</code></pre>
             <pre id="command-hf" class="command"><code><span class="dim">python3 -m pip install -e</span> <span class="yellow">'.[local]'</span>
 svea run \
   --backend huggingface \

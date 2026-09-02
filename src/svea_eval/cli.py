@@ -34,7 +34,9 @@ def build_parser() -> argparse.ArgumentParser:
     run_parser = subparsers.add_parser("run", help="Run or resume an evaluation")
     run_parser.add_argument("--suite", type=Path)
     run_parser.add_argument(
-        "--backend", choices=["openai-compatible", "huggingface", "oracle"], required=True
+        "--backend",
+        choices=["openai-compatible", "ollama", "huggingface", "oracle"],
+        required=True,
     )
     run_parser.add_argument("--model", required=True)
     run_parser.add_argument("--revision")
@@ -42,6 +44,12 @@ def build_parser() -> argparse.ArgumentParser:
     run_parser.add_argument("--api-key-env", default="OPENAI_API_KEY")
     run_parser.add_argument("--device", default="auto")
     run_parser.add_argument("--timeout", type=float, default=120.0)
+    run_parser.add_argument(
+        "--ollama-think",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help="allow Ollama thinking tokens (disabled by default for answer-budget fidelity)",
+    )
     run_parser.add_argument("--temperature", type=float, default=0.0)
     run_parser.add_argument("--seed", type=_optional_int, default=17, metavar="INT|none")
     run_parser.add_argument("--system-prompt", default=DEFAULT_SYSTEM_PROMPT)
@@ -52,7 +60,8 @@ def build_parser() -> argparse.ArgumentParser:
     run_parser.add_argument("--run-id")
     run_parser.add_argument("--diagnostic", action="store_true")
     run_parser.add_argument(
-        "--judge-backend", choices=["openai-compatible", "huggingface", "oracle"]
+        "--judge-backend",
+        choices=["openai-compatible", "ollama", "huggingface", "oracle"],
     )
     run_parser.add_argument("--judge-model")
     run_parser.add_argument("--judge-base-url")
@@ -148,6 +157,7 @@ def _run(args: argparse.Namespace) -> int:
         revision=args.revision,
         device=args.device,
         timeout_seconds=args.timeout,
+        ollama_think=args.ollama_think,
     )
     judge_backend = None
     if args.judge_backend:
@@ -161,6 +171,7 @@ def _run(args: argparse.Namespace) -> int:
             revision=args.judge_revision,
             device=args.device,
             timeout_seconds=args.timeout,
+            ollama_think=args.ollama_think,
         )
     config = GenerationConfig(
         temperature=args.temperature,
@@ -175,6 +186,7 @@ def _run(args: argparse.Namespace) -> int:
         config=config,
         model_revision=args.revision,
         judge_backend=judge_backend,
+        judge_revision=args.judge_revision,
         limit=args.limit,
         domains=set(args.domain),
         task_types=set(args.task_type),

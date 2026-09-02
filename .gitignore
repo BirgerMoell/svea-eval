@@ -6,6 +6,8 @@ __pycache__/
 .venv/
 dist/
 build/
-runs/
+/runs/
+results/runs/*.manifest.json
+results/runs/*.samples.jsonl
 .env
 .DS_Store

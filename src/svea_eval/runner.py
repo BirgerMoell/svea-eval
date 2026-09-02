@@ -25,6 +25,7 @@ def run_evaluation(
     config: GenerationConfig,
     model_revision: str | None = None,
     judge_backend: Backend | None = None,
+    judge_revision: str | None = None,
     judge_config: GenerationConfig | None = None,
     limit: int | None = None,
     domains: set[str] | None = None,
@@ -56,8 +57,11 @@ def run_evaluation(
         "model_id": backend.model_id,
         "model_revision": model_revision,
         "backend": backend.name,
+        "backend_settings": backend.protocol_settings(),
         "judge_id": judge_backend.model_id if judge_backend else None,
+        "judge_revision": judge_revision,
         "judge_backend": judge_backend.name if judge_backend else None,
+        "judge_backend_settings": judge_backend.protocol_settings() if judge_backend else {},
         "temperature": config.temperature,
         "seed": config.seed,
         "system_prompt": config.system_prompt,
@@ -110,7 +114,11 @@ def run_evaluation(
             "backend": backend.name,
         },
         "judge": (
-            {"id": judge_backend.model_id, "backend": judge_backend.name}
+            {
+                "id": judge_backend.model_id,
+                "revision": judge_revision,
+                "backend": judge_backend.name,
+            }
             if judge_backend
             else None
         ),
@@ -121,6 +129,10 @@ def run_evaluation(
             "limit": limit,
             "domain_filter": sorted(domains) if domains else [],
             "task_type_filter": sorted(task_types) if task_types else [],
+            "backend_settings": backend.protocol_settings(),
+            "judge_backend_settings": (
+                judge_backend.protocol_settings() if judge_backend else {}
+            ),
         },
         "environment": {
             "python": platform.python_version(),
