@@ -274,10 +274,10 @@ summary contains:
 
 Two runs should only be compared when their suite ID, version, split, system
 prompt, sampling policy, target reasoning mode and allowance, and scoring/judge
-protocol match. The project page can show a reasoning-on/off delta only when the
-checkpoint and all non-reasoning protocol fields match. API aliases that move
-over time are not immutable model identifiers; record a provider version or
-date in `--revision` whenever possible.
+protocol match. Reasoning-on and reasoning-off results remain separate, clearly
+labeled runs on the project page. API aliases that move over time are not
+immutable model identifiers; record a provider version or date in `--revision`
+whenever possible.
 
 Print an existing result:
 

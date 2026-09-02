@@ -87,25 +87,8 @@ function renderResults() {
     Number(right.summary?.overall?.score || 0) - Number(left.summary?.overall?.score || 0));
   applyDeepLink();
   const view = document.querySelector("#results-view");
-  view.className = "results-stack";
-  const comparisons = reasoningComparisons();
-  const comparisonHtml = comparisons.length ? `<section class="reasoning-comparisons">
-    <div class="comparison-heading"><span>REASONING PROTOCOL COMPARISON</span><p>Same checkpoint, suite, decoding settings and judge; target reasoning mode is the controlled difference.</p></div>
-    ${comparisons.map(({ direct, reasoning }) => {
-      const delta = Number(reasoning.summary?.overall?.score || 0) - Number(direct.summary?.overall?.score || 0);
-      const lixRows = ["svea-v02-lang-005-lix-base", "svea-v02-lang-005-lix-challenge"].map((itemId, itemIndex) => {
-        const directScore = itemScore(direct, itemId);
-        const reasoningScore = itemScore(reasoning, itemId);
-        return `<div><span>LIX ${itemIndex ? "challenge" : "base"}</span><strong>${percent(directScore)} → ${percent(reasoningScore)}</strong></div>`;
-      }).join("");
-      return `<article class="reasoning-comparison">
-        <header><div><span>${escapeHtml(shortModel(reasoning.model.id))}</span><small>${escapeHtml(shortRevision(reasoning.model.revision))}</small></div><strong class="comparison-delta ${delta < 0 ? "negative" : ""}">${delta >= 0 ? "+" : ""}${(delta * 100).toFixed(1)} points</strong></header>
-        <div class="comparison-scores"><div><span>Reasoning off</span><strong>${percent(direct.summary?.overall?.score)}</strong></div><i aria-hidden="true">→</i><div><span>Reasoning on</span><strong>${percent(reasoning.summary?.overall?.score)}</strong><small>${escapeHtml(reasoningAllowance(reasoning))}</small></div></div>
-        <div class="comparison-lix">${lixRows}</div>
-      </article>`;
-    }).join("")}
-  </section>` : "";
-  const cardsHtml = state.results.map((run, index) => {
+  view.className = "result-cards";
+  view.innerHTML = state.results.map((run, index) => {
     const profile = run.summary.capability_profile || {};
     const malformed = Number(run.summary.counts?.malformed || 0);
     const diagnostics = run.summary.output_diagnostics || {};
@@ -132,7 +115,6 @@ function renderResults() {
       <button class="inspect-button" type="button" data-run-index="${index}">Inspect ${run.items?.length || 0} answers <span aria-hidden="true">→</span></button>
     </article>`;
   }).join("");
-  view.innerHTML = comparisonHtml + `<div class="result-cards">${cardsHtml}</div>`;
   setupDeepDive();
 }
 
@@ -333,52 +315,6 @@ function reasoningAllowance(run) {
 
 function runLabel(run) {
   return `${shortModel(run.model.id)} · ${reasoningLabel(run).toLowerCase()}`;
-}
-
-function itemScore(run, itemId) {
-  return run.items?.find(entry => entry.item.id === itemId)?.sample?.score ?? null;
-}
-
-function reasoningComparisons() {
-  const groups = new Map();
-  state.results.forEach(run => {
-    const think = run.protocol?.backend_settings?.think;
-    if (think !== true && think !== false) return;
-    const protocol = JSON.parse(JSON.stringify(run.protocol || {}));
-    if (protocol.backend_settings) {
-      delete protocol.backend_settings.think;
-      delete protocol.backend_settings.reasoning_token_budget;
-    }
-    const key = stableStringify({
-      model: run.model,
-      suite: run.suite,
-      judge: run.judge,
-      temperature: protocol.temperature,
-      seed: protocol.seed,
-      system_prompt: protocol.system_prompt,
-      limit: protocol.limit,
-      domain_filter: protocol.domain_filter || [],
-      task_type_filter: protocol.task_type_filter || [],
-      item_prefix_filter: protocol.item_prefix_filter || [],
-      backend_settings: protocol.backend_settings || {},
-      judge_backend_settings: protocol.judge_backend_settings || {},
-      judge_temperature: protocol.judge_temperature,
-      judge_seed: protocol.judge_seed,
-      judge_system_prompt: protocol.judge_system_prompt,
-    });
-    const group = groups.get(key) || {};
-    group[think ? "reasoning" : "direct"] = run;
-    groups.set(key, group);
-  });
-  return [...groups.values()].filter(group => group.direct && group.reasoning);
-}
-
-function stableStringify(value) {
-  if (Array.isArray(value)) return `[${value.map(stableStringify).join(",")}]`;
-  if (value && typeof value === "object") {
-    return `{${Object.keys(value).sort().map(key => `${JSON.stringify(key)}:${stableStringify(value[key])}`).join(",")}}`;
-  }
-  return JSON.stringify(value);
 }
 
 function setupTabs() {

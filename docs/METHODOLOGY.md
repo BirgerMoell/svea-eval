@@ -111,8 +111,8 @@ for reasoning-capable models.
 The public artifact retains only the final answer and non-content metadata such
 as reasoning character count, latency and total generated tokens. Private hidden
 chain-of-thought is not published. The project page labels each run as reasoning
-on, reasoning off or provider default, and shows an on/off score delta only when
-the model revision, suite, decoding settings and judge protocol otherwise match.
+on, reasoning off or provider default. Their scores remain separate rather than
+being collapsed into a single model result.
 
 Target and judge reasoning settings are independent. Enabling target reasoning
 does not alter the judge protocol.
