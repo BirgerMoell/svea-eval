@@ -179,6 +179,22 @@ read that same output, resuming the run re-scores it locally without calling
 either model again. The project page exposes the named judge, dimension scores,
 published rationale and raw structured judgment for every rubric-scored answer.
 
+Large local targets and judges can also run in separate processes. First run
+the target without a judge, then score only the preserved rubric responses:
+
+```bash
+svea judge runs/target-model.json \
+  --backend ollama \
+  --model PINNED_JUDGE_MODEL \
+  --revision JUDGE_MODEL_DIGEST \
+  --seed 42
+```
+
+The command updates the run in place, appends the judged samples to its resume
+sidecar, and records an explicit `judging_history` stating that target responses
+were reused. This avoids holding both models in memory and never regenerates a
+target answer.
+
 ## Focus a run
 
 Filters can be repeated and applied together:

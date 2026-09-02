@@ -136,17 +136,27 @@ function renderDeepDive() {
   const run = state.results[state.detail.runIndex];
   if (!run) return;
   const judge = run.judge;
-  const think = run.protocol?.backend_settings?.think;
+  const backendSettings = run.protocol?.backend_settings || {};
+  const think = backendSettings.think;
+  const protocolMode = think === false
+    ? "Thinking off"
+    : think === true
+      ? "Thinking on"
+      : backendSettings.resolved_device
+        ? `Transformers · ${String(backendSettings.resolved_device).toUpperCase()}`
+        : "Provider default";
   document.querySelector("#deep-protocol").innerHTML = `
     <div><span>TARGET MODEL</span><strong>${escapeHtml(run.model.id)}</strong><code title="${escapeAttribute(run.model.revision || "")}">${escapeHtml(shortRevision(run.model.revision))}</code></div>
     <div><span>LLM JUDGE</span><strong>${escapeHtml(judge?.id || "Not configured")}</strong><code title="${escapeAttribute(judge?.revision || "")}">${escapeHtml(judge?.revision ? shortRevision(judge.revision) : "—")}</code></div>
     <div><span>SUITE</span><strong>${escapeHtml(run.suite.id)} v${escapeHtml(run.suite.version)}</strong><code>${run.items?.length || 0} items</code></div>
-    <div><span>PROTOCOL</span><strong>${think === false ? "Thinking off" : think === true ? "Thinking on" : "Provider default"}</strong><code>temp ${escapeHtml(run.protocol?.temperature ?? "—")}</code></div>`;
+    <div><span>PROTOCOL</span><strong>${escapeHtml(protocolMode)}</strong><code>temp ${escapeHtml(run.protocol?.temperature ?? "—")}</code></div>`;
   const caveats = Array.isArray(run.limitations) ? run.limitations : [];
   const rescoring = run.rescoring_history?.at(-1);
+  const judging = run.judging_history?.at(-1);
   const rescoringHtml = rescoring ? `<div class="rescore-note"><span>SCORING REVISION</span><p><strong>v${escapeHtml(rescoring.source_suite_version)} → v${escapeHtml(rescoring.target_suite_version)}</strong> ${escapeHtml(rescoring.reason)}</p><small>Saved model responses and judge outputs were reused; no inference was repeated.</small></div>` : "";
+  const judgingHtml = judging ? `<div class="rescore-note"><span>OFFLINE JUDGE PASS</span><p><strong>${escapeHtml(judging.judge?.id || judge?.id || "Named judge")}</strong> scored ${(judging.judged_item_ids || []).length} preserved open answers.</p><small>Target responses were reused unchanged; target generation was not repeated.</small></div>` : "";
   const caveatHtml = caveats.length ? `<details><summary>Run limitations and comparability (${caveats.length})</summary><ul>${caveats.map(caveat => `<li>${escapeHtml(caveat)}</li>`).join("")}</ul></details>` : "";
-  document.querySelector("#deep-caveats").innerHTML = rescoringHtml + caveatHtml;
+  document.querySelector("#deep-caveats").innerHTML = rescoringHtml + judgingHtml + caveatHtml;
 
   const entries = (run.items || []).filter(entry => {
     if (state.detail.domain !== "all" && entry.item.domain !== state.detail.domain) return false;

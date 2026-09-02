@@ -11,6 +11,7 @@ from typing import Any
 from . import __version__
 from .backends import DEFAULT_SYSTEM_PROMPT, GenerationConfig, create_backend
 from .data import load_suite, resolve_suite, validate_suite
+from .judging import judge_artifact
 from .reporting import render_text_report
 from .rescore import rescore_artifact
 from .runner import run_evaluation
@@ -84,6 +85,31 @@ def build_parser() -> argparse.ArgumentParser:
         help="human-readable explanation stored in each result artifact",
     )
 
+    judge_parser = subparsers.add_parser(
+        "judge", help="Judge saved rubric responses without regenerating target answers"
+    )
+    judge_parser.add_argument("run", type=Path)
+    judge_parser.add_argument("--suite", type=Path)
+    judge_parser.add_argument(
+        "--backend",
+        choices=["openai-compatible", "ollama", "huggingface", "oracle"],
+        required=True,
+    )
+    judge_parser.add_argument("--model", required=True)
+    judge_parser.add_argument("--revision")
+    judge_parser.add_argument("--base-url")
+    judge_parser.add_argument("--api-key-env", default="OPENAI_API_KEY")
+    judge_parser.add_argument("--device", default="auto")
+    judge_parser.add_argument("--timeout", type=float, default=120.0)
+    judge_parser.add_argument(
+        "--ollama-think",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+    )
+    judge_parser.add_argument("--temperature", type=float, default=0.0)
+    judge_parser.add_argument("--seed", type=_optional_int, default=17, metavar="INT|none")
+    judge_parser.add_argument("--system-prompt", default=DEFAULT_SYSTEM_PROMPT)
+
     site_parser = subparsers.add_parser("build-site", help="Refresh GitHub Pages data")
     site_parser.add_argument("--docs", type=Path, default=Path("docs"))
     site_parser.add_argument("--results", type=Path, default=Path("results/runs"))
@@ -104,6 +130,8 @@ def main(argv: list[str] | None = None) -> int:
             return _report(args)
         if args.command == "rescore":
             return _rescore(args)
+        if args.command == "judge":
+            return _judge(args)
         if args.command == "build-site":
             return _build_site(args)
     except (OSError, RuntimeError, ValueError, json.JSONDecodeError) as exc:
@@ -238,6 +266,38 @@ def _rescore(args: argparse.Namespace) -> int:
             f"{100 * run['summary']['overall']['score']:.1f}%"
         )
     return 0
+
+
+def _judge(args: argparse.Namespace) -> int:
+    metadata, items = load_suite(args.suite)
+    errors = validate_suite(metadata=metadata, items=items)
+    if errors:
+        raise ValueError("suite validation failed:\n" + "\n".join(errors))
+    backend = create_backend(
+        kind=args.backend,
+        model_id=args.model,
+        base_url=args.base_url,
+        api_key_env=args.api_key_env,
+        revision=args.revision,
+        device=args.device,
+        timeout_seconds=args.timeout,
+        ollama_think=args.ollama_think,
+    )
+    run = judge_artifact(
+        path=args.run,
+        suite_metadata=metadata,
+        items=items,
+        judge_backend=backend,
+        judge_revision=args.revision,
+        config=GenerationConfig(
+            temperature=args.temperature,
+            seed=args.seed,
+            system_prompt=args.system_prompt,
+        ),
+    )
+    print(render_text_report(run))
+    print(f"\nUpdated {args.run.resolve()}")
+    return 0 if run["status"] in {"completed", "partial"} else 1
 
 
 def _build_site(args: argparse.Namespace) -> int:

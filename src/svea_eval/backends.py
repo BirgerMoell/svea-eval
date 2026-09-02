@@ -211,6 +211,14 @@ class HuggingFaceBackend(Backend):
         if self.tokenizer.pad_token_id is None:
             self.tokenizer.pad_token_id = self.tokenizer.eos_token_id
 
+    def protocol_settings(self) -> dict[str, Any]:
+        parameter = next(self.model.parameters())
+        return {
+            "device": self.device,
+            "resolved_device": str(parameter.device),
+            "torch_dtype": str(parameter.dtype).removeprefix("torch."),
+        }
+
     def generate(self, item: Item, config: GenerationConfig) -> Generation:
         messages = [
             {"role": "system", "content": config.system_prompt},

@@ -61,6 +61,20 @@
         ]
       }
     },
+    "judging_history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "started_at",
+          "finished_at",
+          "judge",
+          "target_responses_reused",
+          "judged_item_ids",
+          "failed_item_ids"
+        ]
+      }
+    },
     "limitations": {"type": "array", "items": {"type": "string"}}
   },
   "additionalProperties": true
