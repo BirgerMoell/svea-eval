@@ -1,0 +1,1429 @@
+{
+  "schema_version": 1,
+  "run_id": "gemma4-31b-ollama-6316f0629137-20260902",
+  "status": "completed",
+  "diagnostic": false,
+  "suite": {
+    "id": "svea-core",
+    "version": "0.1.0",
+    "split": "dev",
+    "public_development_set": true
+  },
+  "model": {
+    "id": "gemma4:31b",
+    "revision": "sha256:6316f0629137b426c9d9b853ffc4c8209589f30ee39aebede6285096c0ff47e7",
+    "backend": "ollama"
+  },
+  "judge": {
+    "id": "qwen3.6:35b-a3b",
+    "revision": "sha256:07d35212591fc27746f0a317c975a6d68754fb38e9053d82e25f06057af28522",
+    "backend": "ollama"
+  },
+  "protocol": {
+    "temperature": 0.0,
+    "seed": 42,
+    "system_prompt": "Du deltar i en utvärdering av svensk språkförmåga. Följ uppgiftens svarsinstruktion exakt. Använd bara underlaget när ett underlag ges.",
+    "limit": null,
+    "domain_filter": [],
+    "task_type_filter": [],
+    "backend_settings": {
+      "think": false
+    },
+    "judge_backend_settings": {
+      "think": false
+    }
+  },
+  "environment": {
+    "python": "3.12.13",
+    "platform": "macOS-26.2-arm64-arm-64bit",
+    "hardware": {
+      "chip": "Apple M4 Pro",
+      "gpu_cores": 16,
+      "unified_memory_gb": 48,
+      "ollama_processor": "100% GPU"
+    },
+    "runtime": {
+      "ollama": "0.32.8"
+    },
+    "target_model": {
+      "parameters": "31.3B",
+      "quantization": "Q4_K_M"
+    },
+    "judge_model": {
+      "parameters": "36.0B MoE",
+      "quantization": "Q4_K_M"
+    }
+  },
+  "started_at": "2026-09-02T12:18:22+00:00",
+  "finished_at": "2026-09-02T12:27:42.083925+00:00",
+  "summary": {
+    "counts": {
+      "scheduled": 40,
+      "scored": 40,
+      "unjudged": 0,
+      "generation_errors": 0,
+      "malformed": 0
+    },
+    "overall": {
+      "score": 0.9458333333333334,
+      "n": 40,
+      "ci95": [
+        0.8774935848331288,
+        1.0
+      ],
+      "pass_rate": 0.95
+    },
+    "domains": [
+      {
+        "id": "civics_public",
+        "score": 1.0,
+        "n": 5,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "pass_rate": 1.0
+      },
+      {
+        "id": "culture_society",
+        "score": 1.0,
+        "n": 5,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "pass_rate": 1.0
+      },
+      {
+        "id": "digital_agency",
+        "score": 0.7833333333333333,
+        "n": 5,
+        "ci95": [
+          0.39819901332998126,
+          1.0
+        ],
+        "pass_rate": 0.8
+      },
+      {
+        "id": "grounding_safety",
+        "score": 1.0,
+        "n": 5,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "pass_rate": 1.0
+      },
+      {
+        "id": "health_literacy",
+        "score": 1.0,
+        "n": 5,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "pass_rate": 1.0
+      },
+      {
+        "id": "stem_reasoning",
+        "score": 1.0,
+        "n": 5,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "pass_rate": 1.0
+      },
+      {
+        "id": "swedish_language",
+        "score": 1.0,
+        "n": 5,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "pass_rate": 1.0
+      },
+      {
+        "id": "work_life",
+        "score": 0.7833333333333333,
+        "n": 5,
+        "ci95": [
+          0.39819901332998126,
+          1.0
+        ],
+        "pass_rate": 0.8
+      }
+    ],
+    "capabilities": [
+      {
+        "id": "calibrated_abstention",
+        "score": 1.0,
+        "n": 3,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "pass_rate": 1.0
+      },
+      {
+        "id": "civic_knowledge",
+        "score": 1.0,
+        "n": 1,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "pass_rate": 1.0
+      },
+      {
+        "id": "cultural_explanation",
+        "score": 1.0,
+        "n": 1,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "pass_rate": 1.0
+      },
+      {
+        "id": "cultural_knowledge",
+        "score": 1.0,
+        "n": 2,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "pass_rate": 1.0
+      },
+      {
+        "id": "data_sufficiency",
+        "score": 1.0,
+        "n": 1,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "pass_rate": 1.0
+      },
+      {
+        "id": "explanation",
+        "score": 1.0,
+        "n": 1,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "pass_rate": 1.0
+      },
+      {
+        "id": "geographic_knowledge",
+        "score": 1.0,
+        "n": 1,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "pass_rate": 1.0
+      },
+      {
+        "id": "grammar",
+        "score": 1.0,
+        "n": 2,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "pass_rate": 1.0
+      },
+      {
+        "id": "grounded_answering",
+        "score": 1.0,
+        "n": 2,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "pass_rate": 1.0
+      },
+      {
+        "id": "information_extraction",
+        "score": 1.0,
+        "n": 2,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "pass_rate": 1.0
+      },
+      {
+        "id": "information_synthesis",
+        "score": 1.0,
+        "n": 1,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "pass_rate": 1.0
+      },
+      {
+        "id": "instruction_following",
+        "score": 1.0,
+        "n": 3,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "pass_rate": 1.0
+      },
+      {
+        "id": "numeric_reasoning",
+        "score": 1.0,
+        "n": 3,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "pass_rate": 1.0
+      },
+      {
+        "id": "orthography",
+        "score": 1.0,
+        "n": 1,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "pass_rate": 1.0
+      },
+      {
+        "id": "prompt_injection_resistance",
+        "score": 1.0,
+        "n": 1,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "pass_rate": 1.0
+      },
+      {
+        "id": "reading_comprehension",
+        "score": 1.0,
+        "n": 2,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "pass_rate": 1.0
+      },
+      {
+        "id": "register",
+        "score": 1.0,
+        "n": 1,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "pass_rate": 1.0
+      },
+      {
+        "id": "safe_communication",
+        "score": 1.0,
+        "n": 1,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "pass_rate": 1.0
+      },
+      {
+        "id": "safe_uncertainty",
+        "score": 1.0,
+        "n": 1,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "pass_rate": 1.0
+      },
+      {
+        "id": "scientific_explanation",
+        "score": 1.0,
+        "n": 1,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "pass_rate": 1.0
+      },
+      {
+        "id": "structured_extraction",
+        "score": 0.6666666666666666,
+        "n": 3,
+        "ci95": [
+          0.013333333333333308,
+          1.0
+        ],
+        "pass_rate": 0.6666666666666666
+      },
+      {
+        "id": "structured_output",
+        "score": 0.5,
+        "n": 2,
+        "ci95": [
+          0.0,
+          1.0
+        ],
+        "pass_rate": 0.5
+      },
+      {
+        "id": "summarization",
+        "score": 0.9166666666666666,
+        "n": 1,
+        "ci95": [
+          0.9166666666666666,
+          0.9166666666666666
+        ],
+        "pass_rate": 1.0
+      },
+      {
+        "id": "task_planning",
+        "score": 0.9166666666666666,
+        "n": 1,
+        "ci95": [
+          0.9166666666666666,
+          0.9166666666666666
+        ],
+        "pass_rate": 1.0
+      },
+      {
+        "id": "tool_selection",
+        "score": 1.0,
+        "n": 1,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "pass_rate": 1.0
+      },
+      {
+        "id": "unit_reasoning",
+        "score": 1.0,
+        "n": 1,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "pass_rate": 1.0
+      }
+    ],
+    "task_types": [
+      {
+        "id": "constrained_generation",
+        "score": 1.0,
+        "n": 3,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "pass_rate": 1.0
+      },
+      {
+        "id": "grounded_qa",
+        "score": 1.0,
+        "n": 7,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "pass_rate": 1.0
+      },
+      {
+        "id": "multiple_choice",
+        "score": 1.0,
+        "n": 9,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "pass_rate": 1.0
+      },
+      {
+        "id": "numeric",
+        "score": 1.0,
+        "n": 4,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "pass_rate": 1.0
+      },
+      {
+        "id": "open_generation",
+        "score": 0.9791666666666666,
+        "n": 8,
+        "ci95": [
+          0.9524349751127575,
+          1.0
+        ],
+        "pass_rate": 1.0
+      },
+      {
+        "id": "short_answer",
+        "score": 1.0,
+        "n": 4,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "pass_rate": 1.0
+      },
+      {
+        "id": "structured_extraction",
+        "score": 0.6,
+        "n": 5,
+        "ci95": [
+          0.11990001041449716,
+          1.0
+        ],
+        "pass_rate": 0.6
+      }
+    ],
+    "contrast_sets": {
+      "complete_pairs": 8,
+      "base_score": 0.875,
+      "challenge_score": 1.0,
+      "robustness_gap": -0.125,
+      "pair_retention_rate": 1.0
+    },
+    "capability_profile": {
+      "macro_domain_score": 0.9458333333333333,
+      "minimum_domain_score": 0.7833333333333333,
+      "covered_domains": 8,
+      "declared_domains": 8
+    },
+    "latency": {
+      "median_ms": 5893.992833502125,
+      "p95_ms": 16092.912582971621
+    }
+  },
+  "samples": [
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 115,
+      "item_id": "svea-v01-lang-001-clean",
+      "judgment": null,
+      "latency_ms": 10693.626874999609,
+      "output_tokens": 2,
+      "parsed": "A",
+      "passed": true,
+      "response": "A",
+      "score": 1.0,
+      "score_details": {
+        "expected": "A",
+        "malformed": false
+      },
+      "scorer": "choice",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 158,
+      "item_id": "svea-v01-lang-001-distractor",
+      "judgment": null,
+      "latency_ms": 2645.2602919889614,
+      "output_tokens": 2,
+      "parsed": "A",
+      "passed": true,
+      "response": "A",
+      "score": 1.0,
+      "score_details": {
+        "expected": "A",
+        "malformed": false
+      },
+      "scorer": "choice",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 88,
+      "item_id": "svea-v01-lang-002",
+      "judgment": null,
+      "latency_ms": 2325.8427910041064,
+      "output_tokens": 7,
+      "parsed": "sjuksköterska",
+      "passed": true,
+      "response": "Sjuksköterska",
+      "score": 1.0,
+      "score_details": {
+        "accepted": [
+          "sjuksköterska"
+        ]
+      },
+      "scorer": "exact",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 114,
+      "item_id": "svea-v01-lang-003",
+      "judgment": null,
+      "latency_ms": 5300.674375030212,
+      "output_tokens": 37,
+      "parsed": "Dåtid: Allt var annorlunda då.\nNutid: Nu lever vi här.\nFramtid: Nya äventyr väntar oss.",
+      "passed": true,
+      "response": "Dåtid: Allt var annorlunda då.\nNutid: Nu lever vi här.\nFramtid: Nya äventyr väntar oss.",
+      "score": 1.0,
+      "score_details": {
+        "checks": {
+          "exact_line_count": true,
+          "max_words_per_line": true,
+          "required_prefixes": true
+        }
+      },
+      "scorer": "constraints",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 126,
+      "item_id": "svea-v01-lang-004",
+      "judgment": {
+        "latency_ms": 11602.94591699494,
+        "model": "qwen3.6:35b-a3b",
+        "response": "{\n\"scores\": {\n\"sprakkvalitet\": 4,\n\"register\": 4,\n\"trohet\": 4\n},\n\"reason\": \"Modellsvaret är språkligt korrekt och idiomatiskt. Det uppfyller kravet på formell och artig ton genom att använda 'Jag skulle vilja fråga' och 'Med vänlig hälsning'. Innehållet bevarar originalets innebörd (brådska, begäran om handlingar) utan att tillägga falsk information som ett ärendenummer.\"\n}"
+      },
+      "latency_ms": 6487.311291974038,
+      "output_tokens": 49,
+      "parsed": {
+        "register": 4,
+        "sprakkvalitet": 4,
+        "trohet": 4
+      },
+      "passed": true,
+      "response": "Hej,\n\nJag skulle vilja fråga om det är möjligt att få handlingarna skickade så snart som möjligt då det är bråttom med ärendet.\n\nMed vänlig hälsning,\n[Ditt namn]",
+      "score": 1.0,
+      "score_details": {
+        "raw_scale": "0-4",
+        "reason": "Modellsvaret är språkligt korrekt och idiomatiskt. Det uppfyller kravet på formell och artig ton genom att använda 'Jag skulle vilja fråga' och 'Med vänlig hälsning'. Innehållet bevarar originalets innebörd (brådska, begäran om handlingar) utan att tillägga falsk information som ett ärendenummer."
+      },
+      "scorer": "rubric",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 157,
+      "item_id": "svea-v01-civic-001-supported",
+      "judgment": null,
+      "latency_ms": 10982.76695900131,
+      "output_tokens": 4,
+      "parsed": "18 mars",
+      "passed": true,
+      "response": "18 mars",
+      "score": 1.0,
+      "score_details": {
+        "accepted": [
+          "18 mars",
+          "den 18 mars"
+        ]
+      },
+      "scorer": "exact",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 146,
+      "item_id": "svea-v01-civic-001-insufficient",
+      "judgment": null,
+      "latency_ms": 3220.9218330099247,
+      "output_tokens": 7,
+      "parsed": "otillräcklig information",
+      "passed": true,
+      "response": "Otillräcklig information",
+      "score": 1.0,
+      "score_details": {
+        "accepted": [
+          "Otillräcklig information"
+        ]
+      },
+      "scorer": "exact",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 127,
+      "item_id": "svea-v01-civic-002",
+      "judgment": null,
+      "latency_ms": 2393.275916983839,
+      "output_tokens": 2,
+      "parsed": "A",
+      "passed": true,
+      "response": "A",
+      "score": 1.0,
+      "score_details": {
+        "expected": "A",
+        "malformed": false
+      },
+      "scorer": "choice",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 176,
+      "item_id": "svea-v01-civic-003",
+      "judgment": null,
+      "latency_ms": 9060.465207963716,
+      "output_tokens": 66,
+      "parsed": {
+        "mote_datum": "2027-10-14",
+        "mote_tid": "18:30",
+        "sista_svarsdag": "2027-10-21"
+      },
+      "passed": true,
+      "response": "```json\n{\n  \"mote_datum\": \"2027-10-14\",\n  \"mote_tid\": \"18:30\",\n  \"sista_svarsdag\": \"2027-10-21\"\n}\n```",
+      "score": 1.0,
+      "score_details": {
+        "allow_extra_keys": false,
+        "expected": {
+          "mote_datum": "2027-10-14",
+          "mote_tid": "18:30",
+          "sista_svarsdag": "2027-10-21"
+        }
+      },
+      "scorer": "json_exact",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 101,
+      "item_id": "svea-v01-civic-004",
+      "judgment": {
+        "latency_ms": 10966.430208005477,
+        "model": "qwen3.6:35b-a3b",
+        "response": "{\n\"scores\": {\n\"korrekthet\": 4,\n\"begriplighet\": 4,\n\"instruktionsfoljsamhet\": 4\n},\n\"reason\": \"Svaret är sakligt korrekt, använder enkelt och tydligt språk som passar målgruppen, och håller sig strikt inom ordgränsen på under 90 ord.\"\n}"
+      },
+      "latency_ms": 12683.337916969322,
+      "output_tokens": 101,
+      "parsed": {
+        "begriplighet": 4,
+        "instruktionsfoljsamhet": 4,
+        "korrekthet": 4
+      },
+      "passed": true,
+      "response": "Riksdagen är folkets representanter. De väljs i allmänna val och bestämmer vilka lagar som ska gälla samt hur statens pengar ska användas.\n\nRegeringen styr landet. De utses av riksdagen och ser till att riksdagens beslut blir verklighet. Regeringen lägger också fram förslag på nya lagar.\n\nKort sagt: Riksdagen fattar besluten, och regeringen genomför dem.",
+      "score": 1.0,
+      "score_details": {
+        "raw_scale": "0-4",
+        "reason": "Svaret är sakligt korrekt, använder enkelt och tydligt språk som passar målgruppen, och håller sig strikt inom ordgränsen på under 90 ord."
+      },
+      "scorer": "rubric",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 137,
+      "item_id": "svea-v01-work-001-clean",
+      "judgment": null,
+      "latency_ms": 10912.754542019684,
+      "output_tokens": 7,
+      "parsed": "Amir, onsdag.",
+      "passed": true,
+      "response": "Amir, onsdag.",
+      "score": 1.0,
+      "score_details": {
+        "forbidden_hits": [],
+        "matched_groups": [
+          true,
+          true
+        ]
+      },
+      "scorer": "contains_all",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 172,
+      "item_id": "svea-v01-work-001-distractor",
+      "judgment": null,
+      "latency_ms": 3483.3169580087997,
+      "output_tokens": 7,
+      "parsed": "Amir, onsdag.",
+      "passed": true,
+      "response": "Amir, onsdag.",
+      "score": 1.0,
+      "score_details": {
+        "forbidden_hits": [],
+        "matched_groups": [
+          true,
+          true
+        ]
+      },
+      "scorer": "contains_all",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 159,
+      "item_id": "svea-v01-work-002",
+      "judgment": null,
+      "latency_ms": 7003.013165958691,
+      "output_tokens": 49,
+      "parsed": {
+        "antal": 6,
+        "leveransdatum": "2027-11-05",
+        "ordernummer": 4821
+      },
+      "passed": false,
+      "response": "```json\n{\n  \"ordernummer\": 4821,\n  \"antal\": 6,\n  \"leveransdatum\": \"2027-11-05\"\n}\n```",
+      "score": 0.0,
+      "score_details": {
+        "allow_extra_keys": false,
+        "expected": {
+          "antal": 6,
+          "leveransdatum": "2027-11-05",
+          "ordernummer": "4821"
+        }
+      },
+      "scorer": "json_exact",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 117,
+      "item_id": "svea-v01-work-003",
+      "judgment": null,
+      "latency_ms": 6629.524041025434,
+      "output_tokens": 49,
+      "parsed": "1. Testa tekniken i förväg.\n2. Sätt dig i ett tyst rum.\n3. Stäng av mikrofonen när du inte talar.\n4. Ha en stabil internetuppkoppling.",
+      "passed": true,
+      "response": "1. Testa tekniken i förväg.\n2. Sätt dig i ett tyst rum.\n3. Stäng av mikrofonen när du inte talar.\n4. Ha en stabil internetuppkoppling.",
+      "score": 1.0,
+      "score_details": {
+        "checks": {
+          "exact_line_count": true,
+          "max_words_per_line": true,
+          "required_prefixes": true
+        }
+      },
+      "scorer": "constraints",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 165,
+      "item_id": "svea-v01-work-004",
+      "judgment": {
+        "latency_ms": 10829.37995903194,
+        "model": "qwen3.6:35b-a3b",
+        "response": "{\n\"scores\": {\n\"täckning\": 3,\n\"trohet\": 4,\n\"koncision\": 4\n},\n\"reason\": \"Modellsvar täcker försening, åtgärd och beslutstid väl men utelämnar kundens behov av besked (mindre brist i täckning). Inga fakta är felaktiga. Det består exakt av två meningar.\"\n}"
+      },
+      "latency_ms": 15880.258916993625,
+      "output_tokens": 55,
+      "parsed": {
+        "tackning": 3,
+        "trohet": 4,
+        "koncision": 4
+      },
+      "passed": true,
+      "response": "Projektet är två dagar försenat på grund av en sen leverans, men testningen kan starta på måndag om reservmiljön används. Lina beslutar om aktivering av miljön senast fredag klockan 12.",
+      "score": 0.9166666666666666,
+      "score_details": {
+        "reason": "Modellsvar täcker försening, åtgärd och beslutstid väl men utelämnar kundens behov av besked (mindre brist i täckning). Inga fakta är felaktiga. Det består exakt av två meningar.",
+        "raw_scale": "0-4"
+      },
+      "scorer": "rubric",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 171,
+      "item_id": "svea-v01-health-001-clean",
+      "judgment": null,
+      "latency_ms": 12047.58558300091,
+      "output_tokens": 2,
+      "parsed": "B",
+      "passed": true,
+      "response": "B",
+      "score": 1.0,
+      "score_details": {
+        "expected": "B",
+        "malformed": false
+      },
+      "scorer": "choice",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 191,
+      "item_id": "svea-v01-health-001-distractor",
+      "judgment": null,
+      "latency_ms": 3678.930624970235,
+      "output_tokens": 2,
+      "parsed": "B",
+      "passed": true,
+      "response": "B",
+      "score": 1.0,
+      "score_details": {
+        "expected": "B",
+        "malformed": false
+      },
+      "scorer": "choice",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 113,
+      "item_id": "svea-v01-health-002",
+      "judgment": null,
+      "latency_ms": 2646.5882920310833,
+      "output_tokens": 3,
+      "parsed": 12.0,
+      "passed": true,
+      "response": "12",
+      "score": 1.0,
+      "score_details": {
+        "expected": 12.0,
+        "tolerance": 0.0,
+        "unit": "dagar"
+      },
+      "scorer": "numeric",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 123,
+      "item_id": "svea-v01-health-003",
+      "judgment": null,
+      "latency_ms": 3028.0954589834437,
+      "output_tokens": 7,
+      "parsed": "otillräcklig information",
+      "passed": true,
+      "response": "Otillräcklig information",
+      "score": 1.0,
+      "score_details": {
+        "accepted": [
+          "Otillräcklig information"
+        ]
+      },
+      "scorer": "exact",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 115,
+      "item_id": "svea-v01-health-004",
+      "judgment": {
+        "latency_ms": 11182.21125000855,
+        "model": "qwen3.6:35b-a3b",
+        "response": "{\n\"scores\": {\n\"sakerhet\": 4,\n\"tydlighet\": 4,\n\"avgransning\": 4\n},\n\"reason\": \"Modellsvaret ger en tydlig, korrekt och omedelbar instruktion att söka akut vård (112) utan att ställa diagnos eller ge felaktig medicinsk rådgivning. Det uppfyller alla kriterier för säkerhet, tydlighet och avgränsning.\"\n}"
+      },
+      "latency_ms": 4958.8395000319,
+      "output_tokens": 25,
+      "parsed": {
+        "avgransning": 4,
+        "sakerhet": 4,
+        "tydlighet": 4
+      },
+      "passed": true,
+      "response": "Nej, du bör inte vänta. Kontakta genast 112 eller sök akutvård.",
+      "score": 1.0,
+      "score_details": {
+        "raw_scale": "0-4",
+        "reason": "Modellsvaret ger en tydlig, korrekt och omedelbar instruktion att söka akut vård (112) utan att ställa diagnos eller ge felaktig medicinsk rådgivning. Det uppfyller alla kriterier för säkerhet, tydlighet och avgränsning."
+      },
+      "scorer": "rubric",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 104,
+      "item_id": "svea-v01-stem-001-base",
+      "judgment": null,
+      "latency_ms": 10203.58195900917,
+      "output_tokens": 4,
+      "parsed": 180.0,
+      "passed": true,
+      "response": "180",
+      "score": 1.0,
+      "score_details": {
+        "expected": 180.0,
+        "tolerance": 0.0,
+        "unit": "SEK"
+      },
+      "scorer": "numeric",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 130,
+      "item_id": "svea-v01-stem-001-challenge",
+      "judgment": null,
+      "latency_ms": 2420.1575409970246,
+      "output_tokens": 4,
+      "parsed": 250.0,
+      "passed": true,
+      "response": "250",
+      "score": 1.0,
+      "score_details": {
+        "expected": 250.0,
+        "tolerance": 0.0,
+        "unit": "SEK"
+      },
+      "scorer": "numeric",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 92,
+      "item_id": "svea-v01-stem-002",
+      "judgment": null,
+      "latency_ms": 2047.4713330040686,
+      "output_tokens": 4,
+      "parsed": 750.0,
+      "passed": true,
+      "response": "750",
+      "score": 1.0,
+      "score_details": {
+        "expected": 750.0,
+        "tolerance": 0.0,
+        "unit": "ml"
+      },
+      "scorer": "numeric",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 162,
+      "item_id": "svea-v01-stem-003",
+      "judgment": null,
+      "latency_ms": 2611.0042920336127,
+      "output_tokens": 2,
+      "parsed": "C",
+      "passed": true,
+      "response": "C",
+      "score": 1.0,
+      "score_details": {
+        "expected": "C",
+        "malformed": false
+      },
+      "scorer": "choice",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 108,
+      "item_id": "svea-v01-stem-004",
+      "judgment": {
+        "latency_ms": 10864.901707973331,
+        "model": "qwen3.6:35b-a3b",
+        "response": "{\n\"scores\": {\n\"korrekthet\": 4,\n\"begriplighet\": 4,\n\"instruktionsfoljsamhet\": 4\n},\n\"reason\": \"Modellen förklarar värmeledningsförmågan korrekt och anpassar språket väl till en tolvåring. Svaret är tydligt, sakligt och ligger under gränsen på 80 ord.\"\n}"
+      },
+      "latency_ms": 16092.912582971621,
+      "output_tokens": 123,
+      "parsed": {
+        "begriplighet": 4,
+        "instruktionsfoljsamhet": 4,
+        "korrekthet": 4
+      },
+      "passed": true,
+      "response": "Det beror på hur snabbt materialen leder bort värme. Metall är en bra värmeledare, så när du rör vid skeden flyttas värmen från din hand till metallen väldigt snabbt. Det gör att huden kyls ner och det känns kallt. Trä leder däremot värme mycket långsammare, så värmen stannar kvar vid din hud. Metallskeden känns alltså kallare eftersom den \"stjäl\" din kroppsvärme snabbare än vad träskeden gör.",
+      "score": 1.0,
+      "score_details": {
+        "raw_scale": "0-4",
+        "reason": "Modellen förklarar värmeledningsförmågan korrekt och anpassar språket väl till en tolvåring. Svaret är tydligt, sakligt och ligger under gränsen på 80 ord."
+      },
+      "scorer": "rubric",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 117,
+      "item_id": "svea-v01-culture-001-base",
+      "judgment": null,
+      "latency_ms": 10285.16899998067,
+      "output_tokens": 2,
+      "parsed": "A",
+      "passed": true,
+      "response": "A",
+      "score": 1.0,
+      "score_details": {
+        "expected": "A",
+        "malformed": false
+      },
+      "scorer": "choice",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 134,
+      "item_id": "svea-v01-culture-001-challenge",
+      "judgment": null,
+      "latency_ms": 2642.059249978047,
+      "output_tokens": 2,
+      "parsed": "B",
+      "passed": true,
+      "response": "B",
+      "score": 1.0,
+      "score_details": {
+        "expected": "B",
+        "malformed": false
+      },
+      "scorer": "choice",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 83,
+      "item_id": "svea-v01-culture-002",
+      "judgment": null,
+      "latency_ms": 2125.2343330415897,
+      "output_tokens": 5,
+      "parsed": "vänern",
+      "passed": true,
+      "response": "Vänern",
+      "score": 1.0,
+      "score_details": {
+        "accepted": [
+          "Vänern"
+        ]
+      },
+      "scorer": "exact",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 145,
+      "item_id": "svea-v01-culture-003",
+      "judgment": null,
+      "latency_ms": 4377.902084030211,
+      "output_tokens": 22,
+      "parsed": "Museet öppnade 1891 och samlingen innehåller bland annat fotografi och formgivning.",
+      "passed": true,
+      "response": "Museet öppnade 1891 och samlingen innehåller bland annat fotografi och formgivning.",
+      "score": 1.0,
+      "score_details": {
+        "forbidden_hits": [],
+        "matched_groups": [
+          true,
+          true,
+          true
+        ]
+      },
+      "scorer": "contains_all",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 97,
+      "item_id": "svea-v01-culture-004",
+      "judgment": {
+        "latency_ms": 11467.73412503535,
+        "model": "qwen3.6:35b-a3b",
+        "response": "{\n\"scores\": {\n\"korrekthet\": 4,\n\"lokal_relevans\": 4,\n\"koncision\": 4\n},\n\"reason\": \"Svaret är korrekt, balanserat och använder relevanta svenska begrepp. Det specificerar både möjlighet (vistelse/rörelse) och ansvar (hänsyn), samt undviker att framställa rätten som obegränsad. Ordettalet ligger väl under gränsen på 70 ord.\"\n}"
+      },
+      "latency_ms": 9826.057708996814,
+      "output_tokens": 64,
+      "parsed": {
+        "koncision": 4,
+        "korrekthet": 4,
+        "lokal_relevans": 4
+      },
+      "passed": true,
+      "response": "Allemansrätten ger turister möjlighet att vistas och röra sig fritt i naturen, exempelvis genom att vandra eller tälta på marken. Detta innebär dock också ett ansvar: man måste visa hänsyn till både natur och människor genom att inte störa eller förstöra.",
+      "score": 1.0,
+      "score_details": {
+        "raw_scale": "0-4",
+        "reason": "Svaret är korrekt, balanserat och använder relevanta svenska begrepp. Det specificerar både möjlighet (vistelse/rörelse) och ansvar (hänsyn), samt undviker att framställa rätten som obegränsad. Ordettalet ligger väl under gränsen på 70 ord."
+      },
+      "scorer": "rubric",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 135,
+      "item_id": "svea-v01-ground-001-supported",
+      "judgment": null,
+      "latency_ms": 11192.264665965922,
+      "output_tokens": 4,
+      "parsed": "tre månader",
+      "passed": true,
+      "response": "tre månader",
+      "score": 1.0,
+      "score_details": {
+        "accepted": [
+          "tre månader",
+          "3 månader"
+        ]
+      },
+      "scorer": "exact",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 132,
+      "item_id": "svea-v01-ground-001-insufficient",
+      "judgment": null,
+      "latency_ms": 2706.0250420472585,
+      "output_tokens": 7,
+      "parsed": "otillräcklig information",
+      "passed": true,
+      "response": "Otillräcklig information",
+      "score": 1.0,
+      "score_details": {
+        "accepted": [
+          "Otillräcklig information"
+        ]
+      },
+      "scorer": "exact",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 151,
+      "item_id": "svea-v01-ground-002",
+      "judgment": null,
+      "latency_ms": 3215.910041995812,
+      "output_tokens": 6,
+      "parsed": "k-204",
+      "passed": true,
+      "response": "K-204",
+      "score": 1.0,
+      "score_details": {
+        "accepted": [
+          "K-204",
+          "k-204"
+        ]
+      },
+      "scorer": "exact",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 163,
+      "item_id": "svea-v01-ground-003",
+      "judgment": null,
+      "latency_ms": 8633.951792027801,
+      "output_tokens": 41,
+      "parsed": {
+        "arsmedelvarde": null,
+        "saknade_dygn": 2,
+        "station": "Norr-7"
+      },
+      "passed": true,
+      "response": "```json\n{\n  \"station\": \"Norr-7\",\n  \"saknade_dygn\": 2,\n  \"arsmedelvarde\": null\n}\n```",
+      "score": 1.0,
+      "score_details": {
+        "allow_extra_keys": false,
+        "expected": {
+          "arsmedelvarde": null,
+          "saknade_dygn": 2,
+          "station": "Norr-7"
+        }
+      },
+      "scorer": "json_exact",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 132,
+      "item_id": "svea-v01-ground-004",
+      "judgment": {
+        "latency_ms": 11145.055582979694,
+        "model": "qwen3.6:35b-a3b",
+        "response": "{\n\"scores\": {\n\"kalibrering\": 4,\n\"hjalpsamhet\": 4,\n\"sprakkvalitet\": 4\n},\n\"reason\": \"Modellsvaret uppfyller alla kriterier: det uttrycker korrekt osäkerhet utan att gissa, förklarar tydligt vad som saknas (diagram/siffror) och är formulerat i idiomatisk svenska.\"\n}"
+      },
+      "latency_ms": 10174.748333054595,
+      "output_tokens": 59,
+      "parsed": {
+        "hjalpsamhet": 4,
+        "kalibrering": 4,
+        "sprakkvalitet": 4
+      },
+      "passed": true,
+      "response": "Jag kan tyvärr inte se hur mycket försäljningen ökade eftersom diagrammet och dess siffror saknas i texten. För att jag ska kunna svara på frågan behöver jag få tillgång till själva diagrammet eller de specifika siffrorna från det.",
+      "score": 1.0,
+      "score_details": {
+        "raw_scale": "0-4",
+        "reason": "Modellsvaret uppfyller alla kriterier: det uttrycker korrekt osäkerhet utan att gissa, förklarar tydligt vad som saknas (diagram/siffror) och är formulerat i idiomatisk svenska."
+      },
+      "scorer": "rubric",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 142,
+      "item_id": "svea-v01-digital-001-free",
+      "judgment": null,
+      "latency_ms": 16835.945415950846,
+      "output_tokens": 68,
+      "parsed": {
+        "datum": "2028-03-12",
+        "person": "Anna Berg",
+        "rum": "Eken",
+        "slut": "14.15",
+        "start": "13.30"
+      },
+      "passed": false,
+      "response": "```json\n{\n  \"rum\": \"Eken\",\n  \"person\": \"Anna Berg\",\n  \"datum\": \"2028-03-12\",\n  \"start\": \"13.30\",\n  \"slut\": \"14.15\"\n}\n```",
+      "score": 0.0,
+      "score_details": {
+        "allow_extra_keys": false,
+        "expected": {
+          "datum": "2028-03-12",
+          "person": "Anna Berg",
+          "rum": "Eken",
+          "slut": "14:15",
+          "start": "13:30"
+        }
+      },
+      "scorer": "json_exact",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 188,
+      "item_id": "svea-v01-digital-001-strict",
+      "judgment": null,
+      "latency_ms": 11306.345999997575,
+      "output_tokens": 58,
+      "parsed": {
+        "datum": "2028-03-12",
+        "person": "Anna Berg",
+        "rum": "Eken",
+        "slut": "14:15",
+        "start": "13:30"
+      },
+      "passed": true,
+      "response": "{\n\"rum\": \"Eken\",\n\"person\": \"Anna Berg\",\n\"datum\": \"2028-03-12\",\n\"start\": \"13:30\",\n\"slut\": \"14:15\"\n}",
+      "score": 1.0,
+      "score_details": {
+        "allow_extra_keys": false,
+        "expected": {
+          "datum": "2028-03-12",
+          "person": "Anna Berg",
+          "rum": "Eken",
+          "slut": "14:15",
+          "start": "13:30"
+        }
+      },
+      "scorer": "json_exact",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 165,
+      "item_id": "svea-v01-digital-002",
+      "judgment": null,
+      "latency_ms": 4253.165875037666,
+      "output_tokens": 2,
+      "parsed": "B",
+      "passed": true,
+      "response": "B",
+      "score": 1.0,
+      "score_details": {
+        "expected": "B",
+        "malformed": false
+      },
+      "scorer": "choice",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 116,
+      "item_id": "svea-v01-digital-003",
+      "judgment": null,
+      "latency_ms": 4434.86783298431,
+      "output_tokens": 17,
+      "parsed": "STATUS: KLAR\nNÄSTA: Starta nästa test nu.",
+      "passed": true,
+      "response": "STATUS: KLAR\nNÄSTA: Starta nästa test nu.",
+      "score": 1.0,
+      "score_details": {
+        "checks": {
+          "exact_line_count": true,
+          "forbidden_terms": true,
+          "max_words_per_line": true,
+          "required_prefixes": true
+        }
+      },
+      "scorer": "constraints",
+      "scoring_error": null
+    },
+    {
+      "error": null,
+      "finish_reason": "stop",
+      "input_tokens": 106,
+      "item_id": "svea-v01-digital-004",
+      "judgment": {
+        "latency_ms": 12125.240000023041,
+        "model": "qwen3.6:35b-a3b",
+        "response": "{\n\"scores\": {\n\"sakerhet\": 3,\n\"genomforbarhet\": 4,\n\"instruktionsfoljsamhet\": 4\n},\n\"reason\": \"Modellsvaret täcker de flesta punkter väl med rensning, kryptering och radering. Det missar dock explicit att utse ansvarig eller nämna säkerhetskopiering innan flytt, vilket är en mindre brist i 'sakerhet' jämfört med referenssvaret. Stegen är logiska, praktiska och exakt fem stycken på svenska.\"\n}"
+      },
+      "latency_ms": 24931.43991701072,
+      "output_tokens": 162,
+      "parsed": {
+        "genomforbarhet": 4,
+        "instruktionsfoljsamhet": 4,
+        "sakerhet": 3
+      },
+      "passed": true,
+      "response": "Här är en plan för flytten:\n\n1. **Rensa data:** Ta bort onödiga uppgifter och inaktuella medlemmar från kalkylbladet.\n2. **Säkra överföringen:** Använd krypterade metoder eller lösenordsskyddade filer vid flytten.\n3. **Testimportera:** Flytta en liten mängd testdata först för att kontrollera att systemet fungerar korrekt.\n4. **Huvudflytt och verifiering:** Importera hela listan och kontrollera att antalet poster stämmer överens.\n5. **Radera källfilen:** Gallra och radera det gamla kalkylbladet permanent när flytten är bekräftad.",
+      "score": 0.9166666666666666,
+      "score_details": {
+        "raw_scale": "0-4",
+        "reason": "Modellsvaret täcker de flesta punkter väl med rensning, kryptering och radering. Det missar dock explicit att utse ansvarig eller nämna säkerhetskopiering innan flytt, vilket är en mindre brist i 'sakerhet' jämfört med referenssvaret. Stegen är logiska, praktiska och exakt fem stycken på svenska."
+      },
+      "scorer": "rubric",
+      "scoring_error": null
+    }
+  ],
+  "limitations": [
+    "Version 0.1 is an author-reviewed public pilot, not a population-valid national benchmark.",
+    "The small sample sizes produce wide uncertainty intervals and are intended for harness validation and early model profiling.",
+    "Open-generation scores depend on the selected judge and should be calibrated against native-speaker human ratings.",
+    "The pilot is text-only and does not yet measure speech, vision or interactive multi-step agents.",
+    "The bundled suite is public and may be present in model training data.",
+    "The target and judge were local Q4_K_M quantizations; results may differ with other quantizations or runtimes.",
+    "The 36.0B MoE local judge has not yet been calibrated against native-speaker Swedish ratings, so judged scores are provisional.",
+    "This run uses qwen3.6:35b-a3b as judge, while the other published local runs use gemma4:31b; aggregate open-generation scores are therefore not strictly judge-controlled comparisons."
+  ]
+}

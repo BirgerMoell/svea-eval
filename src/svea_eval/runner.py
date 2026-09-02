@@ -72,6 +72,17 @@ def run_evaluation(
 
     for position, item in enumerate(selected, start=1):
         if item.id in completed:
+            rescored = _rescore_preserved_judgment(
+                item=item, sample=completed[item.id]
+            )
+            if rescored is not None:
+                completed[item.id] = rescored
+                with sidecar.open("a", encoding="utf-8") as handle:
+                    handle.write(
+                        json.dumps(rescored, ensure_ascii=False, sort_keys=True) + "\n"
+                    )
+                print(f"[{position}/{len(selected)}] rescore {item.id}", file=sys.stderr)
+                continue
             print(f"[{position}/{len(selected)}] resume {item.id}", file=sys.stderr)
             continue
         print(f"[{position}/{len(selected)}] run    {item.id}", file=sys.stderr)
@@ -168,13 +179,13 @@ def _run_item(
         if score.scorer == "rubric" and judge_backend is not None:
             judge_item = _judge_item(item=item, response=generation.text)
             judge_generation = judge_backend.generate(item=judge_item, config=judge_config)
+            judgment = {
+                "model": judge_backend.model_id,
+                "response": judge_generation.text,
+                "latency_ms": judge_generation.latency_ms,
+            }
             try:
                 score = score_judgment(item=item, judgment=judge_generation.text)
-                judgment = {
-                    "model": judge_backend.model_id,
-                    "response": judge_generation.text,
-                    "latency_ms": judge_generation.latency_ms,
-                }
             except ValueError as exc:
                 score = Score(
                     value=None,
@@ -226,6 +237,34 @@ def _judge_item(item: Item, response: str) -> Item:
     payload["max_tokens"] = 320
     payload["source"] = item.source
     return Item(**payload)
+
+
+def _rescore_preserved_judgment(
+    *, item: Item, sample: dict[str, Any]
+) -> dict[str, Any] | None:
+    """Re-parse a preserved judge response after a scorer/parser improvement."""
+    judgment = sample.get("judgment")
+    if (
+        sample.get("score") is not None
+        or sample.get("error")
+        or not isinstance(judgment, dict)
+    ):
+        return None
+    response = judgment.get("response")
+    if sample.get("scorer") != "rubric" or not isinstance(response, str):
+        return None
+    try:
+        score = score_judgment(item=item, judgment=response)
+    except ValueError:
+        return None
+    return {
+        **sample,
+        "score": score.value,
+        "passed": score.passed,
+        "parsed": score.parsed,
+        "score_details": score.details,
+        "scoring_error": None,
+    }
 
 
 def _load_sidecar(path: Path) -> dict[str, dict[str, Any]]:

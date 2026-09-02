@@ -17,7 +17,7 @@
     <meta name="twitter:description" content="An open, Swedish-first capability benchmark for API and local language models.">
     <meta name="twitter:image" content="https://birgermoell.github.io/svea-eval/og.png">
     <link rel="canonical" href="https://birgermoell.github.io/svea-eval/">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=20260902-2">
     <title>SVEA Eval — Swedish capability, mapped</title>
   </head>
   <body>
@@ -174,13 +174,30 @@ svea run \
           <p class="kicker">04 / EVIDENCE</p>
           <div>
             <h2>Results, with their caveats attached.</h2>
-            <p>The page accepts only complete, non-diagnostic runs. Public-pilot evidence is never presented as a hidden-test claim.</p>
+            <p>The page accepts only complete, non-diagnostic runs. Open any model to inspect every question, answer, scoring decision and named judge rationale.</p>
           </div>
         </div>
         <div id="results-view" class="results-empty" aria-live="polite">
           <span class="empty-glyph" aria-hidden="true">∅</span>
           <div><h3>No reviewed full-suite runs yet.</h3><p>The harness is ready. The first contribution should be a reproducible baseline with a pinned model and judge.</p></div>
           <a class="button quiet" href="https://github.com/BirgerMoell/svea-eval/blob/main/CONTRIBUTING.md">Submit a run</a>
+        </div>
+        <div id="deep-dive" class="deep-dive" aria-live="polite" hidden>
+          <div class="deep-heading">
+            <div><p class="small-label">ANSWER EXPLORER</p><h3>From aggregate score to actual evidence.</h3></div>
+            <p>Judge rationales are the explanations returned with rubric scores—not private hidden chain-of-thought.</p>
+          </div>
+          <div class="deep-controls">
+            <label>Model<select id="detail-model" aria-label="Select model"></select></label>
+            <label>Domain<select id="detail-domain" aria-label="Filter by domain"><option value="all">All domains</option></select></label>
+            <label>View<select id="detail-filter" aria-label="Filter answers"><option value="all">All answers</option><option value="attention">Needs attention</option><option value="judged">LLM-judged</option><option value="deterministic">Deterministic</option></select></label>
+          </div>
+          <div class="deep-protocol" id="deep-protocol"></div>
+          <div class="deep-caveats" id="deep-caveats"></div>
+          <div class="deep-layout">
+            <div class="item-list" id="detail-items" role="list" aria-label="Evaluation items"></div>
+            <article class="answer-detail" id="detail-answer"></article>
+          </div>
         </div>
       </section>
 
@@ -214,7 +231,7 @@ svea run \
       <p>Open code under Apache-2.0 · Original pilot data under CC0-1.0</p>
       <div><a href="https://github.com/BirgerMoell/svea-eval">GitHub</a><a href="https://github.com/BirgerMoell/svea-eval/blob/main/docs/METHODOLOGY.md">Methodology</a><a href="https://github.com/BirgerMoell/svea-eval/blob/main/docs/SOURCES.md">Sources</a></div>
     </footer>
-    <script src="data/site-data.js?v=20260902-1"></script>
-    <script src="app.js?v=20260902-1" defer></script>
+    <script src="data/site-data.js?v=20260902-2"></script>
+    <script src="app.js?v=20260902-2" defer></script>
   </body>
 </html>

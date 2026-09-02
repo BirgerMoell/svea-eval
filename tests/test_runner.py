@@ -54,6 +54,49 @@ class RunnerTests(unittest.TestCase):
             self.assertEqual(run["samples"][0]["judgment"]["model"], "svea/oracle-diagnostic")
             self.assertEqual(run["judge"]["revision"], "oracle-rev")
 
+    def test_resume_rescores_preserved_judgment(self):
+        with tempfile.TemporaryDirectory() as directory:
+            metadata, items = load_suite()
+            rubric_item = next(item for item in items if item.id == "svea-v01-work-004")
+            output = Path(directory) / "rescored.json"
+            run_evaluation(
+                suite_metadata=metadata,
+                items=[rubric_item],
+                backend=OracleBackend(),
+                judge_backend=OracleBackend(),
+                output=output,
+                config=GenerationConfig(),
+            )
+            sidecar = output.with_suffix(".samples.jsonl")
+            sample = json.loads(sidecar.read_text())
+            sample.update(
+                {
+                    "score": None,
+                    "passed": None,
+                    "parsed": None,
+                    "score_details": {},
+                    "scoring_error": "invalid judge response",
+                }
+            )
+            sample["judgment"]["response"] = (
+                '{"scores":{"täckning":3,"trohet":4,"koncision":4},'
+                '"reason":"Täckningen har en mindre brist."}'
+            )
+            sidecar.write_text(json.dumps(sample, ensure_ascii=False) + "\n")
+
+            resumed = run_evaluation(
+                suite_metadata=metadata,
+                items=[rubric_item],
+                backend=OracleBackend(),
+                judge_backend=OracleBackend(),
+                output=output,
+                config=GenerationConfig(),
+            )
+
+            self.assertEqual(resumed["status"], "completed")
+            self.assertAlmostEqual(resumed["samples"][0]["score"], 11 / 12)
+            self.assertEqual(len(sidecar.read_text().splitlines()), 2)
+
     def test_resume_rejects_changed_protocol(self):
         with tempfile.TemporaryDirectory() as directory:
             metadata, items = load_suite()

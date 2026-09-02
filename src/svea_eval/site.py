@@ -29,6 +29,7 @@ def build_site_data(
         suite_id=metadata["id"],
         suite_version=metadata["version"],
         expected_items=len(items),
+        item_by_id={item.id: item for item in items},
     )
     domains = []
     for domain in metadata["domains"]:
@@ -94,6 +95,7 @@ def _load_public_runs(
     suite_id: str,
     suite_version: str,
     expected_items: int,
+    item_by_id: dict[str, Any],
 ) -> list[dict[str, Any]]:
     if results_dir is None or not results_dir.exists():
         return []
@@ -107,7 +109,7 @@ def _load_public_runs(
             expected_items=expected_items,
         ):
             continue
-        runs.append(_public_run(run))
+        runs.append(_public_run(run, item_by_id=item_by_id))
     return runs
 
 
@@ -125,13 +127,68 @@ def _is_publishable(
     )
 
 
-def _public_run(run: dict[str, Any]) -> dict[str, Any]:
+def _public_run(run: dict[str, Any], *, item_by_id: dict[str, Any]) -> dict[str, Any]:
+    item_results = []
+    for sample in run.get("samples", []):
+        item = item_by_id.get(sample.get("item_id"))
+        if item is None:
+            continue
+        item_results.append(
+            {
+                "item": {
+                    "id": item.id,
+                    "domain": item.domain,
+                    "capability": item.capability,
+                    "task_type": item.task_type,
+                    "prompt": item.prompt,
+                    "context": item.context,
+                    "options": list(item.options),
+                    "pair_id": item.pair_id,
+                    "variant": item.variant,
+                    "rubric": (
+                        {
+                            "dimensions": item.scoring["dimensions"],
+                            "pass_threshold": item.scoring.get("pass_threshold"),
+                            "reference_answer": item.gold.get("reference_answer"),
+                            "required_points": item.gold.get("required_points", []),
+                        }
+                        if item.scoring["type"] == "rubric"
+                        else None
+                    ),
+                    "source": {
+                        "title": item.source.title,
+                        "url": item.source.url,
+                        "license": item.source.license,
+                    },
+                },
+                "sample": {
+                    key: sample.get(key)
+                    for key in (
+                        "response",
+                        "score",
+                        "passed",
+                        "scorer",
+                        "parsed",
+                        "score_details",
+                        "scoring_error",
+                        "latency_ms",
+                        "input_tokens",
+                        "output_tokens",
+                        "finish_reason",
+                        "judgment",
+                        "error",
+                    )
+                },
+            }
+        )
     return {
         "run_id": run["run_id"],
         "model": run["model"],
         "judge": run.get("judge"),
         "suite": run["suite"],
+        "protocol": run.get("protocol", {}),
         "finished_at": run["finished_at"],
         "summary": run["summary"],
         "limitations": run.get("limitations", []),
+        "items": item_results,
     }

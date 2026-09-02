@@ -76,10 +76,15 @@ def score_judgment(item: Item, judgment: str) -> Score:
     scores = payload.get("scores")
     if not isinstance(scores, dict):
         raise ValueError("judge JSON must contain a scores object")
+    normalized_scores = {
+        _normalize_dimension_key(str(key)): value for key, value in scores.items()
+    }
     expected = list(item.scoring["dimensions"])
     parsed: dict[str, int] = {}
     for dimension in expected:
         raw = scores.get(dimension)
+        if raw is None:
+            raw = normalized_scores.get(_normalize_dimension_key(dimension))
         if isinstance(raw, bool) or not isinstance(raw, (int, float)):
             raise ValueError(f"judge score for {dimension!r} is not numeric")
         value = int(raw)
@@ -94,6 +99,16 @@ def score_judgment(item: Item, judgment: str) -> Score:
         scorer="rubric",
         parsed=parsed,
         details={"reason": str(payload.get("reason", "")), "raw_scale": "0-4"},
+    )
+
+
+def _normalize_dimension_key(value: str) -> str:
+    """Match harmless judge-added Swedish diacritics without relaxing score values."""
+    decomposed = unicodedata.normalize("NFKD", value).casefold()
+    return "".join(
+        character
+        for character in decomposed
+        if character.isalnum() and not unicodedata.combining(character)
     )
 
 

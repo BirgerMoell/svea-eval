@@ -174,6 +174,11 @@ Judge scores use item-specific Swedish rubrics on a 0–4 scale and retain the
 raw judgment and judge identity. A serious leaderboard should publish human
 agreement measurements for its chosen judge and avoid self-judging.
 
+The runner also preserves invalid raw judge output. If a later parser fix can
+read that same output, resuming the run re-scores it locally without calling
+either model again. The project page exposes the named judge, dimension scores,
+published rationale and raw structured judgment for every rubric-scored answer.
+
 ## Focus a run
 
 Filters can be repeated and applied together:

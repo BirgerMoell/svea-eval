@@ -53,3 +53,13 @@ class ScoringTests(unittest.TestCase):
         score = score_judgment(item=item, judgment=judgment)
         self.assertAlmostEqual(score.value, 11 / 12)
         self.assertTrue(score.passed)
+
+    def test_rubric_judgment_accepts_diacritic_dimension_alias(self):
+        item = self.items["svea-v01-work-004"]
+        judgment = (
+            '{"scores":{"täckning":3,"trohet":4,"koncision":4},'
+            '"reason":"Täckningen har en mindre brist."}'
+        )
+        score = score_judgment(item=item, judgment=judgment)
+        self.assertAlmostEqual(score.value, 11 / 12)
+        self.assertEqual(score.parsed["tackning"], 3)
