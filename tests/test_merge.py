@@ -46,7 +46,7 @@ class MergeExtensionTests(unittest.TestCase):
 
             self.assertEqual(merged["status"], "completed")
             self.assertFalse(merged["diagnostic"])
-            self.assertEqual(merged["suite"]["version"], "0.2.0")
+            self.assertEqual(merged["suite"]["version"], "0.2.1")
             self.assertEqual(merged["summary"]["counts"]["scored"], 55)
             self.assertEqual(
                 merged["samples"][0]["response"], base["samples"][0]["response"]
@@ -68,7 +68,7 @@ class MergeExtensionTests(unittest.TestCase):
         }
         extension = {
             **base,
-            "suite": {"id": "svea-core", "version": "0.2.0"},
+            "suite": {"id": "svea-core", "version": "0.2.1"},
             "protocol": {**base["protocol"], "temperature": 0.2},
             "samples": [
                 {"item_id": item.id}

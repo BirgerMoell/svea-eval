@@ -38,13 +38,13 @@ class RescoreTests(unittest.TestCase):
             reason="Accept the underspecified identifier representation.",
         )
 
-        self.assertEqual(updated["suite"]["version"], "0.2.0")
+        self.assertEqual(updated["suite"]["version"], "0.2.1")
         self.assertEqual(updated["samples"][0]["response"], response)
         self.assertEqual(updated["samples"][0]["score"], 1.0)
         self.assertTrue(updated["samples"][0]["passed"])
         provenance = updated["rescoring_history"][0]
         self.assertEqual(provenance["source_suite_version"], "0.1.0")
-        self.assertEqual(provenance["target_suite_version"], "0.2.0")
+        self.assertEqual(provenance["target_suite_version"], "0.2.1")
         self.assertTrue(provenance["model_responses_reused"])
         self.assertEqual(provenance["changes"][0]["item_id"], "svea-v01-work-002")
 
@@ -58,7 +58,7 @@ class RescoreTests(unittest.TestCase):
         )
         run = {
             "status": "completed",
-            "suite": {"id": "svea-core", "version": "0.2.0"},
+            "suite": {"id": "svea-core", "version": "0.2.1"},
             "samples": [
                 {
                     "item_id": item_id,

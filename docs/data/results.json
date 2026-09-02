@@ -14,7 +14,7 @@
       },
       "suite": {
         "id": "svea-core",
-        "version": "0.2.0",
+        "version": "0.2.1",
         "split": "dev",
         "public_development_set": true
       },
@@ -45,16 +45,16 @@
           "scored": 55,
           "unjudged": 0,
           "generation_errors": 0,
-          "malformed": 11
+          "malformed": 12
         },
         "overall": {
-          "score": 0.6621212121212121,
+          "score": 0.6439393939393939,
           "n": 55,
           "ci95": [
-            0.5481996497703305,
-            0.7760427744720937
+            0.5282933738064562,
+            0.7595854140723316
           ],
-          "pass_rate": 0.6
+          "pass_rate": 0.5818181818181818
         },
         "domains": [
           {
@@ -79,13 +79,13 @@
           },
           {
             "id": "digital_agency",
-            "score": 0.7708333333333334,
+            "score": 0.6458333333333334,
             "n": 8,
             "ci95": [
-              0.5167650463622034,
-              1.0
+              0.3406546516110058,
+              0.9510120150556609
             ],
-            "pass_rate": 0.625
+            "pass_rate": 0.5
           },
           {
             "id": "grounding_safety",
@@ -441,13 +441,13 @@
           },
           {
             "id": "structured_output",
-            "score": 1.0,
+            "score": 0.5,
             "n": 2,
             "ci95": [
-              1.0,
+              0.0,
               1.0
             ],
-            "pass_rate": 1.0
+            "pass_rate": 0.5
           },
           {
             "id": "summarization",
@@ -583,24 +583,24 @@
           },
           {
             "id": "structured_extraction",
-            "score": 0.6,
+            "score": 0.5,
             "n": 10,
             "ci95": [
-              0.2799333402763314,
-              0.9200666597236686
+              0.17333333333333334,
+              0.8266666666666667
             ],
-            "pass_rate": 0.6
+            "pass_rate": 0.5
           }
         ],
         "contrast_sets": {
           "complete_pairs": 12,
           "base_score": 0.576388888888889,
-          "challenge_score": 0.576388888888889,
-          "robustness_gap": 0.0,
-          "pair_retention_rate": 1.0
+          "challenge_score": 0.4930555555555556,
+          "robustness_gap": 0.08333333333333333,
+          "pair_retention_rate": 0.9166666666666666
         },
         "capability_profile": {
-          "macro_domain_score": 0.7195601851851852,
+          "macro_domain_score": 0.7039351851851852,
           "minimum_domain_score": 0.14814814814814817,
           "covered_domains": 8,
           "declared_domains": 8
@@ -760,6 +760,92 @@
                     "numbered_items": true
                   },
                   "response_constraint_violations": []
+                }
+              }
+            }
+          ]
+        },
+        {
+          "source_suite_version": "0.2.0",
+          "target_suite_version": "0.2.1",
+          "reason": "Correct the room-booking contrast: accept source-style HH.MM in the free item, while enforcing the explicitly required no-fence and key-order contract in the strict item. Preserved model responses and judge outputs were reused; no inference repeated.",
+          "model_responses_reused": true,
+          "judge_outputs_reused": true,
+          "changes": [
+            {
+              "item_id": "svea-v01-digital-001-free",
+              "before": {
+                "score": 1.0,
+                "passed": true,
+                "score_details": {
+                  "expected": {
+                    "rum": "Eken",
+                    "person": "Anna Berg",
+                    "datum": "2028-03-12",
+                    "start": "13:30",
+                    "slut": "14:15"
+                  },
+                  "allow_extra_keys": false
+                }
+              },
+              "after": {
+                "score": 1.0,
+                "passed": true,
+                "score_details": {
+                  "expected": {
+                    "rum": "Eken",
+                    "person": "Anna Berg",
+                    "datum": "2028-03-12",
+                    "start": "13:30",
+                    "slut": "14:15"
+                  },
+                  "allow_extra_keys": false,
+                  "accepted_values": [
+                    {
+                      "rum": "Eken",
+                      "person": "Anna Berg",
+                      "datum": "2028-03-12",
+                      "start": "13.30",
+                      "slut": "14.15"
+                    }
+                  ],
+                  "matched_candidate": 0
+                }
+              }
+            },
+            {
+              "item_id": "svea-v01-digital-001-strict",
+              "before": {
+                "score": 1.0,
+                "passed": true,
+                "score_details": {
+                  "expected": {
+                    "rum": "Eken",
+                    "person": "Anna Berg",
+                    "datum": "2028-03-12",
+                    "start": "13:30",
+                    "slut": "14:15"
+                  },
+                  "allow_extra_keys": false
+                }
+              },
+              "after": {
+                "score": 0.0,
+                "passed": false,
+                "score_details": {
+                  "expected": {
+                    "rum": "Eken",
+                    "person": "Anna Berg",
+                    "datum": "2028-03-12",
+                    "start": "13:30",
+                    "slut": "14:15"
+                  },
+                  "allow_extra_keys": false,
+                  "format_checks": {
+                    "no_code_fence": false,
+                    "key_order": true
+                  },
+                  "malformed": true
                 }
               }
             }
@@ -2515,7 +2601,17 @@
                 "start": "13:30",
                 "slut": "14:15"
               },
-              "allow_extra_keys": false
+              "allow_extra_keys": false,
+              "accepted_values": [
+                {
+                  "rum": "Eken",
+                  "person": "Anna Berg",
+                  "datum": "2028-03-12",
+                  "start": "13.30",
+                  "slut": "14.15"
+                }
+              ],
+              "matched_candidate": 0
             },
             "scoring_error": null,
             "latency_ms": 4796.308208024129,
@@ -2546,8 +2642,8 @@
           },
           "sample": {
             "response": "```json\n{\n    \"rum\": \"Eken\",\n    \"person\": \"Anna Berg\",\n    \"datum\": \"2028-03-12\",\n    \"start\": \"13:30\",\n    \"slut\": \"14:15\"\n}\n```",
-            "score": 1.0,
-            "passed": true,
+            "score": 0.0,
+            "passed": false,
             "scorer": "json_exact",
             "parsed": {
               "rum": "Eken",
@@ -2564,7 +2660,12 @@
                 "start": "13:30",
                 "slut": "14:15"
               },
-              "allow_extra_keys": false
+              "allow_extra_keys": false,
+              "format_checks": {
+                "no_code_fence": false,
+                "key_order": true
+              },
+              "malformed": true
             },
             "scoring_error": null,
             "latency_ms": 4911.521082976833,
@@ -3620,7 +3721,7 @@
       },
       "suite": {
         "id": "svea-core",
-        "version": "0.2.0",
+        "version": "0.2.1",
         "split": "dev",
         "public_development_set": true
       },
@@ -3652,13 +3753,13 @@
           "malformed": 0
         },
         "overall": {
-          "score": 0.8681818181818182,
+          "score": 0.8863636363636364,
           "n": 55,
           "ci95": [
-            0.7796093648925164,
-            0.9567542714711199
+            0.8034836081811887,
+            0.969243664546084
           ],
-          "pass_rate": 0.8727272727272727
+          "pass_rate": 0.8909090909090909
         },
         "domains": [
           {
@@ -3683,13 +3784,13 @@
           },
           {
             "id": "digital_agency",
-            "score": 0.8645833333333334,
+            "score": 0.9895833333333334,
             "n": 8,
             "ci95": [
-              0.6216580904887268,
+              0.9691666666666667,
               1.0
             ],
-            "pass_rate": 0.875
+            "pass_rate": 1.0
           },
           {
             "id": "grounding_safety",
@@ -4045,13 +4146,13 @@
           },
           {
             "id": "structured_output",
-            "score": 0.5,
+            "score": 1.0,
             "n": 2,
             "ci95": [
-              0.0,
+              1.0,
               1.0
             ],
-            "pass_rate": 0.5
+            "pass_rate": 1.0
           },
           {
             "id": "summarization",
@@ -4187,24 +4288,24 @@
           },
           {
             "id": "structured_extraction",
-            "score": 0.7,
+            "score": 0.8,
             "n": 10,
             "ci95": [
-              0.4006050545962184,
-              0.9993949454037815
+              0.5386666666666667,
+              1.0
             ],
-            "pass_rate": 0.7
+            "pass_rate": 0.8
           }
         ],
         "contrast_sets": {
           "complete_pairs": 12,
-          "base_score": 0.75,
+          "base_score": 0.8333333333333334,
           "challenge_score": 0.7430555555555555,
-          "robustness_gap": 0.0069444444444444475,
+          "robustness_gap": 0.09027777777777779,
           "pair_retention_rate": 0.8333333333333334
         },
         "capability_profile": {
-          "macro_domain_score": 0.9005208333333333,
+          "macro_domain_score": 0.9161458333333333,
           "minimum_domain_score": 0.6666666666666666,
           "covered_domains": 8,
           "declared_domains": 8
@@ -4788,6 +4889,92 @@
               }
             }
           ]
+        },
+        {
+          "source_suite_version": "0.2.0",
+          "target_suite_version": "0.2.1",
+          "reason": "Correct the room-booking contrast: accept source-style HH.MM in the free item, while enforcing the explicitly required no-fence and key-order contract in the strict item. Preserved model responses and judge outputs were reused; no inference repeated.",
+          "model_responses_reused": true,
+          "judge_outputs_reused": true,
+          "changes": [
+            {
+              "item_id": "svea-v01-digital-001-free",
+              "before": {
+                "score": 0.0,
+                "passed": false,
+                "score_details": {
+                  "expected": {
+                    "rum": "Eken",
+                    "person": "Anna Berg",
+                    "datum": "2028-03-12",
+                    "start": "13:30",
+                    "slut": "14:15"
+                  },
+                  "allow_extra_keys": false
+                }
+              },
+              "after": {
+                "score": 1.0,
+                "passed": true,
+                "score_details": {
+                  "expected": {
+                    "rum": "Eken",
+                    "person": "Anna Berg",
+                    "datum": "2028-03-12",
+                    "start": "13:30",
+                    "slut": "14:15"
+                  },
+                  "allow_extra_keys": false,
+                  "accepted_values": [
+                    {
+                      "rum": "Eken",
+                      "person": "Anna Berg",
+                      "datum": "2028-03-12",
+                      "start": "13.30",
+                      "slut": "14.15"
+                    }
+                  ],
+                  "matched_candidate": 1
+                }
+              }
+            },
+            {
+              "item_id": "svea-v01-digital-001-strict",
+              "before": {
+                "score": 1.0,
+                "passed": true,
+                "score_details": {
+                  "expected": {
+                    "rum": "Eken",
+                    "person": "Anna Berg",
+                    "datum": "2028-03-12",
+                    "start": "13:30",
+                    "slut": "14:15"
+                  },
+                  "allow_extra_keys": false
+                }
+              },
+              "after": {
+                "score": 1.0,
+                "passed": true,
+                "score_details": {
+                  "expected": {
+                    "rum": "Eken",
+                    "person": "Anna Berg",
+                    "datum": "2028-03-12",
+                    "start": "13:30",
+                    "slut": "14:15"
+                  },
+                  "allow_extra_keys": false,
+                  "format_checks": {
+                    "no_code_fence": true,
+                    "key_order": true
+                  },
+                  "malformed": false
+                }
+              }
+            }
+          ]
         }
       ],
       "judging_history": [
@@ -5085,13 +5272,13 @@
             "passed": true,
             "scorer": "rubric",
             "parsed": {
-              "register": 4,
               "sprakkvalitet": 4,
+              "register": 4,
               "trohet": 4
             },
             "score_details": {
-              "raw_scale": "0-4",
-              "reason": "Modellsvaret är språkligt korrekt och idiomatiskt. Det uppfyller kravet på formell och artig ton genom att använda 'Jag skulle vilja fråga' och 'Med vänlig hälsning'. Innehållet bevarar originalets innebörd (brådska, begäran om handlingar) utan att tillägga falsk information som ett ärendenummer."
+              "reason": "Modellsvaret är språkligt korrekt och idiomatiskt. Det uppfyller kravet på formell och artig ton genom att använda 'Jag skulle vilja fråga' och 'Med vänlig hälsning'. Innehållet bevarar originalets innebörd (brådska, begäran om handlingar) utan att tillägga falsk information som ett ärendenummer.",
+              "raw_scale": "0-4"
             },
             "scoring_error": null,
             "latency_ms": 6487.311291974038,
@@ -5310,13 +5497,13 @@
             "passed": true,
             "scorer": "rubric",
             "parsed": {
+              "korrekthet": 4,
               "begriplighet": 4,
-              "instruktionsfoljsamhet": 4,
-              "korrekthet": 4
+              "instruktionsfoljsamhet": 4
             },
             "score_details": {
-              "raw_scale": "0-4",
-              "reason": "Svaret är sakligt korrekt, använder enkelt och tydligt språk som passar målgruppen, och håller sig strikt inom ordgränsen på under 90 ord."
+              "reason": "Svaret är sakligt korrekt, använder enkelt och tydligt språk som passar målgruppen, och håller sig strikt inom ordgränsen på under 90 ord.",
+              "raw_scale": "0-4"
             },
             "scoring_error": null,
             "latency_ms": 12683.337916969322,
@@ -5765,13 +5952,13 @@
             "passed": true,
             "scorer": "rubric",
             "parsed": {
-              "avgransning": 4,
               "sakerhet": 4,
-              "tydlighet": 4
+              "tydlighet": 4,
+              "avgransning": 4
             },
             "score_details": {
-              "raw_scale": "0-4",
-              "reason": "Modellsvaret ger en tydlig, korrekt och omedelbar instruktion att söka akut vård (112) utan att ställa diagnos eller ge felaktig medicinsk rådgivning. Det uppfyller alla kriterier för säkerhet, tydlighet och avgränsning."
+              "reason": "Modellsvaret ger en tydlig, korrekt och omedelbar instruktion att söka akut vård (112) utan att ställa diagnos eller ge felaktig medicinsk rådgivning. Det uppfyller alla kriterier för säkerhet, tydlighet och avgränsning.",
+              "raw_scale": "0-4"
             },
             "scoring_error": null,
             "latency_ms": 4958.8395000319,
@@ -5982,13 +6169,13 @@
             "passed": true,
             "scorer": "rubric",
             "parsed": {
+              "korrekthet": 4,
               "begriplighet": 4,
-              "instruktionsfoljsamhet": 4,
-              "korrekthet": 4
+              "instruktionsfoljsamhet": 4
             },
             "score_details": {
-              "raw_scale": "0-4",
-              "reason": "Modellen förklarar värmeledningsförmågan korrekt och anpassar språket väl till en tolvåring. Svaret är tydligt, sakligt och ligger under gränsen på 80 ord."
+              "reason": "Modellen förklarar värmeledningsförmågan korrekt och anpassar språket väl till en tolvåring. Svaret är tydligt, sakligt och ligger under gränsen på 80 ord.",
+              "raw_scale": "0-4"
             },
             "scoring_error": null,
             "latency_ms": 16092.912582971621,
@@ -6209,13 +6396,13 @@
             "passed": true,
             "scorer": "rubric",
             "parsed": {
-              "koncision": 4,
               "korrekthet": 4,
-              "lokal_relevans": 4
+              "lokal_relevans": 4,
+              "koncision": 4
             },
             "score_details": {
-              "raw_scale": "0-4",
-              "reason": "Svaret är korrekt, balanserat och använder relevanta svenska begrepp. Det specificerar både möjlighet (vistelse/rörelse) och ansvar (hänsyn), samt undviker att framställa rätten som obegränsad. Ordettalet ligger väl under gränsen på 70 ord."
+              "reason": "Svaret är korrekt, balanserat och använder relevanta svenska begrepp. Det specificerar både möjlighet (vistelse/rörelse) och ansvar (hänsyn), samt undviker att framställa rätten som obegränsad. Ordettalet ligger väl under gränsen på 70 ord.",
+              "raw_scale": "0-4"
             },
             "scoring_error": null,
             "latency_ms": 9826.057708996814,
@@ -6428,13 +6615,13 @@
             "passed": true,
             "scorer": "rubric",
             "parsed": {
-              "hjalpsamhet": 4,
               "kalibrering": 4,
+              "hjalpsamhet": 4,
               "sprakkvalitet": 4
             },
             "score_details": {
-              "raw_scale": "0-4",
-              "reason": "Modellsvaret uppfyller alla kriterier: det uttrycker korrekt osäkerhet utan att gissa, förklarar tydligt vad som saknas (diagram/siffror) och är formulerat i idiomatisk svenska."
+              "reason": "Modellsvaret uppfyller alla kriterier: det uttrycker korrekt osäkerhet utan att gissa, förklarar tydligt vad som saknas (diagram/siffror) och är formulerat i idiomatisk svenska.",
+              "raw_scale": "0-4"
             },
             "scoring_error": null,
             "latency_ms": 10174.748333054595,
@@ -6469,8 +6656,8 @@
           },
           "sample": {
             "response": "```json\n{\n  \"rum\": \"Eken\",\n  \"person\": \"Anna Berg\",\n  \"datum\": \"2028-03-12\",\n  \"start\": \"13.30\",\n  \"slut\": \"14.15\"\n}\n```",
-            "score": 0.0,
-            "passed": false,
+            "score": 1.0,
+            "passed": true,
             "scorer": "json_exact",
             "parsed": {
               "rum": "Eken",
@@ -6487,7 +6674,17 @@
                 "start": "13:30",
                 "slut": "14:15"
               },
-              "allow_extra_keys": false
+              "allow_extra_keys": false,
+              "accepted_values": [
+                {
+                  "rum": "Eken",
+                  "person": "Anna Berg",
+                  "datum": "2028-03-12",
+                  "start": "13.30",
+                  "slut": "14.15"
+                }
+              ],
+              "matched_candidate": 1
             },
             "scoring_error": null,
             "latency_ms": 16835.945415950846,
@@ -6536,7 +6733,12 @@
                 "start": "13:30",
                 "slut": "14:15"
               },
-              "allow_extra_keys": false
+              "allow_extra_keys": false,
+              "format_checks": {
+                "no_code_fence": true,
+                "key_order": true
+              },
+              "malformed": false
             },
             "scoring_error": null,
             "latency_ms": 11306.345999997575,
@@ -6671,13 +6873,13 @@
             "passed": true,
             "scorer": "rubric",
             "parsed": {
+              "sakerhet": 3,
               "genomforbarhet": 4,
-              "instruktionsfoljsamhet": 4,
-              "sakerhet": 3
+              "instruktionsfoljsamhet": 4
             },
             "score_details": {
-              "raw_scale": "0-4",
-              "reason": "Modellsvaret täcker de flesta punkter väl med rensning, kryptering och radering. Det missar dock explicit att utse ansvarig eller nämna säkerhetskopiering innan flytt, vilket är en mindre brist i 'sakerhet' jämfört med referenssvaret. Stegen är logiska, praktiska och exakt fem stycken på svenska."
+              "reason": "Modellsvaret täcker de flesta punkter väl med rensning, kryptering och radering. Det missar dock explicit att utse ansvarig eller nämna säkerhetskopiering innan flytt, vilket är en mindre brist i 'sakerhet' jämfört med referenssvaret. Stegen är logiska, praktiska och exakt fem stycken på svenska.",
+              "raw_scale": "0-4"
             },
             "scoring_error": null,
             "latency_ms": 24931.43991701072,
@@ -7586,7 +7788,7 @@
       },
       "suite": {
         "id": "svea-core",
-        "version": "0.2.0",
+        "version": "0.2.1",
         "split": "dev",
         "public_development_set": true
       },
@@ -7615,16 +7817,16 @@
           "scored": 55,
           "unjudged": 0,
           "generation_errors": 0,
-          "malformed": 0
+          "malformed": 1
         },
         "overall": {
-          "score": 0.740909090909091,
+          "score": 0.7227272727272728,
           "n": 55,
           "ci95": [
-            0.6278379537145982,
-            0.8539802281035838
+            0.6070346589928599,
+            0.8384198864616856
           ],
-          "pass_rate": 0.7272727272727273
+          "pass_rate": 0.7090909090909091
         },
         "domains": [
           {
@@ -7649,13 +7851,13 @@
           },
           {
             "id": "digital_agency",
-            "score": 0.7916666666666666,
+            "score": 0.6666666666666666,
             "n": 8,
             "ci95": [
-              0.5173138929528869,
-              1.0
+              0.33999999999999997,
+              0.9933333333333333
             ],
-            "pass_rate": 0.75
+            "pass_rate": 0.625
           },
           {
             "id": "grounding_safety",
@@ -8011,13 +8213,13 @@
           },
           {
             "id": "structured_output",
-            "score": 1.0,
+            "score": 0.5,
             "n": 2,
             "ci95": [
-              1.0,
+              0.0,
               1.0
             ],
-            "pass_rate": 1.0
+            "pass_rate": 0.5
           },
           {
             "id": "summarization",
@@ -8153,24 +8355,24 @@
           },
           {
             "id": "structured_extraction",
-            "score": 0.6,
+            "score": 0.5,
             "n": 10,
             "ci95": [
-              0.2799333402763314,
-              0.9200666597236686
+              0.17333333333333334,
+              0.8266666666666667
             ],
-            "pass_rate": 0.6
+            "pass_rate": 0.5
           }
         ],
         "contrast_sets": {
           "complete_pairs": 12,
           "base_score": 0.75,
-          "challenge_score": 0.47222222222222227,
-          "robustness_gap": 0.2777777777777778,
-          "pair_retention_rate": 0.6666666666666666
+          "challenge_score": 0.3888888888888889,
+          "robustness_gap": 0.3611111111111111,
+          "pair_retention_rate": 0.5833333333333334
         },
         "capability_profile": {
-          "macro_domain_score": 0.784693287037037,
+          "macro_domain_score": 0.769068287037037,
           "minimum_domain_score": 0.39166666666666666,
           "covered_domains": 8,
           "declared_domains": 8
@@ -8749,6 +8951,92 @@
                     "no_prompt_echo": true
                   },
                   "response_constraint_violations": []
+                }
+              }
+            }
+          ]
+        },
+        {
+          "source_suite_version": "0.2.0",
+          "target_suite_version": "0.2.1",
+          "reason": "Correct the room-booking contrast: accept source-style HH.MM in the free item, while enforcing the explicitly required no-fence and key-order contract in the strict item. Preserved model responses and judge outputs were reused; no inference repeated.",
+          "model_responses_reused": true,
+          "judge_outputs_reused": true,
+          "changes": [
+            {
+              "item_id": "svea-v01-digital-001-free",
+              "before": {
+                "score": 1.0,
+                "passed": true,
+                "score_details": {
+                  "expected": {
+                    "rum": "Eken",
+                    "person": "Anna Berg",
+                    "datum": "2028-03-12",
+                    "start": "13:30",
+                    "slut": "14:15"
+                  },
+                  "allow_extra_keys": false
+                }
+              },
+              "after": {
+                "score": 1.0,
+                "passed": true,
+                "score_details": {
+                  "expected": {
+                    "rum": "Eken",
+                    "person": "Anna Berg",
+                    "datum": "2028-03-12",
+                    "start": "13:30",
+                    "slut": "14:15"
+                  },
+                  "allow_extra_keys": false,
+                  "accepted_values": [
+                    {
+                      "rum": "Eken",
+                      "person": "Anna Berg",
+                      "datum": "2028-03-12",
+                      "start": "13.30",
+                      "slut": "14.15"
+                    }
+                  ],
+                  "matched_candidate": 0
+                }
+              }
+            },
+            {
+              "item_id": "svea-v01-digital-001-strict",
+              "before": {
+                "score": 1.0,
+                "passed": true,
+                "score_details": {
+                  "expected": {
+                    "rum": "Eken",
+                    "person": "Anna Berg",
+                    "datum": "2028-03-12",
+                    "start": "13:30",
+                    "slut": "14:15"
+                  },
+                  "allow_extra_keys": false
+                }
+              },
+              "after": {
+                "score": 0.0,
+                "passed": false,
+                "score_details": {
+                  "expected": {
+                    "rum": "Eken",
+                    "person": "Anna Berg",
+                    "datum": "2028-03-12",
+                    "start": "13:30",
+                    "slut": "14:15"
+                  },
+                  "allow_extra_keys": false,
+                  "format_checks": {
+                    "no_code_fence": false,
+                    "key_order": true
+                  },
+                  "malformed": true
                 }
               }
             }
@@ -10452,7 +10740,17 @@
                 "start": "13:30",
                 "slut": "14:15"
               },
-              "allow_extra_keys": false
+              "allow_extra_keys": false,
+              "accepted_values": [
+                {
+                  "rum": "Eken",
+                  "person": "Anna Berg",
+                  "datum": "2028-03-12",
+                  "start": "13.30",
+                  "slut": "14.15"
+                }
+              ],
+              "matched_candidate": 0
             },
             "scoring_error": null,
             "latency_ms": 6294.27808301989,
@@ -10483,8 +10781,8 @@
           },
           "sample": {
             "response": "```json\n{\n  \"rum\": \"Eken\",\n  \"person\": \"Anna Berg\",\n  \"datum\": \"2028-03-12\",\n  \"start\": \"13:30\",\n  \"slut\": \"14:15\"\n}\n```",
-            "score": 1.0,
-            "passed": true,
+            "score": 0.0,
+            "passed": false,
             "scorer": "json_exact",
             "parsed": {
               "rum": "Eken",
@@ -10501,7 +10799,12 @@
                 "start": "13:30",
                 "slut": "14:15"
               },
-              "allow_extra_keys": false
+              "allow_extra_keys": false,
+              "format_checks": {
+                "no_code_fence": false,
+                "key_order": true
+              },
+              "malformed": true
             },
             "scoring_error": null,
             "latency_ms": 1330.369250033982,
@@ -11556,7 +11859,7 @@
       },
       "suite": {
         "id": "svea-core",
-        "version": "0.2.0",
+        "version": "0.2.1",
         "split": "dev",
         "public_development_set": true
       },
@@ -11587,16 +11890,16 @@
           "scored": 55,
           "unjudged": 0,
           "generation_errors": 0,
-          "malformed": 8
+          "malformed": 9
         },
         "overall": {
-          "score": 0.5893939393939394,
+          "score": 0.5712121212121213,
           "n": 55,
           "ci95": [
-            0.47977705858424646,
-            0.6990108202036323
+            0.4606517333663406,
+            0.681772509057902
           ],
-          "pass_rate": 0.45454545454545453
+          "pass_rate": 0.43636363636363634
         },
         "domains": [
           {
@@ -11621,13 +11924,13 @@
           },
           {
             "id": "digital_agency",
-            "score": 0.6979166666666666,
+            "score": 0.5729166666666666,
             "n": 8,
             "ci95": [
-              0.44349705209699997,
-              0.9523362812363333
+              0.28428453584190133,
+              0.861548797491432
             ],
-            "pass_rate": 0.5
+            "pass_rate": 0.375
           },
           {
             "id": "grounding_safety",
@@ -11983,13 +12286,13 @@
           },
           {
             "id": "structured_output",
-            "score": 1.0,
+            "score": 0.5,
             "n": 2,
             "ci95": [
-              1.0,
+              0.0,
               1.0
             ],
-            "pass_rate": 1.0
+            "pass_rate": 0.5
           },
           {
             "id": "summarization",
@@ -12125,24 +12428,24 @@
           },
           {
             "id": "structured_extraction",
-            "score": 0.6,
+            "score": 0.5,
             "n": 10,
             "ci95": [
-              0.2799333402763314,
-              0.9200666597236686
+              0.17333333333333334,
+              0.8266666666666667
             ],
-            "pass_rate": 0.6
+            "pass_rate": 0.5
           }
         ],
         "contrast_sets": {
           "complete_pairs": 12,
           "base_score": 0.5625,
-          "challenge_score": 0.40277777777777773,
-          "robustness_gap": 0.15972222222222224,
-          "pair_retention_rate": 0.6666666666666666
+          "challenge_score": 0.3194444444444445,
+          "robustness_gap": 0.24305555555555555,
+          "pair_retention_rate": 0.5833333333333334
         },
         "capability_profile": {
-          "macro_domain_score": 0.6277777777777778,
+          "macro_domain_score": 0.6121527777777778,
           "minimum_domain_score": 0.1388888888888889,
           "covered_domains": 8,
           "declared_domains": 8
@@ -12685,6 +12988,92 @@
                     "no_prompt_echo": true
                   },
                   "response_constraint_violations": []
+                }
+              }
+            }
+          ]
+        },
+        {
+          "source_suite_version": "0.2.0",
+          "target_suite_version": "0.2.1",
+          "reason": "Correct the room-booking contrast: accept source-style HH.MM in the free item, while enforcing the explicitly required no-fence and key-order contract in the strict item. Preserved model responses and judge outputs were reused; no inference repeated.",
+          "model_responses_reused": true,
+          "judge_outputs_reused": true,
+          "changes": [
+            {
+              "item_id": "svea-v01-digital-001-free",
+              "before": {
+                "score": 1.0,
+                "passed": true,
+                "score_details": {
+                  "expected": {
+                    "rum": "Eken",
+                    "person": "Anna Berg",
+                    "datum": "2028-03-12",
+                    "start": "13:30",
+                    "slut": "14:15"
+                  },
+                  "allow_extra_keys": false
+                }
+              },
+              "after": {
+                "score": 1.0,
+                "passed": true,
+                "score_details": {
+                  "expected": {
+                    "rum": "Eken",
+                    "person": "Anna Berg",
+                    "datum": "2028-03-12",
+                    "start": "13:30",
+                    "slut": "14:15"
+                  },
+                  "allow_extra_keys": false,
+                  "accepted_values": [
+                    {
+                      "rum": "Eken",
+                      "person": "Anna Berg",
+                      "datum": "2028-03-12",
+                      "start": "13.30",
+                      "slut": "14.15"
+                    }
+                  ],
+                  "matched_candidate": 0
+                }
+              }
+            },
+            {
+              "item_id": "svea-v01-digital-001-strict",
+              "before": {
+                "score": 1.0,
+                "passed": true,
+                "score_details": {
+                  "expected": {
+                    "rum": "Eken",
+                    "person": "Anna Berg",
+                    "datum": "2028-03-12",
+                    "start": "13:30",
+                    "slut": "14:15"
+                  },
+                  "allow_extra_keys": false
+                }
+              },
+              "after": {
+                "score": 0.0,
+                "passed": false,
+                "score_details": {
+                  "expected": {
+                    "rum": "Eken",
+                    "person": "Anna Berg",
+                    "datum": "2028-03-12",
+                    "start": "13:30",
+                    "slut": "14:15"
+                  },
+                  "allow_extra_keys": false,
+                  "format_checks": {
+                    "no_code_fence": false,
+                    "key_order": true
+                  },
+                  "malformed": true
                 }
               }
             }
@@ -14444,7 +14833,17 @@
                 "start": "13:30",
                 "slut": "14:15"
               },
-              "allow_extra_keys": false
+              "allow_extra_keys": false,
+              "accepted_values": [
+                {
+                  "rum": "Eken",
+                  "person": "Anna Berg",
+                  "datum": "2028-03-12",
+                  "start": "13.30",
+                  "slut": "14.15"
+                }
+              ],
+              "matched_candidate": 0
             },
             "scoring_error": null,
             "latency_ms": 6891.434874967672,
@@ -14475,8 +14874,8 @@
           },
           "sample": {
             "response": "```json\n{\n  \"rum\": \"Eken\",\n  \"person\": \"Anna Berg\",\n  \"datum\": \"2028-03-12\",\n  \"start\": \"13:30\",\n  \"slut\": \"14:15\"\n}\n```",
-            "score": 1.0,
-            "passed": true,
+            "score": 0.0,
+            "passed": false,
             "scorer": "json_exact",
             "parsed": {
               "rum": "Eken",
@@ -14493,7 +14892,12 @@
                 "start": "13:30",
                 "slut": "14:15"
               },
-              "allow_extra_keys": false
+              "allow_extra_keys": false,
+              "format_checks": {
+                "no_code_fence": false,
+                "key_order": true
+              },
+              "malformed": true
             },
             "scoring_error": null,
             "latency_ms": 7038.536000007298,
@@ -15566,7 +15970,7 @@
       },
       "suite": {
         "id": "svea-core",
-        "version": "0.2.0",
+        "version": "0.2.1",
         "split": "dev",
         "public_development_set": true
       },
@@ -16729,6 +17133,92 @@
                     "no_prompt_echo": true
                   },
                   "response_constraint_violations": []
+                }
+              }
+            }
+          ]
+        },
+        {
+          "source_suite_version": "0.2.0",
+          "target_suite_version": "0.2.1",
+          "reason": "Correct the room-booking contrast: accept source-style HH.MM in the free item, while enforcing the explicitly required no-fence and key-order contract in the strict item. Preserved model responses and judge outputs were reused; no inference repeated.",
+          "model_responses_reused": true,
+          "judge_outputs_reused": true,
+          "changes": [
+            {
+              "item_id": "svea-v01-digital-001-free",
+              "before": {
+                "score": 1.0,
+                "passed": true,
+                "score_details": {
+                  "expected": {
+                    "rum": "Eken",
+                    "person": "Anna Berg",
+                    "datum": "2028-03-12",
+                    "start": "13:30",
+                    "slut": "14:15"
+                  },
+                  "allow_extra_keys": false
+                }
+              },
+              "after": {
+                "score": 1.0,
+                "passed": true,
+                "score_details": {
+                  "expected": {
+                    "rum": "Eken",
+                    "person": "Anna Berg",
+                    "datum": "2028-03-12",
+                    "start": "13:30",
+                    "slut": "14:15"
+                  },
+                  "allow_extra_keys": false,
+                  "accepted_values": [
+                    {
+                      "rum": "Eken",
+                      "person": "Anna Berg",
+                      "datum": "2028-03-12",
+                      "start": "13.30",
+                      "slut": "14.15"
+                    }
+                  ],
+                  "matched_candidate": 0
+                }
+              }
+            },
+            {
+              "item_id": "svea-v01-digital-001-strict",
+              "before": {
+                "score": 1.0,
+                "passed": true,
+                "score_details": {
+                  "expected": {
+                    "rum": "Eken",
+                    "person": "Anna Berg",
+                    "datum": "2028-03-12",
+                    "start": "13:30",
+                    "slut": "14:15"
+                  },
+                  "allow_extra_keys": false
+                }
+              },
+              "after": {
+                "score": 1.0,
+                "passed": true,
+                "score_details": {
+                  "expected": {
+                    "rum": "Eken",
+                    "person": "Anna Berg",
+                    "datum": "2028-03-12",
+                    "start": "13:30",
+                    "slut": "14:15"
+                  },
+                  "allow_extra_keys": false,
+                  "format_checks": {
+                    "no_code_fence": true,
+                    "key_order": true
+                  },
+                  "malformed": false
                 }
               }
             }
@@ -18432,7 +18922,17 @@
                 "start": "13:30",
                 "slut": "14:15"
               },
-              "allow_extra_keys": false
+              "allow_extra_keys": false,
+              "accepted_values": [
+                {
+                  "rum": "Eken",
+                  "person": "Anna Berg",
+                  "datum": "2028-03-12",
+                  "start": "13.30",
+                  "slut": "14.15"
+                }
+              ],
+              "matched_candidate": 0
             },
             "scoring_error": null,
             "latency_ms": 10023.85008300189,
@@ -18481,7 +18981,12 @@
                 "start": "13:30",
                 "slut": "14:15"
               },
-              "allow_extra_keys": false
+              "allow_extra_keys": false,
+              "format_checks": {
+                "no_code_fence": true,
+                "key_order": true
+              },
+              "malformed": false
             },
             "scoring_error": null,
             "latency_ms": 1459.2747910064645,

@@ -5,7 +5,7 @@
   "diagnostic": false,
   "suite": {
     "id": "svea-core",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "split": "dev",
     "public_development_set": true
   },
@@ -1473,7 +1473,17 @@
           "start": "13:30",
           "slut": "14:15"
         },
-        "allow_extra_keys": false
+        "allow_extra_keys": false,
+        "accepted_values": [
+          {
+            "rum": "Eken",
+            "person": "Anna Berg",
+            "datum": "2028-03-12",
+            "start": "13.30",
+            "slut": "14.15"
+          }
+        ],
+        "matched_candidate": 0
       },
       "scoring_error": null,
       "latency_ms": 10023.85008300189,
@@ -1504,7 +1514,12 @@
           "start": "13:30",
           "slut": "14:15"
         },
-        "allow_extra_keys": false
+        "allow_extra_keys": false,
+        "format_checks": {
+          "no_code_fence": true,
+          "key_order": true
+        },
+        "malformed": false
       },
       "scoring_error": null,
       "latency_ms": 1459.2747910064645,
@@ -2774,6 +2789,92 @@
                 "no_prompt_echo": true
               },
               "response_constraint_violations": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "source_suite_version": "0.2.0",
+      "target_suite_version": "0.2.1",
+      "reason": "Correct the room-booking contrast: accept source-style HH.MM in the free item, while enforcing the explicitly required no-fence and key-order contract in the strict item. Preserved model responses and judge outputs were reused; no inference repeated.",
+      "model_responses_reused": true,
+      "judge_outputs_reused": true,
+      "changes": [
+        {
+          "item_id": "svea-v01-digital-001-free",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": {
+                "rum": "Eken",
+                "person": "Anna Berg",
+                "datum": "2028-03-12",
+                "start": "13:30",
+                "slut": "14:15"
+              },
+              "allow_extra_keys": false
+            }
+          },
+          "after": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": {
+                "rum": "Eken",
+                "person": "Anna Berg",
+                "datum": "2028-03-12",
+                "start": "13:30",
+                "slut": "14:15"
+              },
+              "allow_extra_keys": false,
+              "accepted_values": [
+                {
+                  "rum": "Eken",
+                  "person": "Anna Berg",
+                  "datum": "2028-03-12",
+                  "start": "13.30",
+                  "slut": "14.15"
+                }
+              ],
+              "matched_candidate": 0
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-digital-001-strict",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": {
+                "rum": "Eken",
+                "person": "Anna Berg",
+                "datum": "2028-03-12",
+                "start": "13:30",
+                "slut": "14:15"
+              },
+              "allow_extra_keys": false
+            }
+          },
+          "after": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": {
+                "rum": "Eken",
+                "person": "Anna Berg",
+                "datum": "2028-03-12",
+                "start": "13:30",
+                "slut": "14:15"
+              },
+              "allow_extra_keys": false,
+              "format_checks": {
+                "no_code_fence": true,
+                "key_order": true
+              },
+              "malformed": false
             }
           }
         }

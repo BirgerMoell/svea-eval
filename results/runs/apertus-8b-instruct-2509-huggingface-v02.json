@@ -5,7 +5,7 @@
   "diagnostic": false,
   "suite": {
     "id": "svea-core",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "split": "dev",
     "public_development_set": true
   },
@@ -51,16 +51,16 @@
       "scored": 55,
       "unjudged": 0,
       "generation_errors": 0,
-      "malformed": 11
+      "malformed": 12
     },
     "overall": {
-      "score": 0.6621212121212121,
+      "score": 0.6439393939393939,
       "n": 55,
       "ci95": [
-        0.5481996497703305,
-        0.7760427744720937
+        0.5282933738064562,
+        0.7595854140723316
       ],
-      "pass_rate": 0.6
+      "pass_rate": 0.5818181818181818
     },
     "domains": [
       {
@@ -85,13 +85,13 @@
       },
       {
         "id": "digital_agency",
-        "score": 0.7708333333333334,
+        "score": 0.6458333333333334,
         "n": 8,
         "ci95": [
-          0.5167650463622034,
-          1.0
+          0.3406546516110058,
+          0.9510120150556609
         ],
-        "pass_rate": 0.625
+        "pass_rate": 0.5
       },
       {
         "id": "grounding_safety",
@@ -447,13 +447,13 @@
       },
       {
         "id": "structured_output",
-        "score": 1.0,
+        "score": 0.5,
         "n": 2,
         "ci95": [
-          1.0,
+          0.0,
           1.0
         ],
-        "pass_rate": 1.0
+        "pass_rate": 0.5
       },
       {
         "id": "summarization",
@@ -589,24 +589,24 @@
       },
       {
         "id": "structured_extraction",
-        "score": 0.6,
+        "score": 0.5,
         "n": 10,
         "ci95": [
-          0.2799333402763314,
-          0.9200666597236686
+          0.17333333333333334,
+          0.8266666666666667
         ],
-        "pass_rate": 0.6
+        "pass_rate": 0.5
       }
     ],
     "contrast_sets": {
       "complete_pairs": 12,
       "base_score": 0.576388888888889,
-      "challenge_score": 0.576388888888889,
-      "robustness_gap": 0.0,
-      "pair_retention_rate": 1.0
+      "challenge_score": 0.4930555555555556,
+      "robustness_gap": 0.08333333333333333,
+      "pair_retention_rate": 0.9166666666666666
     },
     "capability_profile": {
-      "macro_domain_score": 0.7195601851851852,
+      "macro_domain_score": 0.7039351851851852,
       "minimum_domain_score": 0.14814814814814817,
       "covered_domains": 8,
       "declared_domains": 8
@@ -1489,7 +1489,17 @@
           "start": "13:30",
           "slut": "14:15"
         },
-        "allow_extra_keys": false
+        "allow_extra_keys": false,
+        "accepted_values": [
+          {
+            "rum": "Eken",
+            "person": "Anna Berg",
+            "datum": "2028-03-12",
+            "start": "13.30",
+            "slut": "14.15"
+          }
+        ],
+        "matched_candidate": 0
       },
       "scoring_error": null,
       "latency_ms": 4796.308208024129,
@@ -1502,8 +1512,8 @@
     {
       "item_id": "svea-v01-digital-001-strict",
       "response": "```json\n{\n    \"rum\": \"Eken\",\n    \"person\": \"Anna Berg\",\n    \"datum\": \"2028-03-12\",\n    \"start\": \"13:30\",\n    \"slut\": \"14:15\"\n}\n```",
-      "score": 1.0,
-      "passed": true,
+      "score": 0.0,
+      "passed": false,
       "scorer": "json_exact",
       "parsed": {
         "rum": "Eken",
@@ -1520,7 +1530,12 @@
           "start": "13:30",
           "slut": "14:15"
         },
-        "allow_extra_keys": false
+        "allow_extra_keys": false,
+        "format_checks": {
+          "no_code_fence": false,
+          "key_order": true
+        },
+        "malformed": true
       },
       "scoring_error": null,
       "latency_ms": 4911.521082976833,
@@ -2377,6 +2392,92 @@
                 "numbered_items": true
               },
               "response_constraint_violations": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "source_suite_version": "0.2.0",
+      "target_suite_version": "0.2.1",
+      "reason": "Correct the room-booking contrast: accept source-style HH.MM in the free item, while enforcing the explicitly required no-fence and key-order contract in the strict item. Preserved model responses and judge outputs were reused; no inference repeated.",
+      "model_responses_reused": true,
+      "judge_outputs_reused": true,
+      "changes": [
+        {
+          "item_id": "svea-v01-digital-001-free",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": {
+                "rum": "Eken",
+                "person": "Anna Berg",
+                "datum": "2028-03-12",
+                "start": "13:30",
+                "slut": "14:15"
+              },
+              "allow_extra_keys": false
+            }
+          },
+          "after": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": {
+                "rum": "Eken",
+                "person": "Anna Berg",
+                "datum": "2028-03-12",
+                "start": "13:30",
+                "slut": "14:15"
+              },
+              "allow_extra_keys": false,
+              "accepted_values": [
+                {
+                  "rum": "Eken",
+                  "person": "Anna Berg",
+                  "datum": "2028-03-12",
+                  "start": "13.30",
+                  "slut": "14.15"
+                }
+              ],
+              "matched_candidate": 0
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-digital-001-strict",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": {
+                "rum": "Eken",
+                "person": "Anna Berg",
+                "datum": "2028-03-12",
+                "start": "13:30",
+                "slut": "14:15"
+              },
+              "allow_extra_keys": false
+            }
+          },
+          "after": {
+            "score": 0.0,
+            "passed": false,
+            "score_details": {
+              "expected": {
+                "rum": "Eken",
+                "person": "Anna Berg",
+                "datum": "2028-03-12",
+                "start": "13:30",
+                "slut": "14:15"
+              },
+              "allow_extra_keys": false,
+              "format_checks": {
+                "no_code_fence": false,
+                "key_order": true
+              },
+              "malformed": true
             }
           }
         }

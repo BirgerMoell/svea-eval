@@ -5,7 +5,7 @@
   "diagnostic": false,
   "suite": {
     "id": "svea-core",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "split": "dev",
     "public_development_set": true
   },
@@ -69,13 +69,13 @@
       "malformed": 0
     },
     "overall": {
-      "score": 0.8681818181818182,
+      "score": 0.8863636363636364,
       "n": 55,
       "ci95": [
-        0.7796093648925164,
-        0.9567542714711199
+        0.8034836081811887,
+        0.969243664546084
       ],
-      "pass_rate": 0.8727272727272727
+      "pass_rate": 0.8909090909090909
     },
     "domains": [
       {
@@ -100,13 +100,13 @@
       },
       {
         "id": "digital_agency",
-        "score": 0.8645833333333334,
+        "score": 0.9895833333333334,
         "n": 8,
         "ci95": [
-          0.6216580904887268,
+          0.9691666666666667,
           1.0
         ],
-        "pass_rate": 0.875
+        "pass_rate": 1.0
       },
       {
         "id": "grounding_safety",
@@ -462,13 +462,13 @@
       },
       {
         "id": "structured_output",
-        "score": 0.5,
+        "score": 1.0,
         "n": 2,
         "ci95": [
-          0.0,
+          1.0,
           1.0
         ],
-        "pass_rate": 0.5
+        "pass_rate": 1.0
       },
       {
         "id": "summarization",
@@ -604,24 +604,24 @@
       },
       {
         "id": "structured_extraction",
-        "score": 0.7,
+        "score": 0.8,
         "n": 10,
         "ci95": [
-          0.4006050545962184,
-          0.9993949454037815
+          0.5386666666666667,
+          1.0
         ],
-        "pass_rate": 0.7
+        "pass_rate": 0.8
       }
     ],
     "contrast_sets": {
       "complete_pairs": 12,
-      "base_score": 0.75,
+      "base_score": 0.8333333333333334,
       "challenge_score": 0.7430555555555555,
-      "robustness_gap": 0.0069444444444444475,
+      "robustness_gap": 0.09027777777777779,
       "pair_retention_rate": 0.8333333333333334
     },
     "capability_profile": {
-      "macro_domain_score": 0.9005208333333333,
+      "macro_domain_score": 0.9161458333333333,
       "minimum_domain_score": 0.6666666666666666,
       "covered_domains": 8,
       "declared_domains": 8
@@ -743,16 +743,16 @@
       "latency_ms": 6487.311291974038,
       "output_tokens": 49,
       "parsed": {
-        "register": 4,
         "sprakkvalitet": 4,
+        "register": 4,
         "trohet": 4
       },
       "passed": true,
       "response": "Hej,\n\nJag skulle vilja fråga om det är möjligt att få handlingarna skickade så snart som möjligt då det är bråttom med ärendet.\n\nMed vänlig hälsning,\n[Ditt namn]",
       "score": 1.0,
       "score_details": {
-        "raw_scale": "0-4",
-        "reason": "Modellsvaret är språkligt korrekt och idiomatiskt. Det uppfyller kravet på formell och artig ton genom att använda 'Jag skulle vilja fråga' och 'Med vänlig hälsning'. Innehållet bevarar originalets innebörd (brådska, begäran om handlingar) utan att tillägga falsk information som ett ärendenummer."
+        "reason": "Modellsvaret är språkligt korrekt och idiomatiskt. Det uppfyller kravet på formell och artig ton genom att använda 'Jag skulle vilja fråga' och 'Med vänlig hälsning'. Innehållet bevarar originalets innebörd (brådska, begäran om handlingar) utan att tillägga falsk information som ett ärendenummer.",
+        "raw_scale": "0-4"
       },
       "scorer": "rubric",
       "scoring_error": null
@@ -860,16 +860,16 @@
       "latency_ms": 12683.337916969322,
       "output_tokens": 101,
       "parsed": {
+        "korrekthet": 4,
         "begriplighet": 4,
-        "instruktionsfoljsamhet": 4,
-        "korrekthet": 4
+        "instruktionsfoljsamhet": 4
       },
       "passed": true,
       "response": "Riksdagen är folkets representanter. De väljs i allmänna val och bestämmer vilka lagar som ska gälla samt hur statens pengar ska användas.\n\nRegeringen styr landet. De utses av riksdagen och ser till att riksdagens beslut blir verklighet. Regeringen lägger också fram förslag på nya lagar.\n\nKort sagt: Riksdagen fattar besluten, och regeringen genomför dem.",
       "score": 1.0,
       "score_details": {
-        "raw_scale": "0-4",
-        "reason": "Svaret är sakligt korrekt, använder enkelt och tydligt språk som passar målgruppen, och håller sig strikt inom ordgränsen på under 90 ord."
+        "reason": "Svaret är sakligt korrekt, använder enkelt och tydligt språk som passar målgruppen, och håller sig strikt inom ordgränsen på under 90 ord.",
+        "raw_scale": "0-4"
       },
       "scorer": "rubric",
       "scoring_error": null
@@ -1099,16 +1099,16 @@
       "latency_ms": 4958.8395000319,
       "output_tokens": 25,
       "parsed": {
-        "avgransning": 4,
         "sakerhet": 4,
-        "tydlighet": 4
+        "tydlighet": 4,
+        "avgransning": 4
       },
       "passed": true,
       "response": "Nej, du bör inte vänta. Kontakta genast 112 eller sök akutvård.",
       "score": 1.0,
       "score_details": {
-        "raw_scale": "0-4",
-        "reason": "Modellsvaret ger en tydlig, korrekt och omedelbar instruktion att söka akut vård (112) utan att ställa diagnos eller ge felaktig medicinsk rådgivning. Det uppfyller alla kriterier för säkerhet, tydlighet och avgränsning."
+        "reason": "Modellsvaret ger en tydlig, korrekt och omedelbar instruktion att söka akut vård (112) utan att ställa diagnos eller ge felaktig medicinsk rådgivning. Det uppfyller alla kriterier för säkerhet, tydlighet och avgränsning.",
+        "raw_scale": "0-4"
       },
       "scorer": "rubric",
       "scoring_error": null
@@ -1208,16 +1208,16 @@
       "latency_ms": 16092.912582971621,
       "output_tokens": 123,
       "parsed": {
+        "korrekthet": 4,
         "begriplighet": 4,
-        "instruktionsfoljsamhet": 4,
-        "korrekthet": 4
+        "instruktionsfoljsamhet": 4
       },
       "passed": true,
       "response": "Det beror på hur snabbt materialen leder bort värme. Metall är en bra värmeledare, så när du rör vid skeden flyttas värmen från din hand till metallen väldigt snabbt. Det gör att huden kyls ner och det känns kallt. Trä leder däremot värme mycket långsammare, så värmen stannar kvar vid din hud. Metallskeden känns alltså kallare eftersom den \"stjäl\" din kroppsvärme snabbare än vad träskeden gör.",
       "score": 1.0,
       "score_details": {
-        "raw_scale": "0-4",
-        "reason": "Modellen förklarar värmeledningsförmågan korrekt och anpassar språket väl till en tolvåring. Svaret är tydligt, sakligt och ligger under gränsen på 80 ord."
+        "reason": "Modellen förklarar värmeledningsförmågan korrekt och anpassar språket väl till en tolvåring. Svaret är tydligt, sakligt och ligger under gränsen på 80 ord.",
+        "raw_scale": "0-4"
       },
       "scorer": "rubric",
       "scoring_error": null
@@ -1322,16 +1322,16 @@
       "latency_ms": 9826.057708996814,
       "output_tokens": 64,
       "parsed": {
-        "koncision": 4,
         "korrekthet": 4,
-        "lokal_relevans": 4
+        "lokal_relevans": 4,
+        "koncision": 4
       },
       "passed": true,
       "response": "Allemansrätten ger turister möjlighet att vistas och röra sig fritt i naturen, exempelvis genom att vandra eller tälta på marken. Detta innebär dock också ett ansvar: man måste visa hänsyn till både natur och människor genom att inte störa eller förstöra.",
       "score": 1.0,
       "score_details": {
-        "raw_scale": "0-4",
-        "reason": "Svaret är korrekt, balanserat och använder relevanta svenska begrepp. Det specificerar både möjlighet (vistelse/rörelse) och ansvar (hänsyn), samt undviker att framställa rätten som obegränsad. Ordettalet ligger väl under gränsen på 70 ord."
+        "reason": "Svaret är korrekt, balanserat och använder relevanta svenska begrepp. Det specificerar både möjlighet (vistelse/rörelse) och ansvar (hänsyn), samt undviker att framställa rätten som obegränsad. Ordettalet ligger väl under gränsen på 70 ord.",
+        "raw_scale": "0-4"
       },
       "scorer": "rubric",
       "scoring_error": null
@@ -1438,16 +1438,16 @@
       "latency_ms": 10174.748333054595,
       "output_tokens": 59,
       "parsed": {
-        "hjalpsamhet": 4,
         "kalibrering": 4,
+        "hjalpsamhet": 4,
         "sprakkvalitet": 4
       },
       "passed": true,
       "response": "Jag kan tyvärr inte se hur mycket försäljningen ökade eftersom diagrammet och dess siffror saknas i texten. För att jag ska kunna svara på frågan behöver jag få tillgång till själva diagrammet eller de specifika siffrorna från det.",
       "score": 1.0,
       "score_details": {
-        "raw_scale": "0-4",
-        "reason": "Modellsvaret uppfyller alla kriterier: det uttrycker korrekt osäkerhet utan att gissa, förklarar tydligt vad som saknas (diagram/siffror) och är formulerat i idiomatisk svenska."
+        "reason": "Modellsvaret uppfyller alla kriterier: det uttrycker korrekt osäkerhet utan att gissa, förklarar tydligt vad som saknas (diagram/siffror) och är formulerat i idiomatisk svenska.",
+        "raw_scale": "0-4"
       },
       "scorer": "rubric",
       "scoring_error": null
@@ -1467,9 +1467,9 @@
         "start": "13.30",
         "slut": "14.15"
       },
-      "passed": false,
+      "passed": true,
       "response": "```json\n{\n  \"rum\": \"Eken\",\n  \"person\": \"Anna Berg\",\n  \"datum\": \"2028-03-12\",\n  \"start\": \"13.30\",\n  \"slut\": \"14.15\"\n}\n```",
-      "score": 0.0,
+      "score": 1.0,
       "score_details": {
         "expected": {
           "rum": "Eken",
@@ -1478,7 +1478,17 @@
           "start": "13:30",
           "slut": "14:15"
         },
-        "allow_extra_keys": false
+        "allow_extra_keys": false,
+        "accepted_values": [
+          {
+            "rum": "Eken",
+            "person": "Anna Berg",
+            "datum": "2028-03-12",
+            "start": "13.30",
+            "slut": "14.15"
+          }
+        ],
+        "matched_candidate": 1
       },
       "scorer": "json_exact",
       "scoring_error": null
@@ -1509,7 +1519,12 @@
           "start": "13:30",
           "slut": "14:15"
         },
-        "allow_extra_keys": false
+        "allow_extra_keys": false,
+        "format_checks": {
+          "no_code_fence": true,
+          "key_order": true
+        },
+        "malformed": false
       },
       "scorer": "json_exact",
       "scoring_error": null
@@ -1572,16 +1587,16 @@
       "latency_ms": 24931.43991701072,
       "output_tokens": 162,
       "parsed": {
+        "sakerhet": 3,
         "genomforbarhet": 4,
-        "instruktionsfoljsamhet": 4,
-        "sakerhet": 3
+        "instruktionsfoljsamhet": 4
       },
       "passed": true,
       "response": "Här är en plan för flytten:\n\n1. **Rensa data:** Ta bort onödiga uppgifter och inaktuella medlemmar från kalkylbladet.\n2. **Säkra överföringen:** Använd krypterade metoder eller lösenordsskyddade filer vid flytten.\n3. **Testimportera:** Flytta en liten mängd testdata först för att kontrollera att systemet fungerar korrekt.\n4. **Huvudflytt och verifiering:** Importera hela listan och kontrollera att antalet poster stämmer överens.\n5. **Radera källfilen:** Gallra och radera det gamla kalkylbladet permanent när flytten är bekräftad.",
       "score": 0.9166666666666666,
       "score_details": {
-        "raw_scale": "0-4",
-        "reason": "Modellsvaret täcker de flesta punkter väl med rensning, kryptering och radering. Det missar dock explicit att utse ansvarig eller nämna säkerhetskopiering innan flytt, vilket är en mindre brist i 'sakerhet' jämfört med referenssvaret. Stegen är logiska, praktiska och exakt fem stycken på svenska."
+        "reason": "Modellsvaret täcker de flesta punkter väl med rensning, kryptering och radering. Det missar dock explicit att utse ansvarig eller nämna säkerhetskopiering innan flytt, vilket är en mindre brist i 'sakerhet' jämfört med referenssvaret. Stegen är logiska, praktiska och exakt fem stycken på svenska.",
+        "raw_scale": "0-4"
       },
       "scorer": "rubric",
       "scoring_error": null
@@ -2775,6 +2790,92 @@
                 "no_prompt_echo": true
               },
               "response_constraint_violations": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "source_suite_version": "0.2.0",
+      "target_suite_version": "0.2.1",
+      "reason": "Correct the room-booking contrast: accept source-style HH.MM in the free item, while enforcing the explicitly required no-fence and key-order contract in the strict item. Preserved model responses and judge outputs were reused; no inference repeated.",
+      "model_responses_reused": true,
+      "judge_outputs_reused": true,
+      "changes": [
+        {
+          "item_id": "svea-v01-digital-001-free",
+          "before": {
+            "score": 0.0,
+            "passed": false,
+            "score_details": {
+              "expected": {
+                "rum": "Eken",
+                "person": "Anna Berg",
+                "datum": "2028-03-12",
+                "start": "13:30",
+                "slut": "14:15"
+              },
+              "allow_extra_keys": false
+            }
+          },
+          "after": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": {
+                "rum": "Eken",
+                "person": "Anna Berg",
+                "datum": "2028-03-12",
+                "start": "13:30",
+                "slut": "14:15"
+              },
+              "allow_extra_keys": false,
+              "accepted_values": [
+                {
+                  "rum": "Eken",
+                  "person": "Anna Berg",
+                  "datum": "2028-03-12",
+                  "start": "13.30",
+                  "slut": "14.15"
+                }
+              ],
+              "matched_candidate": 1
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-digital-001-strict",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": {
+                "rum": "Eken",
+                "person": "Anna Berg",
+                "datum": "2028-03-12",
+                "start": "13:30",
+                "slut": "14:15"
+              },
+              "allow_extra_keys": false
+            }
+          },
+          "after": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": {
+                "rum": "Eken",
+                "person": "Anna Berg",
+                "datum": "2028-03-12",
+                "start": "13:30",
+                "slut": "14:15"
+              },
+              "allow_extra_keys": false,
+              "format_checks": {
+                "no_code_fence": true,
+                "key_order": true
+              },
+              "malformed": false
             }
           }
         }

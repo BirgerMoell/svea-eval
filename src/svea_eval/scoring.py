@@ -281,13 +281,24 @@ def _score_json(item: Item, response: str) -> Score:
         ),
         None,
     )
-    passed = matched_index is not None
+    format_checks: dict[str, bool] = {}
+    if item.scoring.get("forbid_code_fence"):
+        format_checks["no_code_fence"] = "```" not in response
+    required_key_order = item.scoring.get("required_key_order")
+    if required_key_order:
+        format_checks["key_order"] = (
+            isinstance(parsed, dict) and list(parsed) == list(required_key_order)
+        )
+    passed = matched_index is not None and all(format_checks.values())
     details = _with_item_evidence(
         item, {"expected": expected, "allow_extra_keys": subset}
     )
     if accepted_values:
         details["accepted_values"] = accepted_values
         details["matched_candidate"] = matched_index
+    if format_checks:
+        details["format_checks"] = format_checks
+        details["malformed"] = not all(format_checks.values())
     return Score(
         value=1.0 if passed else 0.0,
         passed=passed,

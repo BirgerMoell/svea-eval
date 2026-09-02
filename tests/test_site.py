@@ -22,7 +22,7 @@ class SiteTests(unittest.TestCase):
                     "revision": "judge-rev",
                     "backend": "openai-compatible",
                 },
-                "suite": {"id": "svea-core", "version": "0.2.0"},
+                "suite": {"id": "svea-core", "version": "0.2.1"},
                 "protocol": {"temperature": 0},
                 "finished_at": "2026-09-02T00:00:00+00:00",
                 "summary": {
@@ -52,7 +52,7 @@ class SiteTests(unittest.TestCase):
                 "rescoring_history": [
                     {
                         "source_suite_version": "0.1.0",
-                        "target_suite_version": "0.2.0",
+                        "target_suite_version": "0.2.1",
                         "reason": "Reviewed correction.",
                     }
                 ],
@@ -77,7 +77,7 @@ class SiteTests(unittest.TestCase):
             self.assertIsNone(payload["runs"][0]["items"][0]["item"]["rubric"])
             self.assertEqual(
                 payload["runs"][0]["rescoring_history"][0]["target_suite_version"],
-                "0.2.0",
+                "0.2.1",
             )
             self.assertEqual(
                 payload["runs"][0]["extension_history"][0]["current_suite_version"],

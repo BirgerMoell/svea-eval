@@ -86,6 +86,40 @@ class ScoringTests(unittest.TestCase):
         self.assertTrue(score.passed)
         self.assertEqual(score.details["matched_candidate"], 1)
 
+    def test_free_booking_accepts_source_time_notation(self):
+        item = self.items["svea-v01-digital-001-free"]
+        response = (
+            '```json\n{"rum":"Eken","person":"Anna Berg",'
+            '"datum":"2028-03-12","start":"13.30","slut":"14.15"}\n```'
+        )
+        score = score_item(item=item, response=response)
+        self.assertTrue(score.passed)
+        self.assertEqual(score.details["matched_candidate"], 1)
+
+    def test_strict_booking_rejects_code_fence_but_accepts_ordered_raw_json(self):
+        item = self.items["svea-v01-digital-001-strict"]
+        payload = (
+            '{"rum":"Eken","person":"Anna Berg","datum":"2028-03-12",'
+            '"start":"13:30","slut":"14:15"}'
+        )
+        fenced = score_item(item=item, response=f"```json\n{payload}\n```")
+        raw = score_item(item=item, response=payload)
+        self.assertFalse(fenced.passed)
+        self.assertTrue(fenced.details["malformed"])
+        self.assertFalse(fenced.details["format_checks"]["no_code_fence"])
+        self.assertTrue(raw.passed)
+        self.assertTrue(raw.details["format_checks"]["key_order"])
+
+    def test_strict_booking_rejects_wrong_key_order(self):
+        item = self.items["svea-v01-digital-001-strict"]
+        response = (
+            '{"person":"Anna Berg","rum":"Eken","datum":"2028-03-12",'
+            '"start":"13:30","slut":"14:15"}'
+        )
+        score = score_item(item=item, response=response)
+        self.assertFalse(score.passed)
+        self.assertFalse(score.details["format_checks"]["key_order"])
+
     def test_contains_all_rejects_forbidden_stale_fact(self):
         item = self.items["svea-v01-work-001-distractor"]
         score = score_item(item=item, response="Amir på onsdag, inte måndag.")

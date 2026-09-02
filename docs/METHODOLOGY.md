@@ -73,6 +73,12 @@ and intermediate calculations used to obtain the expected result. The small
 public slice is a diagnostic of Swedish structural analysis and arithmetic, not
 a standalone proxy for general model quality.
 
+Patch v0.2.1 corrected the room-booking contrast. The free item now accepts the
+source notation `HH.MM` as well as normalized `HH:MM`, since it did not prescribe
+a time format. The strict item enforces its stated `TT:MM`, key-order and
+no-code-fence requirements. Published artifacts retain this change in their
+rescoring history; target and judge inference was not repeated.
+
 Rubric judging uses named dimensions with integer scores from 0 to 4. The
 normalized item score is the mean divided by four. Each item declares its pass
 threshold. The raw judge response is retained. Judge choice is part of the
