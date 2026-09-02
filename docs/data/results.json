@@ -479,6 +479,486 @@
         "The target and judge were local Q4_K_M quantizations; results may differ with other quantizations or runtimes.",
         "The 31.3B local judge has not yet been calibrated against native-speaker Swedish ratings, so judged scores are provisional."
       ]
+    },
+    {
+      "run_id": "qwen3-6-35b-a3b-ollama-07d35212591f-20260902",
+      "model": {
+        "id": "qwen3.6:35b-a3b",
+        "revision": "sha256:07d35212591fc27746f0a317c975a6d68754fb38e9053d82e25f06057af28522",
+        "backend": "ollama"
+      },
+      "judge": {
+        "id": "gemma4:31b",
+        "revision": "sha256:6316f0629137b426c9d9b853ffc4c8209589f30ee39aebede6285096c0ff47e7",
+        "backend": "ollama"
+      },
+      "suite": {
+        "id": "svea-core",
+        "version": "0.1.0",
+        "split": "dev",
+        "public_development_set": true
+      },
+      "finished_at": "2026-09-02T12:10:36.391488+00:00",
+      "summary": {
+        "counts": {
+          "scheduled": 40,
+          "scored": 40,
+          "unjudged": 0,
+          "generation_errors": 0,
+          "malformed": 0
+        },
+        "overall": {
+          "score": 0.9583333333333334,
+          "n": 40,
+          "ci95": [
+            0.9037842885149473,
+            1.0
+          ],
+          "pass_rate": 0.95
+        },
+        "domains": [
+          {
+            "id": "civics_public",
+            "score": 1.0,
+            "n": 5,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "pass_rate": 1.0
+          },
+          {
+            "id": "culture_society",
+            "score": 1.0,
+            "n": 5,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "pass_rate": 1.0
+          },
+          {
+            "id": "digital_agency",
+            "score": 0.9,
+            "n": 5,
+            "ci95": [
+              0.7040000000000001,
+              1.0
+            ],
+            "pass_rate": 0.8
+          },
+          {
+            "id": "grounding_safety",
+            "score": 1.0,
+            "n": 5,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "pass_rate": 1.0
+          },
+          {
+            "id": "health_literacy",
+            "score": 1.0,
+            "n": 5,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "pass_rate": 1.0
+          },
+          {
+            "id": "stem_reasoning",
+            "score": 1.0,
+            "n": 5,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "pass_rate": 1.0
+          },
+          {
+            "id": "swedish_language",
+            "score": 0.7666666666666667,
+            "n": 5,
+            "ci95": [
+              0.3857111428701071,
+              1.0
+            ],
+            "pass_rate": 0.8
+          },
+          {
+            "id": "work_life",
+            "score": 1.0,
+            "n": 5,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "pass_rate": 1.0
+          }
+        ],
+        "capabilities": [
+          {
+            "id": "calibrated_abstention",
+            "score": 1.0,
+            "n": 3,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "pass_rate": 1.0
+          },
+          {
+            "id": "civic_knowledge",
+            "score": 1.0,
+            "n": 1,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "pass_rate": 1.0
+          },
+          {
+            "id": "cultural_explanation",
+            "score": 1.0,
+            "n": 1,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "pass_rate": 1.0
+          },
+          {
+            "id": "cultural_knowledge",
+            "score": 1.0,
+            "n": 2,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "pass_rate": 1.0
+          },
+          {
+            "id": "data_sufficiency",
+            "score": 1.0,
+            "n": 1,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "pass_rate": 1.0
+          },
+          {
+            "id": "explanation",
+            "score": 1.0,
+            "n": 1,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "pass_rate": 1.0
+          },
+          {
+            "id": "geographic_knowledge",
+            "score": 1.0,
+            "n": 1,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "pass_rate": 1.0
+          },
+          {
+            "id": "grammar",
+            "score": 1.0,
+            "n": 2,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "pass_rate": 1.0
+          },
+          {
+            "id": "grounded_answering",
+            "score": 1.0,
+            "n": 2,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "pass_rate": 1.0
+          },
+          {
+            "id": "information_extraction",
+            "score": 1.0,
+            "n": 2,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "pass_rate": 1.0
+          },
+          {
+            "id": "information_synthesis",
+            "score": 1.0,
+            "n": 1,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "pass_rate": 1.0
+          },
+          {
+            "id": "instruction_following",
+            "score": 1.0,
+            "n": 3,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "pass_rate": 1.0
+          },
+          {
+            "id": "numeric_reasoning",
+            "score": 1.0,
+            "n": 3,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "pass_rate": 1.0
+          },
+          {
+            "id": "orthography",
+            "score": 0.0,
+            "n": 1,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "pass_rate": 0.0
+          },
+          {
+            "id": "prompt_injection_resistance",
+            "score": 1.0,
+            "n": 1,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "pass_rate": 1.0
+          },
+          {
+            "id": "reading_comprehension",
+            "score": 1.0,
+            "n": 2,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "pass_rate": 1.0
+          },
+          {
+            "id": "register",
+            "score": 0.8333333333333334,
+            "n": 1,
+            "ci95": [
+              0.8333333333333334,
+              0.8333333333333334
+            ],
+            "pass_rate": 1.0
+          },
+          {
+            "id": "safe_communication",
+            "score": 1.0,
+            "n": 1,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "pass_rate": 1.0
+          },
+          {
+            "id": "safe_uncertainty",
+            "score": 1.0,
+            "n": 1,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "pass_rate": 1.0
+          },
+          {
+            "id": "scientific_explanation",
+            "score": 1.0,
+            "n": 1,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "pass_rate": 1.0
+          },
+          {
+            "id": "structured_extraction",
+            "score": 1.0,
+            "n": 3,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "pass_rate": 1.0
+          },
+          {
+            "id": "structured_output",
+            "score": 1.0,
+            "n": 2,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "pass_rate": 1.0
+          },
+          {
+            "id": "summarization",
+            "score": 1.0,
+            "n": 1,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "pass_rate": 1.0
+          },
+          {
+            "id": "task_planning",
+            "score": 0.5,
+            "n": 1,
+            "ci95": [
+              0.5,
+              0.5
+            ],
+            "pass_rate": 0.0
+          },
+          {
+            "id": "tool_selection",
+            "score": 1.0,
+            "n": 1,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "pass_rate": 1.0
+          },
+          {
+            "id": "unit_reasoning",
+            "score": 1.0,
+            "n": 1,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "pass_rate": 1.0
+          }
+        ],
+        "task_types": [
+          {
+            "id": "constrained_generation",
+            "score": 1.0,
+            "n": 3,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "pass_rate": 1.0
+          },
+          {
+            "id": "grounded_qa",
+            "score": 1.0,
+            "n": 7,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "pass_rate": 1.0
+          },
+          {
+            "id": "multiple_choice",
+            "score": 1.0,
+            "n": 9,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "pass_rate": 1.0
+          },
+          {
+            "id": "numeric",
+            "score": 1.0,
+            "n": 4,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "pass_rate": 1.0
+          },
+          {
+            "id": "open_generation",
+            "score": 0.9166666666666666,
+            "n": 8,
+            "ci95": [
+              0.7931982721503191,
+              1.0
+            ],
+            "pass_rate": 0.875
+          },
+          {
+            "id": "short_answer",
+            "score": 0.75,
+            "n": 4,
+            "ci95": [
+              0.26,
+              1.0
+            ],
+            "pass_rate": 0.75
+          },
+          {
+            "id": "structured_extraction",
+            "score": 1.0,
+            "n": 5,
+            "ci95": [
+              1.0,
+              1.0
+            ],
+            "pass_rate": 1.0
+          }
+        ],
+        "contrast_sets": {
+          "complete_pairs": 8,
+          "base_score": 1.0,
+          "challenge_score": 1.0,
+          "robustness_gap": 0.0,
+          "pair_retention_rate": 1.0
+        },
+        "capability_profile": {
+          "macro_domain_score": 0.9583333333333334,
+          "minimum_domain_score": 0.7666666666666667,
+          "covered_domains": 8,
+          "declared_domains": 8
+        },
+        "latency": {
+          "median_ms": 1257.2280204913113,
+          "p95_ms": 9243.712625000626
+        }
+      },
+      "limitations": [
+        "Version 0.1 is an author-reviewed public pilot, not a population-valid national benchmark.",
+        "The small sample sizes produce wide uncertainty intervals and are intended for harness validation and early model profiling.",
+        "Open-generation scores depend on the selected judge and should be calibrated against native-speaker human ratings.",
+        "The pilot is text-only and does not yet measure speech, vision or interactive multi-step agents.",
+        "The bundled suite is public and may be present in model training data.",
+        "The target and judge were local Q4_K_M quantizations; results may differ with other quantizations or runtimes.",
+        "The 31.3B local judge has not yet been calibrated against native-speaker Swedish ratings, so judged scores are provisional."
+      ]
     }
   ]
 }
