@@ -19,6 +19,7 @@ _LEADING_CHOICE = re.compile(
     re.IGNORECASE,
 )
 _NUMBER = re.compile(r"[-+]?\d(?:[\d\s.]*\d)?(?:[,.]\d+)?|[-+]?\d")
+_SINGLE_NUMBER = re.compile(r"[-+]?\d+(?:[,.]\d+)?")
 
 
 def normalize_text(value: str) -> str:
@@ -236,14 +237,25 @@ def _score_contains_all(item: Item, response: str) -> Score:
 
 
 def _score_numeric(item: Item, response: str) -> Score:
-    match = _NUMBER.search(response.replace("\u00a0", " "))
+    normalized_response = response.replace("\u00a0", " ").strip()
+    match = _NUMBER.search(normalized_response)
+    required_format = item.scoring.get("format")
+    format_valid = required_format != "single_number" or _SINGLE_NUMBER.fullmatch(
+        normalized_response
+    ) is not None
     if not match:
         return Score(
             value=0.0,
             passed=False,
             scorer="numeric",
             details=_with_item_evidence(
-                item, {"malformed": True, "expected": item.gold["value"]}
+                item,
+                {
+                    "malformed": True,
+                    "expected": item.gold["value"],
+                    "required_format": required_format,
+                    "format_valid": False,
+                },
             ),
         )
     raw = match.group(0).replace(" ", "")
@@ -254,15 +266,47 @@ def _score_numeric(item: Item, response: str) -> Score:
     parsed = float(raw)
     expected = float(item.gold["value"])
     tolerance = float(item.scoring.get("tolerance", 0.0))
-    passed = math.isclose(parsed, expected, abs_tol=tolerance, rel_tol=0.0)
+    absolute_error = abs(parsed - expected)
+    relative_error = absolute_error / abs(expected) if expected else None
+    value = 0.0
+    passed = format_valid and math.isclose(
+        parsed, expected, abs_tol=tolerance, rel_tol=0.0
+    )
+    partial_credit_method = item.scoring.get("partial_credit")
+    if passed:
+        value = 1.0
+    elif (
+        format_valid
+        and partial_credit_method == "relative_error"
+        and relative_error is not None
+    ):
+        value = max(0.0, 1.0 - relative_error)
     return Score(
-        value=1.0 if passed else 0.0,
+        value=value,
         passed=passed,
         scorer="numeric",
         parsed=parsed,
         details=_with_item_evidence(
             item,
-            {"expected": expected, "tolerance": tolerance, "unit": item.gold.get("unit")},
+            {
+                "expected": expected,
+                "tolerance": tolerance,
+                "unit": item.gold.get("unit"),
+                "absolute_error": absolute_error,
+                "relative_error": relative_error,
+                "relative_error_percent": (
+                    relative_error * 100 if relative_error is not None else None
+                ),
+                "partial_credit_method": partial_credit_method,
+                "score_formula": (
+                    "max(0, 1 - absolute_error / abs(expected))"
+                    if partial_credit_method == "relative_error"
+                    else None
+                ),
+                "required_format": required_format,
+                "format_valid": format_valid,
+                "malformed": not format_valid,
+            },
         ),
     )
 

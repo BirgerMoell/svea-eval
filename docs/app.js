@@ -254,11 +254,15 @@ function renderAnswer(run, entry) {
     <p><strong>Required points</strong></p><ul>${(rubric.required_points || []).map(point => `<li>${escapeHtml(point)}</li>`).join("")}</ul>
     <p><strong>Scoring dimensions</strong></p><dl>${Object.entries(rubric.dimensions || {}).map(([name, description]) => `<dt>${escapeHtml(label(name))}</dt><dd>${escapeHtml(description)}</dd>`).join("")}</dl>
   </div></details>` : "";
+  const numericDetails = sample.scorer === "numeric" ? sample.score_details : null;
+  const numericExplanation = numericDetails?.relative_error_percent != null
+    ? `<p><strong>Numeric error.</strong> Expected ${escapeHtml(numericDetails.expected)}, parsed ${escapeHtml(sample.parsed)}: absolute error ${escapeHtml(formatMetric(numericDetails.absolute_error))}, relative error ${escapeHtml(formatMetric(numericDetails.relative_error_percent))}%. ${numericDetails.partial_credit_method === "relative_error" ? `The item score is 100% minus relative error, clamped to 0–100%: <strong>${percent(sample.score)}</strong>.` : "This item does not declare error-based partial credit."}</p>`
+    : "";
   const deterministicExplanation = malformed
     ? partialFormatCredit
       ? `<p class="malformed-warning"><strong>Malformed format.</strong> The response violated the exact answer contract, but an unambiguous correct leading choice was detected, so ${percent(sample.score)} partial credit was awarded. It did not pass.</p>`
       : `<p class="malformed-warning"><strong>Malformed format.</strong> The response did not match the declared answer contract, so no credit was awarded${sample.parsed ? ` (detected choice: ${escapeHtml(sample.parsed)})` : ""}.</p>`
-    : `<p>No LLM judge was used for this item. The answer was checked by the declared scorer.</p>`;
+    : `${numericExplanation}<p>No LLM judge was used for this item. The answer was checked by the declared scorer.</p>`;
   const judgePanel = sample.judgment ? `
     <section class="judge-rationale">
       <div class="answer-subhead"><span>LLM JUDGE RATIONALE</span><strong>${escapeHtml(sample.judgment.model)}</strong></div>
@@ -319,6 +323,12 @@ function shortRevision(value) {
   if (!value) return "revision not supplied";
   const revision = String(value);
   return revision.startsWith("sha256:") ? revision.slice(7, 19) : revision.slice(0, 12);
+}
+
+function formatMetric(value) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return "—";
+  return number.toLocaleString("en-US", { maximumFractionDigits: 2 });
 }
 
 function escapeHtml(value) {

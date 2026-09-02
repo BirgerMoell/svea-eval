@@ -337,7 +337,7 @@ Until an archival release exists, cite the repository and version:
   author  = {Birger Moëll},
   title   = {SVEA Eval: Swedish Versatile Evaluation & Analysis},
   year    = {2026},
-  version = {0.2.1},
+  version = {0.2.2},
   url     = {https://github.com/BirgerMoell/svea-eval}
 }
 ```

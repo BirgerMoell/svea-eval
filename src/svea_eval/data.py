@@ -116,6 +116,17 @@ def _validate_gold(item: Item, errors: list[str]) -> None:
         errors.append(f"{item.id}: contains_all scorer requires gold.required")
     elif scorer == "numeric" and "value" not in item.gold:
         errors.append(f"{item.id}: numeric scorer requires gold.value")
+    elif scorer == "numeric":
+        required_format = item.scoring.get("format")
+        if required_format not in {None, "single_number"}:
+            errors.append(f"{item.id}: unsupported numeric format {required_format!r}")
+        partial_credit = item.scoring.get("partial_credit")
+        if partial_credit not in {None, "relative_error"}:
+            errors.append(
+                f"{item.id}: unsupported numeric partial-credit method {partial_credit!r}"
+            )
+        if partial_credit == "relative_error" and float(item.gold["value"]) == 0:
+            errors.append(f"{item.id}: relative-error partial credit requires non-zero gold")
     elif scorer == "json_exact" and "value" not in item.gold:
         errors.append(f"{item.id}: json_exact scorer requires gold.value")
     elif scorer == "json_exact" and "accepted_values" in item.gold:

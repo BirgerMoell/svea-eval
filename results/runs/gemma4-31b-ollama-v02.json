@@ -5,7 +5,7 @@
   "diagnostic": false,
   "suite": {
     "id": "svea-core",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "split": "dev",
     "public_development_set": true
   },
@@ -1061,7 +1061,15 @@
       "score_details": {
         "expected": 12.0,
         "tolerance": 0.0,
-        "unit": "dagar"
+        "unit": "dagar",
+        "absolute_error": 0.0,
+        "relative_error": 0.0,
+        "relative_error_percent": 0.0,
+        "partial_credit_method": null,
+        "score_formula": null,
+        "required_format": null,
+        "format_valid": true,
+        "malformed": false
       },
       "scorer": "numeric",
       "scoring_error": null
@@ -1128,7 +1136,15 @@
       "score_details": {
         "expected": 180.0,
         "tolerance": 0.0,
-        "unit": "SEK"
+        "unit": "SEK",
+        "absolute_error": 0.0,
+        "relative_error": 0.0,
+        "relative_error_percent": 0.0,
+        "partial_credit_method": null,
+        "score_formula": null,
+        "required_format": null,
+        "format_valid": true,
+        "malformed": false
       },
       "scorer": "numeric",
       "scoring_error": null
@@ -1148,7 +1164,15 @@
       "score_details": {
         "expected": 250.0,
         "tolerance": 0.0,
-        "unit": "SEK"
+        "unit": "SEK",
+        "absolute_error": 0.0,
+        "relative_error": 0.0,
+        "relative_error_percent": 0.0,
+        "partial_credit_method": null,
+        "score_formula": null,
+        "required_format": null,
+        "format_valid": true,
+        "malformed": false
       },
       "scorer": "numeric",
       "scoring_error": null
@@ -1168,7 +1192,15 @@
       "score_details": {
         "expected": 750.0,
         "tolerance": 0.0,
-        "unit": "ml"
+        "unit": "ml",
+        "absolute_error": 0.0,
+        "relative_error": 0.0,
+        "relative_error_percent": 0.0,
+        "partial_credit_method": null,
+        "score_formula": null,
+        "required_format": null,
+        "format_valid": true,
+        "malformed": false
       },
       "scorer": "numeric",
       "scoring_error": null
@@ -1612,6 +1644,14 @@
         "expected": 2.5,
         "tolerance": 0.05,
         "unit": null,
+        "absolute_error": 50.8,
+        "relative_error": 20.32,
+        "relative_error_percent": 2032.0,
+        "partial_credit_method": "relative_error",
+        "score_formula": "max(0, 1 - absolute_error / abs(expected))",
+        "required_format": "single_number",
+        "format_valid": true,
+        "malformed": false,
         "gold_calculation": {
           "A_ord": 5,
           "B_meningar": 2,
@@ -1640,6 +1680,14 @@
         "expected": 22.5,
         "tolerance": 0.05,
         "unit": null,
+        "absolute_error": 40.8,
+        "relative_error": 1.8133333333333332,
+        "relative_error_percent": 181.33333333333331,
+        "partial_credit_method": "relative_error",
+        "score_formula": "max(0, 1 - absolute_error / abs(expected))",
+        "required_format": "single_number",
+        "format_valid": true,
+        "malformed": false,
         "gold_calculation": {
           "A_ord": 5,
           "B_meningar": 2,
@@ -1749,6 +1797,14 @@
         "expected": 1.0,
         "tolerance": 0.001,
         "unit": null,
+        "absolute_error": 0.25,
+        "relative_error": 0.25,
+        "relative_error_percent": 25.0,
+        "partial_credit_method": null,
+        "score_formula": null,
+        "required_format": null,
+        "format_valid": true,
+        "malformed": false,
         "gold_calculation": {
           "heads": [
             2,
@@ -1787,6 +1843,14 @@
         "expected": 1.17,
         "tolerance": 0.005,
         "unit": null,
+        "absolute_error": 0.16000000000000014,
+        "relative_error": 0.13675213675213688,
+        "relative_error_percent": 13.675213675213687,
+        "partial_credit_method": null,
+        "score_formula": null,
+        "required_format": null,
+        "format_valid": true,
+        "malformed": false,
         "gold_calculation": {
           "heads": [
             3,
@@ -2876,6 +2940,361 @@
                 "key_order": true
               },
               "malformed": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "source_suite_version": "0.2.1",
+      "target_suite_version": "0.2.2",
+      "reason": "v0.2.2 adds strict single-number validation and relative-error partial credit for the two LIX calculation items; preserved model responses and judge outputs were re-scored without inference.",
+      "model_responses_reused": true,
+      "judge_outputs_reused": true,
+      "changes": [
+        {
+          "item_id": "svea-v01-health-002",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": 12.0,
+              "tolerance": 0.0,
+              "unit": "dagar"
+            }
+          },
+          "after": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": 12.0,
+              "tolerance": 0.0,
+              "unit": "dagar",
+              "absolute_error": 0.0,
+              "relative_error": 0.0,
+              "relative_error_percent": 0.0,
+              "partial_credit_method": null,
+              "score_formula": null,
+              "required_format": null,
+              "format_valid": true,
+              "malformed": false
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-stem-001-base",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": 180.0,
+              "tolerance": 0.0,
+              "unit": "SEK"
+            }
+          },
+          "after": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": 180.0,
+              "tolerance": 0.0,
+              "unit": "SEK",
+              "absolute_error": 0.0,
+              "relative_error": 0.0,
+              "relative_error_percent": 0.0,
+              "partial_credit_method": null,
+              "score_formula": null,
+              "required_format": null,
+              "format_valid": true,
+              "malformed": false
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-stem-001-challenge",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": 250.0,
+              "tolerance": 0.0,
+              "unit": "SEK"
+            }
+          },
+          "after": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": 250.0,
+              "tolerance": 0.0,
+              "unit": "SEK",
+              "absolute_error": 0.0,
+              "relative_error": 0.0,
+              "relative_error_percent": 0.0,
+              "partial_credit_method": null,
+              "score_formula": null,
+              "required_format": null,
+              "format_valid": true,
+              "malformed": false
+            }
+          }
+        },
+        {
+          "item_id": "svea-v01-stem-002",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": 750.0,
+              "tolerance": 0.0,
+              "unit": "ml"
+            }
+          },
+          "after": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": 750.0,
+              "tolerance": 0.0,
+              "unit": "ml",
+              "absolute_error": 0.0,
+              "relative_error": 0.0,
+              "relative_error_percent": 0.0,
+              "partial_credit_method": null,
+              "score_formula": null,
+              "required_format": null,
+              "format_valid": true,
+              "malformed": false
+            }
+          }
+        },
+        {
+          "item_id": "svea-v02-lang-005-lix-base",
+          "before": {
+            "score": 0.0,
+            "passed": false,
+            "score_details": {
+              "expected": 2.5,
+              "tolerance": 0.05,
+              "unit": null,
+              "gold_calculation": {
+                "A_ord": 5,
+                "B_meningar": 2,
+                "C_langa_ord": 0,
+                "medel_meningslangd": 2.5,
+                "andel_langa_ord": 0.0,
+                "lix": 2.5
+              }
+            }
+          },
+          "after": {
+            "score": 0.0,
+            "passed": false,
+            "score_details": {
+              "expected": 2.5,
+              "tolerance": 0.05,
+              "unit": null,
+              "absolute_error": 50.8,
+              "relative_error": 20.32,
+              "relative_error_percent": 2032.0,
+              "partial_credit_method": "relative_error",
+              "score_formula": "max(0, 1 - absolute_error / abs(expected))",
+              "required_format": "single_number",
+              "format_valid": true,
+              "malformed": false,
+              "gold_calculation": {
+                "A_ord": 5,
+                "B_meningar": 2,
+                "C_langa_ord": 0,
+                "medel_meningslangd": 2.5,
+                "andel_langa_ord": 0.0,
+                "lix": 2.5
+              }
+            }
+          }
+        },
+        {
+          "item_id": "svea-v02-lang-005-lix-challenge",
+          "before": {
+            "score": 0.0,
+            "passed": false,
+            "score_details": {
+              "expected": 22.5,
+              "tolerance": 0.05,
+              "unit": null,
+              "gold_calculation": {
+                "A_ord": 5,
+                "B_meningar": 2,
+                "C_langa_ord": 1,
+                "medel_meningslangd": 2.5,
+                "andel_langa_ord": 20.0,
+                "lix": 22.5
+              }
+            }
+          },
+          "after": {
+            "score": 0.0,
+            "passed": false,
+            "score_details": {
+              "expected": 22.5,
+              "tolerance": 0.05,
+              "unit": null,
+              "absolute_error": 40.8,
+              "relative_error": 1.8133333333333332,
+              "relative_error_percent": 181.33333333333331,
+              "partial_credit_method": "relative_error",
+              "score_formula": "max(0, 1 - absolute_error / abs(expected))",
+              "required_format": "single_number",
+              "format_valid": true,
+              "malformed": false,
+              "gold_calculation": {
+                "A_ord": 5,
+                "B_meningar": 2,
+                "C_langa_ord": 1,
+                "medel_meningslangd": 2.5,
+                "andel_langa_ord": 20.0,
+                "lix": 22.5
+              }
+            }
+          }
+        },
+        {
+          "item_id": "svea-v02-stem-005-add-base",
+          "before": {
+            "score": 0.0,
+            "passed": false,
+            "score_details": {
+              "expected": 1.0,
+              "tolerance": 0.001,
+              "unit": null,
+              "gold_calculation": {
+                "heads": [
+                  2,
+                  0,
+                  2,
+                  2
+                ],
+                "distances": [
+                  1,
+                  0,
+                  1,
+                  2
+                ],
+                "sum": 4,
+                "token_count": 4,
+                "add": 1.0,
+                "root_included": true
+              }
+            }
+          },
+          "after": {
+            "score": 0.0,
+            "passed": false,
+            "score_details": {
+              "expected": 1.0,
+              "tolerance": 0.001,
+              "unit": null,
+              "absolute_error": 0.25,
+              "relative_error": 0.25,
+              "relative_error_percent": 25.0,
+              "partial_credit_method": null,
+              "score_formula": null,
+              "required_format": null,
+              "format_valid": true,
+              "malformed": false,
+              "gold_calculation": {
+                "heads": [
+                  2,
+                  0,
+                  2,
+                  2
+                ],
+                "distances": [
+                  1,
+                  0,
+                  1,
+                  2
+                ],
+                "sum": 4,
+                "token_count": 4,
+                "add": 1.0,
+                "root_included": true
+              }
+            }
+          }
+        },
+        {
+          "item_id": "svea-v02-stem-005-add-challenge",
+          "before": {
+            "score": 0.0,
+            "passed": false,
+            "score_details": {
+              "expected": 1.17,
+              "tolerance": 0.005,
+              "unit": null,
+              "gold_calculation": {
+                "heads": [
+                  3,
+                  3,
+                  4,
+                  0,
+                  4,
+                  4
+                ],
+                "distances": [
+                  2,
+                  1,
+                  1,
+                  0,
+                  1,
+                  2
+                ],
+                "sum": 7,
+                "token_count": 6,
+                "raw_add": 1.1666666667,
+                "rounded_add": 1.17,
+                "root_included": true
+              }
+            }
+          },
+          "after": {
+            "score": 0.0,
+            "passed": false,
+            "score_details": {
+              "expected": 1.17,
+              "tolerance": 0.005,
+              "unit": null,
+              "absolute_error": 0.16000000000000014,
+              "relative_error": 0.13675213675213688,
+              "relative_error_percent": 13.675213675213687,
+              "partial_credit_method": null,
+              "score_formula": null,
+              "required_format": null,
+              "format_valid": true,
+              "malformed": false,
+              "gold_calculation": {
+                "heads": [
+                  3,
+                  3,
+                  4,
+                  0,
+                  4,
+                  4
+                ],
+                "distances": [
+                  2,
+                  1,
+                  1,
+                  0,
+                  1,
+                  2
+                ],
+                "sum": 7,
+                "token_count": 6,
+                "raw_add": 1.1666666667,
+                "rounded_add": 1.17,
+                "root_included": true
+              }
             }
           }
         }

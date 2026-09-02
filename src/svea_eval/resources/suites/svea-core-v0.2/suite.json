@@ -1,6 +1,6 @@
 {
   "id": "svea-core",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "name": "SVEA Core public pilot",
   "tagline": "Measure what a model can do in Swedish — and where that ability breaks.",
   "status": "public-pilot",

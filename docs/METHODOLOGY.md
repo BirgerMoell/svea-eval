@@ -56,7 +56,7 @@ All item scores are normalized to 0–1.
 |---|---|
 | `choice` | requires the declared response format; current pilot items give 1.0 for exactly one A–F letter, 0.5 for an unambiguous correct leading choice with extra text, and mark the latter malformed and not passed |
 | `exact` | Unicode-normalized, case-insensitive answer or declared alias |
-| `numeric` | parses Swedish decimal commas and applies an explicit tolerance |
+| `numeric` | parses Swedish decimal commas, applies an explicit tolerance and exposes absolute and relative error; items may opt into declared error-based partial credit |
 | `contains_all` | requires at least one alias from every fact group and rejects forbidden facts |
 | `json_exact` | parses raw or fenced JSON and compares one or more explicitly declared typed values |
 | `constraints` | evaluates explicit line, word, prefix and term checks |
@@ -64,7 +64,8 @@ All item scores are normalized to 0–1.
 
 Constraint items may receive a partial 0–1 score so the failure is
 interpretable. `passed` requires every declared constraint. Other deterministic
-scorers are normally binary.
+scorers are normally binary unless an item explicitly declares a partial-credit
+method.
 
 LIX and dependency questions have reviewed gold calculations stored with each
 item. Tokenization, treatment of the root and rounding are declared in the
@@ -72,6 +73,21 @@ prompt. Deterministic score details expose the counts, head vectors, distances
 and intermediate calculations used to obtain the expected result. The small
 public slice is a diagnostic of Swedish structural analysis and arithmetic, not
 a standalone proxy for general model quality.
+
+The LIX cluster deliberately separates three related capabilities: direct
+answer-only calculation, explicit `A`/`B`/`C` component decomposition, and
+auditing a supplied calculation. This reveals whether a failure comes from
+counting, arithmetic or error recognition without asking for or publishing
+hidden chain-of-thought.
+
+Patch v0.2.2 adds `relative_error` partial credit to the two direct LIX
+calculation items. Their score is `max(0, 1 - |answer - gold| / |gold|)`, while
+`passed` still requires the answer to fall within the declared tolerance. The
+prompt's “answer only with the number” contract is enforced: explanatory or
+otherwise malformed responses receive zero. Absolute error, relative error and
+the scoring formula are published in scorer details. For example, `63.3`
+against `22.5` has an absolute error of `40.8` and a relative error of `181.3%`,
+so its partial score is clamped to zero.
 
 Patch v0.2.1 corrected the room-booking contrast. The free item now accepts the
 source notation `HH.MM` as well as normalized `HH:MM`, since it did not prescribe

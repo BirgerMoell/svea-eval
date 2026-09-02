@@ -55,8 +55,35 @@ class ScoringTests(unittest.TestCase):
         item = self.items["svea-v02-lang-005-lix-challenge"]
         score = score_item(item=item, response="22,5")
         self.assertTrue(score.passed)
+        self.assertEqual(score.value, 1.0)
+        self.assertEqual(score.details["absolute_error"], 0.0)
         self.assertEqual(score.details["gold_calculation"]["C_langa_ord"], 1)
         self.assertEqual(score.details["gold_calculation"]["lix"], 22.5)
+
+    def test_lix_numeric_scores_one_minus_relative_error(self):
+        item = self.items["svea-v02-lang-005-lix-challenge"]
+        score = score_item(item=item, response="20.0")
+        self.assertFalse(score.passed)
+        self.assertAlmostEqual(score.value, 1 - 2.5 / 22.5)
+        self.assertEqual(score.details["absolute_error"], 2.5)
+        self.assertAlmostEqual(score.details["relative_error_percent"], 100 / 9)
+        self.assertEqual(score.details["partial_credit_method"], "relative_error")
+
+    def test_lix_numeric_clamps_large_relative_error_to_zero(self):
+        item = self.items["svea-v02-lang-005-lix-challenge"]
+        score = score_item(item=item, response="63.3")
+        self.assertFalse(score.passed)
+        self.assertEqual(score.value, 0.0)
+        self.assertAlmostEqual(score.details["absolute_error"], 40.8)
+        self.assertAlmostEqual(score.details["relative_error_percent"], 181.3333333333)
+
+    def test_lix_numeric_rejects_verbose_number_as_malformed(self):
+        item = self.items["svea-v02-lang-005-lix-challenge"]
+        score = score_item(item=item, response="LIX = 22,5")
+        self.assertFalse(score.passed)
+        self.assertEqual(score.value, 0.0)
+        self.assertFalse(score.details["format_valid"])
+        self.assertTrue(score.details["malformed"])
 
     def test_dependency_add_uses_precomputed_gold(self):
         item = self.items["svea-v02-stem-005-add-challenge"]
