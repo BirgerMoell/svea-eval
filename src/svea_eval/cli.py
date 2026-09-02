@@ -12,6 +12,7 @@ from . import __version__
 from .backends import DEFAULT_SYSTEM_PROMPT, GenerationConfig, create_backend
 from .data import load_suite, resolve_suite, validate_suite
 from .reporting import render_text_report
+from .rescore import rescore_artifact
 from .runner import run_evaluation
 from .site import build_site_data
 
@@ -72,6 +73,17 @@ def build_parser() -> argparse.ArgumentParser:
     report_parser.add_argument("run", type=Path)
     report_parser.add_argument("--json", action="store_true")
 
+    rescore_parser = subparsers.add_parser(
+        "rescore", help="Re-score saved responses against the current suite"
+    )
+    rescore_parser.add_argument("runs", type=Path, nargs="+")
+    rescore_parser.add_argument("--suite", type=Path)
+    rescore_parser.add_argument(
+        "--reason",
+        required=True,
+        help="human-readable explanation stored in each result artifact",
+    )
+
     site_parser = subparsers.add_parser("build-site", help="Refresh GitHub Pages data")
     site_parser.add_argument("--docs", type=Path, default=Path("docs"))
     site_parser.add_argument("--results", type=Path, default=Path("results/runs"))
@@ -90,6 +102,8 @@ def main(argv: list[str] | None = None) -> int:
             return _run(args)
         if args.command == "report":
             return _report(args)
+        if args.command == "rescore":
+            return _rescore(args)
         if args.command == "build-site":
             return _build_site(args)
     except (OSError, RuntimeError, ValueError, json.JSONDecodeError) as exc:
@@ -204,6 +218,25 @@ def _report(args: argparse.Namespace) -> int:
         print(json.dumps(run["summary"], ensure_ascii=False, indent=2))
     else:
         print(render_text_report(run))
+    return 0
+
+
+def _rescore(args: argparse.Namespace) -> int:
+    metadata, items = load_suite(args.suite)
+    errors = validate_suite(metadata=metadata, items=items)
+    if errors:
+        raise ValueError("suite validation failed:\n" + "\n".join(errors))
+    for path in args.runs:
+        run = rescore_artifact(
+            path=path.resolve(),
+            suite_metadata=metadata,
+            items=items,
+            reason=args.reason,
+        )
+        print(
+            f"Rescored {path.resolve()} to {metadata['id']} v{metadata['version']}: "
+            f"{100 * run['summary']['overall']['score']:.1f}%"
+        )
     return 0
 
 

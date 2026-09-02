@@ -5,7 +5,7 @@
   "diagnostic": false,
   "suite": {
     "id": "svea-core",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "split": "dev",
     "public_development_set": true
   },
@@ -65,13 +65,13 @@
       "malformed": 0
     },
     "overall": {
-      "score": 0.9458333333333334,
+      "score": 0.9708333333333334,
       "n": 40,
       "ci95": [
-        0.8774935848331288,
+        0.9217113342115469,
         1.0
       ],
-      "pass_rate": 0.95
+      "pass_rate": 0.975
     },
     "domains": [
       {
@@ -146,13 +146,13 @@
       },
       {
         "id": "work_life",
-        "score": 0.7833333333333333,
+        "score": 0.9833333333333334,
         "n": 5,
         "ci95": [
-          0.39819901332998126,
+          0.9506666666666668,
           1.0
         ],
-        "pass_rate": 0.8
+        "pass_rate": 1.0
       }
     ],
     "capabilities": [
@@ -358,13 +358,13 @@
       },
       {
         "id": "structured_extraction",
-        "score": 0.6666666666666666,
+        "score": 1.0,
         "n": 3,
         "ci95": [
-          0.013333333333333308,
+          1.0,
           1.0
         ],
-        "pass_rate": 0.6666666666666666
+        "pass_rate": 1.0
       },
       {
         "id": "structured_output",
@@ -480,13 +480,13 @@
       },
       {
         "id": "structured_extraction",
-        "score": 0.6,
+        "score": 0.8,
         "n": 5,
         "ci95": [
-          0.11990001041449716,
+          0.4080000000000001,
           1.0
         ],
-        "pass_rate": 0.6
+        "pass_rate": 0.8
       }
     ],
     "contrast_sets": {
@@ -497,7 +497,7 @@
       "pair_retention_rate": 1.0
     },
     "capability_profile": {
-      "macro_domain_score": 0.9458333333333333,
+      "macro_domain_score": 0.9708333333333333,
       "minimum_domain_score": 0.7833333333333333,
       "covered_domains": 8,
       "declared_domains": 8
@@ -692,12 +692,12 @@
       "response": "```json\n{\n  \"mote_datum\": \"2027-10-14\",\n  \"mote_tid\": \"18:30\",\n  \"sista_svarsdag\": \"2027-10-21\"\n}\n```",
       "score": 1.0,
       "score_details": {
-        "allow_extra_keys": false,
         "expected": {
           "mote_datum": "2027-10-14",
           "mote_tid": "18:30",
           "sista_svarsdag": "2027-10-21"
-        }
+        },
+        "allow_extra_keys": false
       },
       "scorer": "json_exact",
       "scoring_error": null
@@ -742,11 +742,11 @@
       "response": "Amir, onsdag.",
       "score": 1.0,
       "score_details": {
-        "forbidden_hits": [],
         "matched_groups": [
           true,
           true
-        ]
+        ],
+        "forbidden_hits": []
       },
       "scorer": "contains_all",
       "scoring_error": null
@@ -764,11 +764,11 @@
       "response": "Amir, onsdag.",
       "score": 1.0,
       "score_details": {
-        "forbidden_hits": [],
         "matched_groups": [
           true,
           true
-        ]
+        ],
+        "forbidden_hits": []
       },
       "scorer": "contains_all",
       "scoring_error": null
@@ -782,20 +782,28 @@
       "latency_ms": 7003.013165958691,
       "output_tokens": 49,
       "parsed": {
+        "ordernummer": 4821,
         "antal": 6,
-        "leveransdatum": "2027-11-05",
-        "ordernummer": 4821
+        "leveransdatum": "2027-11-05"
       },
-      "passed": false,
+      "passed": true,
       "response": "```json\n{\n  \"ordernummer\": 4821,\n  \"antal\": 6,\n  \"leveransdatum\": \"2027-11-05\"\n}\n```",
-      "score": 0.0,
+      "score": 1.0,
       "score_details": {
-        "allow_extra_keys": false,
         "expected": {
+          "ordernummer": "4821",
           "antal": 6,
-          "leveransdatum": "2027-11-05",
-          "ordernummer": "4821"
-        }
+          "leveransdatum": "2027-11-05"
+        },
+        "allow_extra_keys": false,
+        "accepted_values": [
+          {
+            "ordernummer": 4821,
+            "antal": 6,
+            "leveransdatum": "2027-11-05"
+          }
+        ],
+        "matched_candidate": 1
       },
       "scorer": "json_exact",
       "scoring_error": null
@@ -1131,12 +1139,12 @@
       "response": "Museet öppnade 1891 och samlingen innehåller bland annat fotografi och formgivning.",
       "score": 1.0,
       "score_details": {
-        "forbidden_hits": [],
         "matched_groups": [
           true,
           true,
           true
-        ]
+        ],
+        "forbidden_hits": []
       },
       "scorer": "contains_all",
       "scoring_error": null
@@ -1239,20 +1247,20 @@
       "latency_ms": 8633.951792027801,
       "output_tokens": 41,
       "parsed": {
-        "arsmedelvarde": null,
+        "station": "Norr-7",
         "saknade_dygn": 2,
-        "station": "Norr-7"
+        "arsmedelvarde": null
       },
       "passed": true,
       "response": "```json\n{\n  \"station\": \"Norr-7\",\n  \"saknade_dygn\": 2,\n  \"arsmedelvarde\": null\n}\n```",
       "score": 1.0,
       "score_details": {
-        "allow_extra_keys": false,
         "expected": {
-          "arsmedelvarde": null,
+          "station": "Norr-7",
           "saknade_dygn": 2,
-          "station": "Norr-7"
-        }
+          "arsmedelvarde": null
+        },
+        "allow_extra_keys": false
       },
       "scorer": "json_exact",
       "scoring_error": null
@@ -1293,24 +1301,24 @@
       "latency_ms": 16835.945415950846,
       "output_tokens": 68,
       "parsed": {
-        "datum": "2028-03-12",
-        "person": "Anna Berg",
         "rum": "Eken",
-        "slut": "14.15",
-        "start": "13.30"
+        "person": "Anna Berg",
+        "datum": "2028-03-12",
+        "start": "13.30",
+        "slut": "14.15"
       },
       "passed": false,
       "response": "```json\n{\n  \"rum\": \"Eken\",\n  \"person\": \"Anna Berg\",\n  \"datum\": \"2028-03-12\",\n  \"start\": \"13.30\",\n  \"slut\": \"14.15\"\n}\n```",
       "score": 0.0,
       "score_details": {
-        "allow_extra_keys": false,
         "expected": {
-          "datum": "2028-03-12",
-          "person": "Anna Berg",
           "rum": "Eken",
-          "slut": "14:15",
-          "start": "13:30"
-        }
+          "person": "Anna Berg",
+          "datum": "2028-03-12",
+          "start": "13:30",
+          "slut": "14:15"
+        },
+        "allow_extra_keys": false
       },
       "scorer": "json_exact",
       "scoring_error": null
@@ -1324,24 +1332,24 @@
       "latency_ms": 11306.345999997575,
       "output_tokens": 58,
       "parsed": {
-        "datum": "2028-03-12",
-        "person": "Anna Berg",
         "rum": "Eken",
-        "slut": "14:15",
-        "start": "13:30"
+        "person": "Anna Berg",
+        "datum": "2028-03-12",
+        "start": "13:30",
+        "slut": "14:15"
       },
       "passed": true,
       "response": "{\n\"rum\": \"Eken\",\n\"person\": \"Anna Berg\",\n\"datum\": \"2028-03-12\",\n\"start\": \"13:30\",\n\"slut\": \"14:15\"\n}",
       "score": 1.0,
       "score_details": {
-        "allow_extra_keys": false,
         "expected": {
-          "datum": "2028-03-12",
-          "person": "Anna Berg",
           "rum": "Eken",
-          "slut": "14:15",
-          "start": "13:30"
-        }
+          "person": "Anna Berg",
+          "datum": "2028-03-12",
+          "start": "13:30",
+          "slut": "14:15"
+        },
+        "allow_extra_keys": false
       },
       "scorer": "json_exact",
       "scoring_error": null
@@ -1380,9 +1388,9 @@
       "score_details": {
         "checks": {
           "exact_line_count": true,
-          "forbidden_terms": true,
           "max_words_per_line": true,
-          "required_prefixes": true
+          "required_prefixes": true,
+          "forbidden_terms": true
         }
       },
       "scorer": "constraints",
@@ -1425,5 +1433,51 @@
     "The target and judge were local Q4_K_M quantizations; results may differ with other quantizations or runtimes.",
     "The 36.0B MoE local judge has not yet been calibrated against native-speaker Swedish ratings, so judged scores are provisional.",
     "This run uses qwen3.6:35b-a3b as judge, while the other published local runs use gemma4:31b; aggregate open-generation scores are therefore not strictly judge-controlled comparisons."
+  ],
+  "rescoring_history": [
+    {
+      "source_suite_version": "0.1.0",
+      "target_suite_version": "0.1.1",
+      "reason": "SVEA Core v0.1.1 accepts numeric or string ordernummer in svea-v01-work-002 because the prompt did not declare an identifier type; saved model responses and judge outputs were reused.",
+      "model_responses_reused": true,
+      "judge_outputs_reused": true,
+      "changes": [
+        {
+          "item_id": "svea-v01-work-002",
+          "before": {
+            "score": 0.0,
+            "passed": false,
+            "score_details": {
+              "allow_extra_keys": false,
+              "expected": {
+                "antal": 6,
+                "leveransdatum": "2027-11-05",
+                "ordernummer": "4821"
+              }
+            }
+          },
+          "after": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": {
+                "ordernummer": "4821",
+                "antal": 6,
+                "leveransdatum": "2027-11-05"
+              },
+              "allow_extra_keys": false,
+              "accepted_values": [
+                {
+                  "ordernummer": 4821,
+                  "antal": 6,
+                  "leveransdatum": "2027-11-05"
+                }
+              ],
+              "matched_candidate": 1
+            }
+          }
+        }
+      ]
+    }
   ]
 }

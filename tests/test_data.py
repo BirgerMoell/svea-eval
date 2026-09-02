@@ -8,6 +8,7 @@ class DataTests(unittest.TestCase):
         metadata, items = load_suite()
 
         self.assertEqual(validate_suite(metadata=metadata, items=items), [])
+        self.assertEqual(metadata["version"], "0.1.1")
         self.assertEqual(len(items), 40)
         self.assertEqual(len({item.domain for item in items}), 8)
         self.assertEqual(len({item.task_type for item in items}), 7)

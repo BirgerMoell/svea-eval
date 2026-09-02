@@ -227,6 +227,17 @@ svea build-site --results results/runs --docs docs
 
 Diagnostic and partial runs are filtered out during site generation.
 
+When a suite patch changes deterministic gold data without changing prompts,
+saved responses can be re-scored without another model or judge call:
+
+```bash
+svea rescore results/runs/model.json \
+  --reason "Explain the reviewed scoring correction"
+```
+
+The result retains its raw generations and judge outputs and records the old
+and new suite versions plus every changed item in `rescoring_history`.
+
 ## Relationship to existing Swedish evaluation
 
 SVEA is meant to connect complementary instruments:
@@ -282,7 +293,7 @@ Until an archival release exists, cite the repository and version:
   author  = {Birger Moëll},
   title   = {SVEA Eval: Swedish Versatile Evaluation & Analysis},
   year    = {2026},
-  version = {0.1.0},
+  version = {0.1.1},
   url     = {https://github.com/BirgerMoell/svea-eval}
 }
 ```

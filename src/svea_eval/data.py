@@ -118,6 +118,14 @@ def _validate_gold(item: Item, errors: list[str]) -> None:
         errors.append(f"{item.id}: numeric scorer requires gold.value")
     elif scorer == "json_exact" and "value" not in item.gold:
         errors.append(f"{item.id}: json_exact scorer requires gold.value")
+    elif scorer == "json_exact" and "accepted_values" in item.gold:
+        accepted = item.gold["accepted_values"]
+        if not isinstance(accepted, list):
+            errors.append(f"{item.id}: gold.accepted_values must be a list")
+        elif any(type(value) is not type(item.gold["value"]) for value in accepted):
+            errors.append(
+                f"{item.id}: every accepted JSON value must have the primary value's type"
+            )
     elif scorer == "constraints" and not item.scoring.get("rules"):
         errors.append(f"{item.id}: constraints scorer requires scoring.rules")
     elif scorer == "rubric" and not item.scoring.get("dimensions"):

@@ -52,7 +52,7 @@ All item scores are normalized to 0–1.
 | `exact` | Unicode-normalized, case-insensitive answer or declared alias |
 | `numeric` | parses Swedish decimal commas and applies an explicit tolerance |
 | `contains_all` | requires at least one alias from every fact group and rejects forbidden facts |
-| `json_exact` | parses raw or fenced JSON and compares typed values |
+| `json_exact` | parses raw or fenced JSON and compares one or more explicitly declared typed values |
 | `constraints` | evaluates explicit line, word, prefix and term checks |
 | `rubric` | remains missing until a named judge returns dimension scores |
 

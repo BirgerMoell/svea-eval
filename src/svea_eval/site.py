@@ -190,5 +190,6 @@ def _public_run(run: dict[str, Any], *, item_by_id: dict[str, Any]) -> dict[str,
         "finished_at": run["finished_at"],
         "summary": run["summary"],
         "limitations": run.get("limitations", []),
+        "rescoring_history": run.get("rescoring_history", []),
         "items": item_results,
     }

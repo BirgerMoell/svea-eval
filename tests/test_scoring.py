@@ -32,6 +32,15 @@ class ScoringTests(unittest.TestCase):
         self.assertTrue(score_item(item=item, response=valid).passed)
         self.assertFalse(score_item(item=item, response=extra).passed)
 
+    def test_json_accepts_explicit_typed_alternative(self):
+        item = self.items["svea-v01-work-002"]
+        numeric_identifier = (
+            '{"ordernummer":4821,"antal":6,"leveransdatum":"2027-11-05"}'
+        )
+        score = score_item(item=item, response=numeric_identifier)
+        self.assertTrue(score.passed)
+        self.assertEqual(score.details["matched_candidate"], 1)
+
     def test_contains_all_rejects_forbidden_stale_fact(self):
         item = self.items["svea-v01-work-001-distractor"]
         score = score_item(item=item, response="Amir på onsdag, inte måndag.")

@@ -190,7 +190,7 @@ h1 em { color: var(--blue); font-weight: 500; }
 .deep-controls { padding: 18px 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
 .deep-controls label { display: grid; gap: 6px; color: var(--muted); font-size: 9px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
 .deep-controls select { width: 100%; min-height: 46px; padding: 0 38px 0 12px; border: 1px solid var(--ink); border-radius: 0; background: var(--white); color: var(--ink); font: inherit; font-size: 12px; }
-.deep-protocol { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--ink); background: var(--blue); color: white; }
+.deep-protocol { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--ink); background: var(--blue); color: white; }
 .deep-protocol div { min-height: 80px; padding: 13px 16px; display: flex; flex-direction: column; border-right: 1px solid rgba(255,255,255,.25); }
 .deep-protocol div:last-child { border-right: 0; }
 .deep-protocol span { color: var(--yellow); font-size: 8px; font-weight: 900; letter-spacing: .14em; }
@@ -201,6 +201,10 @@ h1 em { color: var(--blue); font-weight: 500; }
 .deep-caveats details { margin: 0; padding: 12px 16px; }
 .deep-caveats summary { color: var(--ink); }
 .deep-caveats ul { margin: 12px 0 2px; padding-left: 20px; color: var(--muted); font-size: 10px; line-height: 1.55; }
+.rescore-note { padding: 13px 16px; border-bottom: 1px solid var(--line); }
+.rescore-note span { color: var(--red); font-size: 8px; font-weight: 900; letter-spacing: .13em; }
+.rescore-note p { margin: 5px 0 2px; font-size: 10px; line-height: 1.5; }
+.rescore-note small { color: var(--muted); font-size: 9px; }
 .deep-layout { display: grid; grid-template-columns: minmax(260px, 340px) minmax(0, 1fr); border-right: 1px solid var(--ink); border-bottom: 1px solid var(--ink); border-left: 1px solid var(--ink); background: var(--white); }
 .item-list { max-height: 850px; overflow-y: auto; border-right: 1px solid var(--ink); background: #efebe1; }
 .item-row { width: 100%; min-height: 74px; padding: 11px 13px; border: 0; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 25px 1fr auto; gap: 9px; align-items: center; background: transparent; color: var(--ink); text-align: left; cursor: pointer; }

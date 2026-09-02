@@ -198,14 +198,28 @@ def _score_numeric(item: Item, response: str) -> Score:
 def _score_json(item: Item, response: str) -> Score:
     parsed = _parse_json(response)
     expected = item.gold["value"]
+    accepted_values = item.gold.get("accepted_values", [])
+    candidates = [expected, *accepted_values]
     subset = bool(item.scoring.get("allow_extra_keys", False))
-    passed = _json_contains(parsed, expected) if subset else parsed == expected
+    matched_index = next(
+        (
+            index
+            for index, candidate in enumerate(candidates)
+            if (_json_contains(parsed, candidate) if subset else parsed == candidate)
+        ),
+        None,
+    )
+    passed = matched_index is not None
+    details = {"expected": expected, "allow_extra_keys": subset}
+    if accepted_values:
+        details["accepted_values"] = accepted_values
+        details["matched_candidate"] = matched_index
     return Score(
         value=1.0 if passed else 0.0,
         passed=passed,
         scorer="json_exact",
         parsed=parsed,
-        details={"expected": expected, "allow_extra_keys": subset},
+        details=details,
     )
 
 

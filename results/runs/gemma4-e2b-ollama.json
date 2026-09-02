@@ -5,7 +5,7 @@
   "diagnostic": false,
   "suite": {
     "id": "svea-core",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "split": "dev",
     "public_development_set": true
   },
@@ -790,7 +790,15 @@
           "antal": 6,
           "leveransdatum": "2027-11-05"
         },
-        "allow_extra_keys": false
+        "allow_extra_keys": false,
+        "accepted_values": [
+          {
+            "ordernummer": 4821,
+            "antal": 6,
+            "leveransdatum": "2027-11-05"
+          }
+        ],
+        "matched_candidate": 0
       },
       "scoring_error": null,
       "latency_ms": 916.6644589859061,
@@ -1424,5 +1432,51 @@
     "The bundled suite is public and may be present in model training data.",
     "The target and judge were local Q4_K_M quantizations; results may differ with other quantizations or runtimes.",
     "The 31.3B local judge has not yet been calibrated against native-speaker Swedish ratings, so judged scores are provisional."
+  ],
+  "rescoring_history": [
+    {
+      "source_suite_version": "0.1.0",
+      "target_suite_version": "0.1.1",
+      "reason": "SVEA Core v0.1.1 accepts numeric or string ordernummer in svea-v01-work-002 because the prompt did not declare an identifier type; saved model responses and judge outputs were reused.",
+      "model_responses_reused": true,
+      "judge_outputs_reused": true,
+      "changes": [
+        {
+          "item_id": "svea-v01-work-002",
+          "before": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": {
+                "ordernummer": "4821",
+                "antal": 6,
+                "leveransdatum": "2027-11-05"
+              },
+              "allow_extra_keys": false
+            }
+          },
+          "after": {
+            "score": 1.0,
+            "passed": true,
+            "score_details": {
+              "expected": {
+                "ordernummer": "4821",
+                "antal": 6,
+                "leveransdatum": "2027-11-05"
+              },
+              "allow_extra_keys": false,
+              "accepted_values": [
+                {
+                  "ordernummer": 4821,
+                  "antal": 6,
+                  "leveransdatum": "2027-11-05"
+                }
+              ],
+              "matched_candidate": 0
+            }
+          }
+        }
+      ]
+    }
   ]
 }

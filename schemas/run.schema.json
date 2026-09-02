@@ -47,6 +47,20 @@
         "required": ["item_id", "response", "score", "passed", "scorer", "error"]
       }
     },
+    "rescoring_history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "source_suite_version",
+          "target_suite_version",
+          "reason",
+          "model_responses_reused",
+          "judge_outputs_reused",
+          "changes"
+        ]
+      }
+    },
     "limitations": {"type": "array", "items": {"type": "string"}}
   },
   "additionalProperties": true
