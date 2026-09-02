@@ -2,7 +2,7 @@
   "schema_version": 1,
   "run_id": "prelude-anneal300b-iter-0989075-hf-f289699b246d-20260902",
   "status": "completed",
-  "diagnostic": false,
+  "diagnostic": true,
   "suite": {
     "id": "svea-core",
     "version": "0.1.3",
@@ -1485,7 +1485,8 @@
     "The pilot is text-only and does not yet measure speech, vision or interactive multi-step agents.",
     "The bundled suite is public and may be present in model training data.",
     "OpenEuroLLM Prelude anneal300b_iter_0989075 is an intermediate BF16 base-model checkpoint without instruction tuning or safety alignment; its score is a zero-shot instruction-following diagnostic and is not directly comparable to instruction-tuned models.",
-    "The checkpoint tokenizer does not provide a chat template. SVEA therefore used its recorded plain-text fallback prompt (system instruction, task prompt, then 'Svar:') on Apple MPS."
+    "The checkpoint tokenizer does not provide a chat template. SVEA therefore used its recorded plain-text fallback prompt (system instruction, task prompt, then 'Svar:') on Apple MPS.",
+    "Withdrawn from published benchmark comparisons after audit found prompt-echo contamination in 39 of 40 responses and maximum-token termination in all 40. The artifact is retained only as diagnostic evidence."
   ],
   "judging_environment": {
     "python": "3.12.13",
