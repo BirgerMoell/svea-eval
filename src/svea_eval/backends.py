@@ -230,22 +230,31 @@ class HuggingFaceBackend(Backend):
     def protocol_settings(self) -> dict[str, Any]:
         parameter = next(self.model.parameters())
         return {
+            "think": False,
             "device": self.device,
             "resolved_device": str(parameter.device),
             "torch_dtype": str(parameter.dtype).removeprefix("torch."),
         }
+
+    def _render_prompt(self, messages: list[dict[str, str]], fallback: str) -> str:
+        if self.tokenizer.chat_template:
+            return self.tokenizer.apply_chat_template(
+                messages,
+                tokenize=False,
+                add_generation_prompt=True,
+                enable_thinking=False,
+            )
+        return fallback
 
     def generate(self, item: Item, config: GenerationConfig) -> Generation:
         messages = [
             {"role": "system", "content": config.system_prompt},
             {"role": "user", "content": item.user_prompt()},
         ]
-        if self.tokenizer.chat_template:
-            rendered = self.tokenizer.apply_chat_template(
-                messages, tokenize=False, add_generation_prompt=True
-            )
-        else:
-            rendered = f"{config.system_prompt}\n\n{item.user_prompt()}\n\nSvar:"
+        rendered = self._render_prompt(
+            messages,
+            fallback=f"{config.system_prompt}\n\n{item.user_prompt()}\n\nSvar:",
+        )
         inputs = self.tokenizer(rendered, return_tensors="pt")
         target_device = next(self.model.parameters()).device
         inputs = {key: value.to(target_device) for key, value in inputs.items()}

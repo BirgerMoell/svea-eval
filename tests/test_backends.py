@@ -3,7 +3,12 @@ import os
 import unittest
 from unittest.mock import patch
 
-from svea_eval.backends import GenerationConfig, OllamaBackend, OpenAICompatibleBackend
+from svea_eval.backends import (
+    GenerationConfig,
+    HuggingFaceBackend,
+    OllamaBackend,
+    OpenAICompatibleBackend,
+)
 from svea_eval.data import load_suite
 
 
@@ -52,6 +57,53 @@ class _FakeOllamaResponse(_FakeResponse):
 
 
 class BackendTests(unittest.TestCase):
+    def test_huggingface_backend_explicitly_disables_template_thinking(self):
+        captured = {}
+
+        class FakeTokenizer:
+            chat_template = "test-template"
+
+            def apply_chat_template(self, messages, **kwargs):
+                captured["messages"] = messages
+                captured["kwargs"] = kwargs
+                return "rendered"
+
+        backend = HuggingFaceBackend.__new__(HuggingFaceBackend)
+        backend.tokenizer = FakeTokenizer()
+        backend.device = "mps"
+        backend.model = type(
+            "FakeModel",
+            (),
+            {
+                "parameters": lambda self: iter(
+                    [type("FakeParameter", (), {"device": "mps:0", "dtype": "torch.bfloat16"})()]
+                )
+            },
+        )()
+        messages = [{"role": "user", "content": "Hej"}]
+
+        rendered = backend._render_prompt(messages, fallback="fallback")
+
+        self.assertEqual(rendered, "rendered")
+        self.assertEqual(captured["messages"], messages)
+        self.assertEqual(
+            captured["kwargs"],
+            {
+                "tokenize": False,
+                "add_generation_prompt": True,
+                "enable_thinking": False,
+            },
+        )
+        self.assertEqual(
+            backend.protocol_settings(),
+            {
+                "think": False,
+                "device": "mps",
+                "resolved_device": "mps:0",
+                "torch_dtype": "bfloat16",
+            },
+        )
+
     def test_openai_compatible_backend_uses_chat_contract(self):
         old_key = os.environ.get("SVEA_TEST_KEY")
         os.environ["SVEA_TEST_KEY"] = "secret-for-local-test"
