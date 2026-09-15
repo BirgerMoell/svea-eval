@@ -71,13 +71,15 @@ class BackendTests(unittest.TestCase):
         backend = HuggingFaceBackend.__new__(HuggingFaceBackend)
         backend.tokenizer = FakeTokenizer()
         backend.device = "mps"
+        backend.requested_dtype = "bfloat16"
         backend.model = type(
             "FakeModel",
             (),
             {
                 "parameters": lambda self: iter(
                     [type("FakeParameter", (), {"device": "mps:0", "dtype": "torch.bfloat16"})()]
-                )
+                ),
+                "config": type("FakeConfig", (), {"use_cache": True})(),
             },
         )()
         messages = [{"role": "user", "content": "Hej"}]
@@ -101,6 +103,8 @@ class BackendTests(unittest.TestCase):
                 "device": "mps",
                 "resolved_device": "mps:0",
                 "torch_dtype": "bfloat16",
+                "requested_dtype": "bfloat16",
+                "use_cache": True,
             },
         )
 

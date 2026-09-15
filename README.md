@@ -172,6 +172,12 @@ svea run \
   --output runs/model-hf.json
 ```
 
+For checkpoints stored in float32 that need a smaller inference footprint,
+`--dtype bfloat16` explicitly casts the model at load time. `--use-cache`
+explicitly enables the inference KV cache if the training config disabled it.
+Both settings are recorded in the run protocol; a cast run should not be
+presented as native-float32 evaluation.
+
 The backend uses the checkpoint's chat template when present and otherwise
 falls back to a simple Swedish prompt wrapper. Pinning a revision is strongly
 recommended for any result you intend to compare or publish.

@@ -47,6 +47,14 @@ def build_parser() -> argparse.ArgumentParser:
     run_parser.add_argument("--base-url")
     run_parser.add_argument("--api-key-env", default="OPENAI_API_KEY")
     run_parser.add_argument("--device", default="auto")
+    run_parser.add_argument(
+        "--dtype", choices=["auto", "bfloat16", "float16", "float32"], default="auto",
+        help="Transformers load dtype (explicit casts are recorded in the run protocol)",
+    )
+    run_parser.add_argument(
+        "--use-cache", action="store_true",
+        help="enable inference KV cache even if the checkpoint disables it for training",
+    )
     run_parser.add_argument("--timeout", type=float, default=120.0)
     run_parser.add_argument(
         "--ollama-think",
@@ -245,6 +253,8 @@ def _run(args: argparse.Namespace) -> int:
         timeout_seconds=args.timeout,
         ollama_think=args.ollama_think,
         ollama_reasoning_tokens=args.ollama_reasoning_tokens,
+        dtype=args.dtype,
+        use_cache=True if args.use_cache else None,
     )
     judge_backend = None
     if args.judge_backend:

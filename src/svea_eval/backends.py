@@ -205,24 +205,38 @@ class HuggingFaceBackend(Backend):
 
     name = "huggingface"
 
-    def __init__(self, model_id: str, revision: str | None = None, device: str = "auto") -> None:
+    def __init__(
+        self,
+        model_id: str,
+        revision: str | None = None,
+        device: str = "auto",
+        dtype: str = "auto",
+        use_cache: bool | None = None,
+    ) -> None:
         try:
             import torch
             from transformers import AutoModelForCausalLM, AutoTokenizer
+            from transformers import __version__ as transformers_version
         except ImportError as exc:
             raise RuntimeError("install local dependencies with: pip install -e '.[local]'") from exc
 
         self.model_id = model_id
         self.revision = revision
         self.device = device
+        self.requested_dtype = dtype
+        self.use_cache = use_cache
         self._torch = torch
         self.tokenizer = AutoTokenizer.from_pretrained(model_id, revision=revision)
-        model_kwargs: dict[str, Any] = {"revision": revision, "torch_dtype": "auto"}
+        torch_dtype = "auto" if dtype == "auto" else getattr(torch, dtype)
+        dtype_key = "dtype" if int(transformers_version.split(".", 1)[0]) >= 5 else "torch_dtype"
+        model_kwargs: dict[str, Any] = {"revision": revision, dtype_key: torch_dtype}
         if device == "auto":
             model_kwargs["device_map"] = "auto"
         self.model = AutoModelForCausalLM.from_pretrained(model_id, **model_kwargs)
         if device != "auto":
             self.model.to(device)
+        if use_cache is not None:
+            self.model.config.use_cache = use_cache
         self.model.eval()
         if self.tokenizer.pad_token_id is None:
             self.tokenizer.pad_token_id = self.tokenizer.eos_token_id
@@ -234,6 +248,8 @@ class HuggingFaceBackend(Backend):
             "device": self.device,
             "resolved_device": str(parameter.device),
             "torch_dtype": str(parameter.dtype).removeprefix("torch."),
+            "requested_dtype": self.requested_dtype,
+            "use_cache": bool(self.model.config.use_cache),
         }
 
     def _render_prompt(self, messages: list[dict[str, str]], fallback: str) -> str:
@@ -263,6 +279,8 @@ class HuggingFaceBackend(Backend):
             "do_sample": config.temperature > 0,
             "pad_token_id": self.tokenizer.pad_token_id,
         }
+        if self.use_cache is not None:
+            generation_kwargs["use_cache"] = self.use_cache
         if config.temperature > 0:
             generation_kwargs["temperature"] = config.temperature
         if config.seed is not None:
@@ -325,6 +343,8 @@ def create_backend(
     timeout_seconds: float = 120.0,
     ollama_think: bool = False,
     ollama_reasoning_tokens: int | None = None,
+    dtype: str = "auto",
+    use_cache: bool | None = None,
 ) -> Backend:
     if kind == "openai-compatible":
         if not base_url:
@@ -336,7 +356,10 @@ def create_backend(
             timeout_seconds=timeout_seconds,
         )
     if kind == "huggingface":
-        return HuggingFaceBackend(model_id=model_id, revision=revision, device=device)
+        return HuggingFaceBackend(
+            model_id=model_id, revision=revision, device=device,
+            dtype=dtype, use_cache=use_cache,
+        )
     if kind == "ollama":
         return OllamaBackend(
             model_id=model_id,
