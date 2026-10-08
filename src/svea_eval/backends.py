@@ -245,6 +245,7 @@ class HuggingFaceBackend(Backend):
         parameter = next(self.model.parameters())
         return {
             "think": False,
+            "strip_terminal_eos": True,
             "device": self.device,
             "resolved_device": str(parameter.device),
             "torch_dtype": str(parameter.dtype).removeprefix("torch."),
@@ -291,14 +292,28 @@ class HuggingFaceBackend(Backend):
         latency_ms = (time.perf_counter() - started) * 1000
         input_length = int(inputs["input_ids"].shape[-1])
         new_tokens = generated[0][input_length:]
-        text = self.tokenizer.decode(new_tokens, skip_special_tokens=True)
+        terminal_eos_id = _terminal_eos_id(
+            new_tokens, self.model.generation_config.eos_token_id
+        )
+        answer_tokens = new_tokens[:-1] if terminal_eos_id is not None else new_tokens
+        text = self.tokenizer.decode(answer_tokens, skip_special_tokens=True)
         return Generation(
             text=text,
             latency_ms=latency_ms,
             input_tokens=input_length,
             output_tokens=int(new_tokens.shape[-1]),
             finish_reason="length" if int(new_tokens.shape[-1]) >= item.max_tokens else "stop",
+            raw={"terminal_eos_token_id": terminal_eos_id} if terminal_eos_id is not None else {},
         )
+
+
+def _terminal_eos_id(tokens: Any, eos_token_id: int | list[int] | None) -> int | None:
+    """Exclude a generation terminator even if a tokenizer marks it non-special."""
+    if len(tokens) == 0 or eos_token_id is None:
+        return None
+    eos_ids = {eos_token_id} if isinstance(eos_token_id, int) else set(eos_token_id)
+    final_id = int(tokens[-1])
+    return final_id if final_id in eos_ids else None
 
 
 class OracleBackend(Backend):

@@ -8,6 +8,7 @@ from svea_eval.backends import (
     HuggingFaceBackend,
     OllamaBackend,
     OpenAICompatibleBackend,
+    _terminal_eos_id,
 )
 from svea_eval.data import load_suite
 
@@ -100,6 +101,7 @@ class BackendTests(unittest.TestCase):
             backend.protocol_settings(),
             {
                 "think": False,
+                "strip_terminal_eos": True,
                 "device": "mps",
                 "resolved_device": "mps:0",
                 "torch_dtype": "bfloat16",
@@ -107,6 +109,12 @@ class BackendTests(unittest.TestCase):
                 "use_cache": True,
             },
         )
+
+    def test_huggingface_terminal_eos_is_excluded_even_if_not_special(self):
+        self.assertEqual(_terminal_eos_id([10, 20, 99], 99), 99)
+        self.assertEqual(_terminal_eos_id([10, 20, 99], [98, 99]), 99)
+        self.assertIsNone(_terminal_eos_id([10, 20], 99))
+        self.assertIsNone(_terminal_eos_id([], 99))
 
     def test_openai_compatible_backend_uses_chat_contract(self):
         old_key = os.environ.get("SVEA_TEST_KEY")
